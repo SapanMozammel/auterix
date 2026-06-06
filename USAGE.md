@@ -6,21 +6,21 @@ How to use this repo as a single source of truth for your Claude Code workflow a
 
 ## Bootstrapping a new project
 
-Run these commands from your **project root**:
+Run these commands from your **project root** (requires `gh` CLI, already authenticated):
 
 ```bash
 mkdir -p .claude/plans
 
-# Pull agents, commands, skills, and base settings
-npx degit SapanMozammel/claude-workflow/agents   .claude/agents   --force
-npx degit SapanMozammel/claude-workflow/commands .claude/commands --force
-npx degit SapanMozammel/claude-workflow/skills   .claude/skills   --force
-curl -o .claude/settings.json \
-  https://raw.githubusercontent.com/SapanMozammel/claude-workflow/main/settings.json
+TMP=$(mktemp -d)
+gh repo clone SapanMozammel/claude-workflow "$TMP" -- --depth=1 --quiet
 
-# Start your CLAUDE.md from the template
-curl -o CLAUDE.md \
-  https://raw.githubusercontent.com/SapanMozammel/claude-workflow/main/CLAUDE.template.md
+cp -r "$TMP/agents"            .claude/agents
+cp -r "$TMP/commands"          .claude/commands
+cp -r "$TMP/skills"            .claude/skills
+cp    "$TMP/settings.json"     .claude/settings.json
+cp    "$TMP/CLAUDE.template.md" CLAUDE.md
+
+rm -rf "$TMP"
 ```
 
 Then edit `CLAUDE.md` to describe your project's stack, commands, and conventions.
@@ -33,7 +33,10 @@ When you update a skill, agent, or command in this repo, pull the changes into a
 
 ```bash
 # From your project root:
-curl -fsSL https://raw.githubusercontent.com/SapanMozammel/claude-workflow/main/sync.sh | bash
+TMP=$(mktemp -d)
+gh repo clone SapanMozammel/claude-workflow "$TMP" -- --depth=1 --quiet
+bash "$TMP/sync.sh"
+rm -rf "$TMP"
 ```
 
 What `sync.sh` overwrites: `agents/`, `commands/`, `skills/`, `settings.json`

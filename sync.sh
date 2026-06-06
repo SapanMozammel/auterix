@@ -7,17 +7,27 @@ set -e
 
 REPO="SapanMozammel/claude-workflow"
 CLAUDE_DIR=".claude"
+TMP_DIR=$(mktemp -d)
 
 if [ ! -d "$CLAUDE_DIR" ]; then
   echo "No .claude/ found. Run from your project root."
   exit 1
 fi
 
-echo "Syncing workflow from $REPO..."
+if ! command -v gh &>/dev/null; then
+  echo "GitHub CLI (gh) is required. Install: https://cli.github.com"
+  exit 1
+fi
 
-npx --yes degit "$REPO/agents"   "$CLAUDE_DIR/agents"   --force
-npx --yes degit "$REPO/commands" "$CLAUDE_DIR/commands" --force
-npx --yes degit "$REPO/skills"   "$CLAUDE_DIR/skills"   --force
-npx --yes degit "$REPO"          "$CLAUDE_DIR"          --force -- settings.json
+echo "Cloning workflow from $REPO..."
+gh repo clone "$REPO" "$TMP_DIR" -- --depth=1 --quiet
 
+echo "Syncing agents/, commands/, skills/, settings.json..."
+rm -rf "$CLAUDE_DIR/agents" "$CLAUDE_DIR/commands" "$CLAUDE_DIR/skills"
+cp -r "$TMP_DIR/agents"   "$CLAUDE_DIR/agents"
+cp -r "$TMP_DIR/commands" "$CLAUDE_DIR/commands"
+cp -r "$TMP_DIR/skills"   "$CLAUDE_DIR/skills"
+cp    "$TMP_DIR/settings.json" "$CLAUDE_DIR/settings.json"
+
+rm -rf "$TMP_DIR"
 echo "Done. plans/, settings.local.json, and CLAUDE.md untouched."

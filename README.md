@@ -6,21 +6,29 @@ Private single-source repo for Claude Code workflow — agents, slash commands, 
 
 ```bash
 # From your project root:
-mkdir -p .claude
-npx degit SapanMozammel/claude-workflow/agents   .claude/agents
-npx degit SapanMozammel/claude-workflow/commands .claude/commands
-npx degit SapanMozammel/claude-workflow/skills   .claude/skills
-curl -o .claude/settings.json https://raw.githubusercontent.com/SapanMozammel/claude-workflow/main/settings.json
+mkdir -p .claude/plans
 
-# Copy and fill in the CLAUDE.md template
-curl -o CLAUDE.md https://raw.githubusercontent.com/SapanMozammel/claude-workflow/main/CLAUDE.template.md
+# Clone workflow into a temp dir, then copy what you need
+TMP=$(mktemp -d)
+gh repo clone SapanMozammel/claude-workflow "$TMP" -- --depth=1 --quiet
+cp -r "$TMP/agents"   .claude/agents
+cp -r "$TMP/commands" .claude/commands
+cp -r "$TMP/skills"   .claude/skills
+cp    "$TMP/settings.json" .claude/settings.json
+cp    "$TMP/CLAUDE.template.md" CLAUDE.md
+rm -rf "$TMP"
 ```
+
+Then edit `CLAUDE.md` to describe your project's stack and conventions.
 
 ## Sync an existing project
 
 ```bash
 # From your project root (safe — never touches plans/ or CLAUDE.md):
-curl -fsSL https://raw.githubusercontent.com/SapanMozammel/claude-workflow/main/sync.sh | bash
+TMP=$(mktemp -d)
+gh repo clone SapanMozammel/claude-workflow "$TMP" -- --depth=1 --quiet
+bash "$TMP/sync.sh"
+rm -rf "$TMP"
 ```
 
 ## What's included
