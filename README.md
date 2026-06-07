@@ -45,7 +45,6 @@ rm -rf "$TMP"
 - `plans/` — PRDs live in the project repo
 - `settings.local.json` — local overrides stay local
 - `CLAUDE.md` — project instructions (use `CLAUDE.template.md` as a starting point)
-- `resume/` — sapan.dev-only pipeline
 
 ## Update the workflow
 

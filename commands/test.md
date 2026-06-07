@@ -16,7 +16,7 @@ Two modes — the command picks based on `$ARGUMENTS`:
 
 ## Skills to load FIRST (before reading the target or running the suite)
 
-Invoke each via the **Skill** tool. **Sapan rules in `CLAUDE.md`, `workflow/testing.md`, and `workflow/i18n-audit.md` override external skill guidance on conflict.**
+Invoke each via the **Skill** tool. **project rules in `CLAUDE.md`, `workflow/testing.md`, and `workflow/i18n-audit.md` override external skill guidance on conflict.**
 
 - `react-best-practices` — TSX testing patterns + the broader component checklist.
 - `web-design-guidelines` — defines critical a11y violations the test should catch.
@@ -31,7 +31,7 @@ Determine scope from `$ARGUMENTS`:
 |---|---|
 | `unit` | `pnpm run test` (Vitest, run-once) |
 | `e2e` | `pnpm run test:e2e` (Playwright, defaults to all 8 projects in the matrix). Use `--project=chromium-desktop` for a fast single-browser smoke. |
-| `i18n` | Run sapan's i18n audit: parallel-spawn agents to check translation parity (missing keys, over-translation, orphan keys, ICU placeholder integrity) per `.claude/commands/review-i18n.md` (was `audit-i18n.md`); produce the three PRDs at `.claude/plans/{missing-translations-audit, over-translation-audit, orphan-translation-keys-audit}/prd.md` |
+| `i18n` | Run project's i18n audit: parallel-spawn agents to check translation parity (missing keys, over-translation, orphan keys, ICU placeholder integrity) per `.claude/commands/review-i18n.md` (was `audit-i18n.md`); produce the three PRDs at `.claude/plans/{missing-translations-audit, over-translation-audit, orphan-translation-keys-audit}/prd.md` |
 | empty | `pnpm run test` (and `pnpm run test:e2e` if `e2e/` exists) |
 
 If all pass: report summary (suites, tests, duration, coverage if `pnpm run test:coverage` was used).
@@ -59,32 +59,31 @@ Triggered when `$ARGUMENTS` is a file path, component name, or feature descripti
    - Whole route, multi-component journey, visual regression, accessibility audit → **Playwright** in `e2e/<feature>.spec.ts`.
 
 3. **Reuse what exists.** Before writing fresh helpers:
-   - Check `tests/test-utils.tsx` — sapan's `render` already wraps in `<Provider store={store}>`. Always import `render` from here, never directly from `@testing-library/react`.
-   - Check `tests/setup.tsx` — sapan's global mocks (next/link, next/image, next-themes, next-intl, @/i18n/navigation, @marsidev/react-turnstile, framer-motion, gsap, gsap/ScrollTrigger, @react-three/fiber, @react-three/drei, matchMedia, IntersectionObserver, ResizeObserver). **If a new global mock is needed, extend `tests/setup.tsx` rather than adding `vi.mock(...)` per test.**
+   - Check `tests/test-utils.tsx` — project's `render` already wraps in `<Provider store={store}>`. Always import `render` from here, never directly from `@testing-library/react`.
+   - Check `tests/setup.tsx` — project's global mocks (see `workflow/testing.md` for the full list). **If a new global mock is needed, extend `tests/setup.tsx` rather than adding `vi.mock(...)` per test.**
    - Check sibling `tests/components/*` for existing patterns and match their style.
-   - When Apollo is in use: a future `tests/apollo-utils.tsx` is the place to host `MockedProvider` wrapping helpers.
 
 4. **Generate the spec.** Cover the layers below — skip what genuinely doesn't apply, but don't stop at "renders without crashing".
 
 ### Coverage checklist (component / hook)
 
-- [ ] **Renders with realistic data** from sapan's static shapes (`Blog`, `Experience`, `Portfolio`, `Testimonial`, `FAQ` per `src/types/`).
+- [ ] **Renders with realistic data** from project's static data shapes (per `architecture/data.md`).
 - [ ] **Loading / Empty states** — when the component shows distinct states.
 - [ ] **Error state** — when the component handles failure (form validation, network error, retry).
 - [ ] **Prop variants** that change layout or behavior.
 - [ ] **User interactions** — `click`, `type`, `submit`, keyboard (`Tab`, `Enter`, `Escape`).
-- [ ] **State transitions** — Redux dispatches, derived UI, hook returns.
+- [ ] **State transitions** — store dispatches, derived UI, hook returns (per `architecture/state.md`).
 - [ ] **URL params** — `useSearchParams` / `useParams` (already mocked in `tests/setup.tsx`).
-- [ ] **localStorage** — `preferred-language` key when relevant; use `vi.stubGlobal('localStorage', ...)`.
-- [ ] **`prefers-reduced-motion` variant** when the component animates (sapan honors `motion-safe:` and `useReducedMotion`).
+- [ ] **localStorage** — persisted keys when relevant; use `vi.stubGlobal('localStorage', ...)`.
+- [ ] **`prefers-reduced-motion` variant** when the component animates.
 - [ ] **Accessibility** — roles, labels, focus management on dialogs/menus. Prefer `getByRole` over `getByTestId`.
-- [ ] **Apollo mocks** (when target uses Apollo) — at least one success + one error mock per query/mutation hit.
+- [ ] **Data-fetching mocks** (when target uses a data library) — at least one success + one error mock per query/mutation hit.
 
 ### Coverage checklist (Playwright e2e)
 
 - [ ] **Happy path** through the feature.
 - [ ] **At least one edge case** (empty results, validation failure, network error via `page.route(...)`).
-- [ ] **i18n** — verify on at least `en` and `ar` (RTL); other locales sampled per `e2e/i18n.spec.ts`.
+- [ ] **i18n** — verify on representative locales including RTL when applicable (per `architecture/routing.md`).
 - [ ] **Theme** — verify in light + dark when token-touching.
 - [ ] **Accessibility scan** with `@axe-core/playwright` — no critical violations.
 - [ ] **Visual regression** at 375 / 768 / 1440 px via `toHaveScreenshot()` when the spec covers a visual surface.
@@ -97,7 +96,7 @@ Triggered when `$ARGUMENTS` is a file path, component name, or feature descripti
    | Vitest unit / component | `tests/components/`, `tests/lib/`, `tests/data/`, `tests/store/`, `tests/ui/` | `Foo.test.tsx` / `helper.test.ts` |
    | Playwright e2e | `e2e/` | `<feature>.spec.ts` |
 
-   **Sapan diverges from the R&D `__tests__/` convention** — sapan's `vitest.config.ts` includes `tests/**/*.test.{ts,tsx}` and excludes `__tests__/`. Keep tests in `tests/` outside `src/`.
+   Keep tests in `tests/` outside `src/`, NOT `__tests__/` next to source (per `workflow/testing.md`).
 
 6. **Run until green.**
 
@@ -113,16 +112,16 @@ Triggered when `$ARGUMENTS` is a file path, component name, or feature descripti
 
 ## Mocking rules
 
-- Sapan's `tests/setup.tsx` already mocks: `next/link`, `next/image`, `next-themes`, `next-intl` (with auto-loaded `en` translations from `src/i18n/locales/en/`), `@/i18n/navigation`, `@marsidev/react-turnstile` (auto-resolves with fake token), `framer-motion`, `gsap`, `gsap/ScrollTrigger`, `@react-three/fiber`, `@react-three/drei`, `matchMedia`, `IntersectionObserver`, `ResizeObserver`. **Don't duplicate these per test** — extend `tests/setup.tsx`.
-- Apollo (when in use): wrap with `MockedProvider` from `@apollo/client/testing` — see `architecture/data-graphql.md`.
-- localStorage: `vi.stubGlobal('localStorage', { getItem, setItem, removeItem, clear })` and reset between tests in `beforeEach`. Sapan's only meaningful localStorage key is `preferred-language` (locale persistence).
+- project's `tests/setup.tsx` already has global mocks (see `workflow/testing.md`). **Don't duplicate these per test** — extend `tests/setup.tsx`.
+- Data-fetching libraries (when in use): wrap with the library's mock provider — see `architecture/data.md` and any data library skills loaded.
+- localStorage: `vi.stubGlobal('localStorage', { getItem, setItem, removeItem, clear })` and reset between tests in `beforeEach`.
 - **Never mock the module under test. Never mock React itself.**
 
 ## Constraints
 
 - Use **pnpm** for everything. Never `npm` / `npx`.
 - TypeScript strict — no `any`, no `@ts-nocheck` in new test files. Import types from `src/types/*`.
-- Follow sapan testing conventions in `CLAUDE.md` and `.claude/skills/workflow/testing.md`.
+- Follow project testing conventions in `CLAUDE.md` and `.claude/skills/workflow/testing.md`.
 - Do not weaken assertions to make a test pass. If the component is buggy, fail the test and tell the user.
 
 ## Report

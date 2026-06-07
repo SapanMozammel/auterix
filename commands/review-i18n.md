@@ -9,12 +9,12 @@ Steps Claude must follow:
 2. **Spawn two parallel Explore agents** (single message, multiple tool calls):
 
    **Agent A — hardcoded UI strings**
-   Scope: `src/app/` and `src/components/`. Inspect JSX text, `aria-label`, `placeholder`, `alt`, `title`, and default prop values. Exclude everything imported from `src/data/` and the intentional hardcodes listed in the skill. For each finding: `file:line` — exact string — suggested key path (prefer reusing keys in `src/i18n/locales/en/*.json`).
+   Scope: `src/app/` and `src/components/`. Inspect JSX text, `aria-label`, `placeholder`, `alt`, `title`, and default prop values. Exclude everything imported from `src/data/` and the intentional hardcodes listed in the skill. For each finding: `file:line` — exact string — suggested key path (prefer reusing existing keys in the baseline locale namespace files).
 
    **Agent B — over-translation check**
-   Scope: all 64 locale JSON files. Verify: tech names intact in `home.hero.description`, ICU placeholders (`{name}`, etc.) intact, key parity against English baseline, no untranslated-but-should-be values, no over-translated proper nouns.
+   Scope: all locale JSON files. Verify: tech names intact, ICU placeholders (`{name}`, etc.) intact, key parity against baseline locale, no untranslated-but-should-be values, no over-translated proper nouns.
 
-3. **Run the orphan-key scan** (Node snippet from the skill under "Orphan-key detection"). This finds keys that exist in `src/i18n/locales/en/*.json` but are never referenced from any `useTranslations` / `getTranslations` call-site in `src/`. These are dead translation data — must land in PRD 3.
+3. **Run the orphan-key scan** (Node snippet from the skill under "Orphan-key detection"). This finds keys that exist in the baseline locale files but are never referenced from any translation call-site in `src/`. These are dead translation data — must land in PRD 3.
 
 4. **Verify each flagged file + each orphan candidate**: read the flagged lines and grep for the orphan key literal yourself before trusting results. Orphan detection has false-positive risk (dynamic key lookups); confirm by reading the translator callers in the same file.
 
@@ -33,7 +33,7 @@ Steps Claude must follow:
 
 7. **Write PRD 3** to `.claude/plans/orphan-translation-keys-audit/prd.md`:
    - If zero orphans: short clean-audit record stating no dead keys, with the detection command for future regression.
-   - If orphans found: list every unused key path from the English baseline, with `[🔄]` tasks to remove the key from all 16 locale files (`common.json`, `navigation.json`, `home.json`, `blog.json`).
+   - If orphans found: list every unused key path from the baseline locale, with `[🔄]` tasks to remove the key from all locale files.
    - Include verification (re-run parity + orphan detection after removal).
 
 8. **Report**: total findings per PRD, all three paths, and the `/implement` command(s) to run next.

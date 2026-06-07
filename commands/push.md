@@ -15,7 +15,7 @@ Optional flags: `$ARGUMENTS`
 
 ## Process
 
-1. **Detect the default branch** dynamically (sapan defaults to `main`, but the detection is portable across repo renames):
+1. **Detect the default branch** dynamically (project defaults to `main`, but the detection is portable across repo renames):
 
    ```bash
    BASE=$(git rev-parse --abbrev-ref origin/HEAD 2>/dev/null | sed 's@^origin/@@')
@@ -90,4 +90,4 @@ Optional flags: `$ARGUMENTS`
 - This project uses **pnpm**. Never substitute `npm` / `npx` / `yarn`.
 - The full `pnpm run build` is intentionally NOT in this gate — it's slow and gated in `/pr` instead. Push should stay fast enough to use frequently.
 - TypeScript strict mode is enforced via `pnpm run type:check` (which runs `tsc --noEmit`).
-- The default branch is detected dynamically via `git rev-parse --abbrev-ref origin/HEAD` — sapan currently uses `main`, but this command works across repo renames without code changes.
+- The default branch is detected dynamically via `git rev-parse --abbrev-ref origin/HEAD` — project currently uses `main`, but this command works across repo renames without code changes.

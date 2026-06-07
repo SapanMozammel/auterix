@@ -49,7 +49,7 @@ No arguments.
 - **Never edit files under `src/types/graphql/`** — they're regenerated. Edits will be wiped on the next codegen.
 - **Never widen types or add `as any`** to silence drift errors. Fix the operation or the schema source.
 - **Never commit `src/types/graphql/`** — it's gitignored. If it shows up in `git status`, the gitignore entry was deleted.
-- **Never substitute `npm` or `npx` for `pnpm`** — sapan is pnpm-only.
+- **Never substitute `npm` or `npx` for `pnpm`** — project is pnpm-only.
 
 ## Notes
 

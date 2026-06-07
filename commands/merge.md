@@ -5,7 +5,7 @@ allowed-tools: Bash(git merge:*), Bash(git checkout:*), Bash(git fetch:*), Bash(
 
 # Merge
 
-Local merge of a **source branch** into the **current branch** — matches `git merge <branch>` convention. Defaults are tuned for sapan's GitFlow-ish layout: `feature/*` → `dev` (squash), `dev` → `main` (no-ff merge commit). Never pushes, never force-merges, never auto-resolves conflicts.
+Local merge of a **source branch** into the **current branch** — matches `git merge <branch>` convention. Defaults are tuned for project's GitFlow-ish layout: `feature/*` → `dev` (squash), `dev` → `main` (no-ff merge commit). Never pushes, never force-merges, never auto-resolves conflicts.
 
 ## Input
 
@@ -42,7 +42,7 @@ Parse `$ARGUMENTS`, strip flags, treat the first remaining token as the source b
 
    - If `SOURCE` is empty: stop. Ask the user which branch to merge. Do NOT auto-pick a recent feature branch.
    - If `SOURCE` equals `TARGET`: abort. Cannot merge a branch into itself.
-   - If `TARGET` equals `$BASE` and `SOURCE` is a `feature/*` branch: surface a warning. Sapan's flow is `feature/*` → `dev` → `$BASE`, not `feature/*` → `$BASE` directly. Require explicit user confirmation before proceeding.
+   - If `TARGET` equals `$BASE` and `SOURCE` is a `feature/*` branch: surface a warning. project's flow is `feature/*` → `dev` → `$BASE`, not `feature/*` → `$BASE` directly. Require explicit user confirmation before proceeding.
 
 2. **Working-tree sanity (target side).**
 
@@ -81,7 +81,7 @@ Parse `$ARGUMENTS`, strip flags, treat the first remaining token as the source b
 
 4. **Pick the default merge strategy** (only when neither `--squash` nor `--no-squash` was provided), based on the **source** branch shape:
 
-   - Source `feature/*` / `fix/*` / `chore/*` / `docs/*` / `test/*` / `refactor/*` / `style/*` → **squash** (sapan history on `dev` is one commit per feature)
+   - Source `feature/*` / `fix/*` / `chore/*` / `docs/*` / `test/*` / `refactor/*` / `style/*` → **squash** (project history on `dev` is one commit per feature)
    - Source `dev` (target = `$BASE`) → **`--no-ff`** (preserves dev history into main; release commits group together)
    - Anything else → **`--no-ff`** (default) — surface the choice in the report so the user can override
 
@@ -172,7 +172,7 @@ Parse `$ARGUMENTS`, strip flags, treat the first remaining token as the source b
 
 | Source | Target | Default | Why |
 |---|---|---|---|
-| `feature/foo` | `dev` | `--squash` | Sapan's `dev` history is one commit per feature; cleaner blame |
+| `feature/foo` | `dev` | `--squash` | project's `dev` history is one commit per feature; cleaner blame |
 | `dev` | `main` | `--no-ff` | Release: keeps the feature commits visible in main's first-parent line |
 | `hotfix/foo` | `main` | `--no-ff` | Hotfix: preserve the small fix commit chain for audit |
 | anything | sibling | `--no-ff` | Don't lose context on cross-branch merges |
@@ -182,6 +182,6 @@ Override either default with `--squash` or `--no-squash`.
 ## Notes
 
 - This project uses **pnpm**. Never substitute `npm` / `npx` / `yarn`.
-- TypeScript strict mode + `exactOptionalPropertyTypes` are on; `pnpm run type:check` is the canonical type check.
-- Prettier runs via the PostToolUse hook + `/format` — no separate command in the merge gate. Prefer `/format` when the diff touches `className` strings or `@apply` directives.
+- TypeScript strict mode is on; `pnpm run type:check` is the canonical type check.
+- Prettier runs via the PostToolUse hook + `/format` — no separate command in the merge gate.
 - **Memory-anchored rule:** never push or commit without explicit user direction. The squash flow drops you at staged-but-uncommitted state on purpose — finalize with `/commit-staged` when you're ready.

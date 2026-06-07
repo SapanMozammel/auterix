@@ -4,12 +4,12 @@
 
 Steps Claude must follow:
 1. If `$ARGUMENTS` is a locale code (e.g. `fr`, `ar`): translate only that locale
-2. If `$ARGUMENTS` is empty: translate all 16 locales in parallel
-3. Read all files in `src/i18n/locales/en/` as the source of truth (4 namespace files)
+2. If `$ARGUMENTS` is empty: translate all supported locales in parallel (read locale list from `architecture/routing.md`)
+3. Read all files in the baseline locale directory (e.g. `src/i18n/locales/en/`) as the source of truth
 4. For each target locale, spawn a **parallel subagent** with:
-   - The full English namespace files
+   - The full baseline locale namespace files
    - The existing target locale files (to preserve already-translated keys)
-   - The locale name and RTL flag (`ar` is RTL)
+   - The locale name and RTL flag (check `architecture/routing.md` for RTL locales)
    - Instruction: translate only keys missing or marked as stale; do not overwrite existing translations
 5. Each subagent writes its output to `src/i18n/locales/[locale]/[namespace].json`
 6. After all subagents complete, report: locales updated, keys added per locale, any failures

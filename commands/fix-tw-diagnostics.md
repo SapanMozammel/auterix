@@ -7,7 +7,7 @@ allowed-tools: Bash(pnpm run format:all*), Bash(pnpm run lint*), Bash(pnpm run l
 
 ## Skills to load FIRST
 
-- `tailwind-diagnostics` (sapan workflow) — describes the diagnostic categories and the **why** behind each rewrite; the actual detection + fix logic lives in `eslint-plugin-better-tailwindcss` wired through `.formatter/sync.js`. Read the skill so you can explain a finding to the user; do not duplicate its mapping tables into prompts.
+- `tailwind-diagnostics` (project workflow) — describes the diagnostic categories and the **why** behind each rewrite; the actual detection + fix logic lives in `eslint-plugin-better-tailwindcss` wired through `.formatter/sync.js`. Read the skill so you can explain a finding to the user; do not duplicate its mapping tables into prompts.
 
 ## Input (optional scope)
 
@@ -48,7 +48,7 @@ pnpm run lint 2>&1 | grep -E '(\.tsx|\.ts):[0-9]+|no-conflicting-classes' | head
 
 The `better-tailwindcss/no-conflicting-classes` rule runs at `warn` severity (report-only — intent inference required, same as the IDE). Group the output by file/line. Do NOT auto-fix; the resolution requires reading intent.
 
-Per the `tailwind-diagnostics` skill §2, the plugin already filters intentional pairs (`bg-light dark:bg-slate-900`, `p-4 px-2`, responsive-breakpoint overrides), so any warning surfaced is a real conflict.
+Per the `tailwind-diagnostics` skill §2, the plugin already filters intentional pairs (`p-4 px-2`, responsive-breakpoint overrides, and project-canonical dark-mode pairs), so any warning surfaced is a real conflict.
 
 ### Step 3 — Final gate
 
@@ -73,4 +73,4 @@ Settles Prettier's class sort after rewrites, then verifies types. Surface failu
 - Use the **Edit** tool only for autofix-incompatible findings reported in Step 1's remaining errors; never Write to whole files for what the lint rule could have rewritten.
 - Skip files in `.claude/skills/external/`, `node_modules/`, `.next/` — ESLint's `ignores` config already excludes them.
 - Never auto-fix `cssConflict` — intent inference is required; the command only reports.
-- Sapan-canonical pairs (`bg-light dark:bg-slate-900`, `text-primary dark:text-success`) are NOT conflicts; the plugin already handles variants correctly.
+- Project-canonical dark-mode color pairs (documented in `tailwind-diagnostics` skill) are NOT conflicts; the plugin already handles variants correctly.

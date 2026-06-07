@@ -3,7 +3,7 @@ name: tailwind-v4-syntax
 description: "Triggers when editing classNames or @apply directives that use Tailwind v3 syntax in this v4 project. Most common: the `!important` modifier moved from prefix (`!h-9`) to suffix (`h-9!`). Also flags any v3-only utilities/variants that don't exist in v4. Use when authoring or refactoring components, fixing IDE `suggestCanonicalClasses` diagnostics, or sweeping the codebase for v4 hygiene."
 ---
 
-# Tailwind v4 Syntax (sapan is on `tailwindcss@^4.2.4`)
+# Tailwind v4 Syntax (project is on `tailwindcss@^4.2.4`)
 
 ## Important modifier moved from prefix to suffix
 
@@ -29,10 +29,10 @@ Same rule for `@apply` directives in SCSS:
 
 ```scss
 /* v3 */
-@apply font-hg text-3xl !leading-tight font-bold;
+@apply font-display text-3xl !leading-tight font-bold;
 
 /* v4 */
-@apply font-hg text-3xl leading-tight! font-bold;
+@apply font-display text-3xl leading-tight! font-bold;
 ```
 
 ## How to find them
@@ -66,5 +66,5 @@ Use the codemod when also migrating `tailwind.config.ts` shape, theme tokens, et
 ## See also
 
 - [`tailwind-diagnostics`](./tailwind-diagnostics.md) — broader sweep covering both the `!important` migration (sub-case 1a of `suggestCanonicalClasses`) and `cssConflict` reporting. Use via `/fix-tw-diagnostics` when scoping wider than just the `!utility` form.
-- [`design-system/colors.md`](../design-system/colors.md), [`design-system/typography.md`](../design-system/typography.md), [`design-system/spacing.md`](../design-system/spacing.md) — sapan token rules that complement this v4-syntax rule
+- [`design-system/colors.md`](../design-system/colors.md), [`design-system/typography.md`](../design-system/typography.md), [`design-system/spacing.md`](../design-system/spacing.md) — project token rules that complement this v4-syntax rule
 - [`architecture/component-patterns.md`](../architecture/component-patterns.md) — `cn()` mandate for className composition

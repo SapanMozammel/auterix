@@ -9,7 +9,7 @@ allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git status:*), Bash(git r
 
 Optional target branch and flags: `$ARGUMENTS`
 
-Default base: dynamically detected via `git rev-parse --abbrev-ref origin/HEAD` (sapan currently uses `main`).
+Default base: dynamically detected via `git rev-parse --abbrev-ref origin/HEAD` (project currently uses `main`).
 
 ## Flags
 
@@ -61,15 +61,14 @@ Parse `$ARGUMENTS`, strip flags, treat the remainder as the target branch:
 4. **Auto-detect categories** from the changed-file list:
 
    - **Components**: any path under `src/components/**`
-   - **Routes added**: new `src/app/**/page.tsx`, `src/app/**/layout.tsx`, `src/app/**/route.ts`
+   - **Routes added**: new page, layout, or route handler files
    - **Tests added**: new files in `tests/**` or `e2e/**`
    - **Docs touched**: `CLAUDE.md`, `docs/**`, `.claude/plans/**/prd.md`, top-level `*.md`
-   - **i18n**: `src/i18n/**`, translation `*.json` files
-   - **Styling/tokens**: `tailwind.config.ts` (when present), `src/styles/**`, `src/app/fonts.ts`
-   - **State**: `src/store/**`, `src/providers/**`, `src/hooks/**`
-   - **GraphQL operations** (when Apollo is in use): new or changed `*.graphql` files in `src/lib/apollo/**`; flag breaking field renames or schema changes
-   - **Config/infra**: `next.config.ts`, `src/proxy.ts`, `tsconfig.json`, `package.json`, `pnpm-lock.yaml`, `eslint.config.mjs`, `.github/**`
-   - **Data**: `src/data/{content,config}/**`
+   - **i18n**: translation files, i18n config
+   - **Styling/tokens**: `tailwind.config.ts` (when present), `src/styles/**`, font config
+   - **State**: store files, providers, hooks
+   - **Config/infra**: `next.config.ts`, `tsconfig.json`, `package.json`, `pnpm-lock.yaml`, `eslint.config.mjs`, `.github/**`
+   - **Data**: data source files
 
 5. **Draft PR body** using exactly these sections (omit a section only if it has no content):
 
@@ -82,19 +81,16 @@ Parse `$ARGUMENTS`, strip flags, treat the remainder as the target branch:
    - Figma: <node id or URL — only if referenced in the diff or commit messages>
 
    ## Routing & Layout Changes
-   - <new routes, layout/provider changes, locale-prefix updates>
+   - <new routes, layout/provider changes>
 
    ## i18n
    - <translation keys added/changed; locales touched; RTL impact>
 
    ## State & Data
-   - <Redux slices, hooks, static data files>
-
-   ## GraphQL Changes
-   - <when Apollo is in use: new typed operations, schema fields touched, breaking renames; otherwise omit>
+   - <state changes, hooks, data files>
 
    ## Tests Added
-   - <Vitest unit/component (`tests/**`) and Playwright e2e (`e2e/**`) — list files>
+   - <unit/component (`tests/**`) and Playwright e2e (`e2e/**`) — list files>
 
    ## Docs Updated
    - <CLAUDE.md / docs/ / .claude/plans/*/prd.md / inline JSDoc>
@@ -102,7 +98,6 @@ Parse `$ARGUMENTS`, strip flags, treat the remainder as the target branch:
    ## Test Plan
    - [ ] <reviewer-runnable verification step>
    - [ ] <visual check at mobile / tablet / desktop if UI>
-   - [ ] <i18n check on `/ar` (RTL) if i18n touched>
    - [ ] <theme toggle (light/dark) if tokens or color classes touched>
 
    ## Risks / Rollback
@@ -134,7 +129,7 @@ Parse `$ARGUMENTS`, strip flags, treat the remainder as the target branch:
 
 8. **Print the PR URL** returned by `gh pr create`.
 
-9. **Suggest a merge-commit message** for when the PR is merged. Default to squash-merge style (matches sapan's one-commit-per-release convention on `main`). Provide:
+9. **Suggest a merge-commit message** for when the PR is merged. Default to squash-merge style (matches project's one-commit-per-release convention on `main`). Provide:
 
    - **Title** (under 72 chars, ending with ` (#<PR number>)` — what GitHub appends on squash):
      - If the PR is a release (bumps `package.json` version + has a CHANGELOG-equivalent entry), use `chore: release vX.Y.Z — <short descriptor> (#N)`
@@ -146,7 +141,7 @@ Parse `$ARGUMENTS`, strip flags, treat the remainder as the target branch:
 
 ## Hard rules — DO NOT BREAK
 
-- **Default base is detected dynamically** via `git rev-parse --abbrev-ref origin/HEAD` (sapan currently `main`). Override only via `$ARGUMENTS`.
+- **Default base is detected dynamically** via `git rev-parse --abbrev-ref origin/HEAD` (project currently `main`). Override only via `$ARGUMENTS`.
 - **Never skip the quality gate silently.** `--skip-tests` / `--skip-build` are doc-only escape hatches — verify the diff actually matches docs-only scope before honoring them.
 - **Never `--no-verify`** on the push that precedes the PR.
 - **Never force-push** as part of `/pr`. If the branch needs a force update, the user does it explicitly.
@@ -156,6 +151,5 @@ Parse `$ARGUMENTS`, strip flags, treat the remainder as the target branch:
 ## Notes
 
 - This project uses **pnpm**. Never substitute `npm` / `npx` / `yarn`.
-- TypeScript strict mode + `exactOptionalPropertyTypes` are on; `pnpm run type:check` is the canonical type check.
-- Prettier runs via the PostToolUse hook in `.claude/settings.json` and via `/format` (or `pnpm run format:all` directly) — no separate command in the PR gate. Prefer `/format` when the diff touches `className` strings or `@apply` directives — it adds the Tailwind v3→v4 `!utility` sweep on top of the standard format pipeline.
-- **GraphQL section is included only when Apollo is in use** — i.e., when files under `src/lib/apollo/**` changed. Skip the section otherwise (sapan is static-content first; Apollo is foundation-only with no endpoint set).
+- TypeScript strict mode is on; `pnpm run type:check` is the canonical type check.
+- Prettier runs via the PostToolUse hook in `.claude/settings.json` and via `/format`.

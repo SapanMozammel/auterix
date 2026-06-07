@@ -111,124 +111,38 @@ border-danger text-danger
 opacity-50 cursor-not-allowed
 ```
 
----
-
-## Section Structure
-
-Every landing page section follows this exact pattern:
-
-```tsx
-<SectionSeparator lts rts lbs rbs bl ll rl>
-  <div className="container flex w-full grow flex-col">
-    <SectionTitle
-      title="Section Title"
-      subtitle="SECTION SUBTITLE"
-      watermark="Watermark"
-    />
-    {/* Section content */}
-  </div>
-</SectionSeparator>
-```
-
-### SectionSeparator Props (decorative corners/edges)
-- `lts` / `rts` / `lbs` / `rbs` — Left/Right Top/Bottom Stars (IconPlus corners)
-- `tl` / `bl` / `ll` / `rl` — Top/Bottom/Left/Right Lines
-
-### SectionTitle Props
-- `title` — Main heading (`font-cg`)
-- `subtitle` — Small caps label (secondary color)
-- `watermark` — Large background text (very low opacity)
-
----
-
-## Button System
-
-Located at `src/components/layout/common/Button.tsx`, variants in `Button/variants.ts`.
-
-### Props
-- `fill: boolean` — filled vs outlined
-- `gradient: boolean` — gradient vs solid
-- `loading: boolean` — loading spinner
-- `to: string` — renders as Link instead of button
-
-### 8 Variants
-1. `link-fill-gradient` — Gradient-filled link
-2. `link-fill-solid` — Solid-filled link
-3. `link-outline-gradient` — Gradient-outlined link
-4. `link-outline-solid` — Solid-outlined link
-5. `button-fill-gradient` — Gradient-filled button
-6. `button-fill-solid` — Solid-filled button
-7. `button-outline-gradient` — Gradient-outlined button
-8. `button-outline-solid` — Solid-outlined button
-
-### Gradient Stops
-- Light: `var(--color-info)` → `var(--color-primary)`
-- Dark: `var(--color-primary)` → `var(--color-success)`
-
----
-
-## Decorative Glow Blobs
-
-Full-page status/error pages use a centered radial glow blob for visual depth. Named `@utility` classes in `src/styles/utilities.scss` keep JSX clean and guarantee CSS generation — no inline `style`, no Tailwind arbitrary-value classes.
-
-### Available utilities
-
-| Class | Size | Color |
-|---|---|---|
-| `glow-blob-primary` | 640×260px | `--color-primary` at 28% |
-| `glow-blob-danger` | 640×260px | `--color-danger` at 18% |
-| `glow-blob-primary-sm` | 600×220px | `--color-primary` at 22% |
-
-```tsx
-<div className='glow-blob-primary pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full' />
-```
-
-- `background: color-mix(in oklab, var(--color-TOKEN) N%, transparent)` — reads the CSS variable directly, works in both light and dark mode without `dark:` variants; this is the only raw CSS property in the utility (no Tailwind equivalent)
-- Dimensions and blur use `@apply w-* h-* blur-*` inside the `@utility` block — Tailwind scale values preferred over arbitrary pixels
-- To add a new variant: add a `@utility glow-blob-*` block in `src/styles/utilities.scss` with `@apply` for size/blur and raw CSS for `background`
-- The parent must be `relative overflow-hidden`; content sits in `relative z-10`
-
 ## Animation Library Selection
+
+Choose the right animation tool based on interaction type and duration. Define your project's animation library matrix here.
 
 | Interaction | Duration | Library |
 |---|---|---|
 | Hover | 150ms | CSS transition |
-| Button | 200ms | Framer Motion |
-| Card / panel | 300ms | Framer Motion |
-| Section entrance | 500ms | Framer Motion |
-| Page transition | 800ms | Framer Motion |
-| Scroll sequences | variable | GSAP + ScrollTrigger |
-| 3D | — | Three.js / R3F |
+| Component entrance | 300–500ms | (your animation library) |
+| Scroll sequences | variable | (your scroll animation library) |
 
-### CSS Keyframe Classes
-| Class | Duration | Use |
-|---|---|---|
-| `animate-noise` | 1s infinite | Background texture |
-| `animate-spin-slow` | 10s infinite | Slow rotation |
-| `animate-faq-border-shift` | 3s infinite | Gradient border shift |
-| `animate-overlay-in` | 0.3s forwards | Modal fade in |
-| `animate-overlay-out` | 0.3s forwards | Modal fade out |
-| `animate-slide-in-from-{direction}` | 0.3s forwards | Slide in |
-| `animate-slide-out-to-{direction}` | 0.3s forwards | Slide out |
+Document any custom CSS keyframe classes (`@keyframes`) your project registers — this helps reviewers know what's available vs. what needs to be added.
 
 ---
 
 ## File Organization
+
+Define your project's file organization here. A typical Next.js App Router layout:
 
 | What | Where |
 |---|---|
 | Page sections | `src/components/layout/{section-name}/index.tsx` |
 | Sub-components | `src/components/layout/{section-name}/{sub-component}.tsx` |
 | Shared layout pieces | `src/components/layout/common/` |
-| Base UI (shadcn + custom) | `src/components/ui/` |
-| Custom icons | `src/components/icons/` (`projects/<brand>/logo.tsx` for project logos) |
+| Base UI components | `src/components/ui/` |
+| Custom icons | `src/components/icons/` |
 | Static content | `src/data/content/` |
 | App config | `src/data/config/` |
 | Type definitions | `src/types/` |
 | Utilities | `src/lib/utils/` |
 | Styles | `src/styles/` |
 
-**Filename casing.** Every file and folder name is **kebab-case** (`hero-background.tsx`, `cta-logo.tsx`, `notification-x/logo.tsx`, `use-contact-form.ts`, `locale-slice.ts`). React component identifiers (the exported symbol) stay PascalCase. `index.tsx` is the entry file inside any folder unit. Locale folders (`pt-BR`, `zh-CN`) follow BCP-47 and are exempt; Next.js route segments (`[locale]`, `[slug]`, `(landing)`) follow App Router syntax and are exempt.
+**Filename casing.** Every file and folder name is **kebab-case**. React component identifiers (the exported symbol) stay PascalCase. `index.tsx` is the entry file inside any folder unit.
 
 ---
 
@@ -242,7 +156,7 @@ Before writing or modifying any component:
 - [ ] Mobile-first breakpoints (`sm:`, `md:`, `lg:`)
 - [ ] Server Component by default — `'use client'` only when hooks/events required
 - [ ] If Client: `memo()` + `ComponentName.displayName = 'ComponentName'`
-- [ ] Navigation: `import { Link } from '@/i18n/navigation'` for internal routes. For external links (`https://`, `mailto:`, `tel:`), use `import NextLink from 'next/link'`. Both can coexist in the same file.
+- [ ] Internal navigation: use project's locale-aware Link helper (per `architecture/routing.md`). External links: use `NextLink` from `next/link`
 - [ ] All imports use `@/` alias
 - [ ] `type Props = { ... }` — never `interface`
 - [ ] No `any` types
@@ -256,9 +170,8 @@ For e2e enforcement of server/client boundaries (reduced-motion default, RSC rou
 
 ### External reference
 
-Sapan rules in this file are authoritative; external references are framework-level guidance — load when sapan rules don't cover the case.
+project rules in this file are authoritative; external references are framework-level guidance — load when project rules don't cover the case.
 
-- [`workflow/no-use-effect.md`](../workflow/no-use-effect.md) — strict no-direct-`useEffect` rule (ALWAYS ACTIVE; sapan-canonical, the 6-rule guide for derived state, event handlers, `useMemo`, `useSyncExternalStore`, key-based reset, `useMountEffect`)
-- [`workflow/tailwind-mangle.md`](../workflow/tailwind-mangle.md) — production class mangling. The `cn()` mandate above is what makes this safe: any non-`cn()` className composition (template literal, string concat, runtime-computed) silently breaks the prod build. Auto-detects runtime `classList.*` reservations.
+- [`workflow/no-use-effect.md`](../workflow/no-use-effect.md) — strict no-direct-`useEffect` rule (ALWAYS ACTIVE; project-canonical, the 6-rule guide for derived state, event handlers, `useMemo`, `useSyncExternalStore`, key-based reset, `useMountEffect`)
 - [`external/react/react-best-practices/`](../external/react/react-best-practices/) — TSX quality checklist (component structure, hooks, a11y, perf, TS)
 - [`external/nextjs/nextjs-app-router-patterns/`](../external/nextjs/nextjs-app-router-patterns/) — advanced patterns (Server Components, streaming, parallel routes)

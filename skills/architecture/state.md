@@ -1,75 +1,69 @@
 # Architecture — State Management
 
-## Redux Store (`src/store/`)
+## State Store
 
-### Slices
+Document your project's state management solution (Redux Toolkit, Zustand, Jotai, Context, etc.).
 
-**`localeSlice`** — `src/store/slices/locale-slice.ts`
-- State: `currentLocale`, `isRTL`
-- Persists to `localStorage` key `preferred-language`
-- Updated when user switches language via `LanguageSwitcher`
+### Slices / Atoms / Stores
 
-**`uiSlice`** — `src/store/slices/ui-slice.ts`
-- State: `isContactModalOpen`
-- Controls the contact modal open/close state
+Document each piece of state, what it owns, and where it lives:
 
-### Typed Hooks (always use these — never raw Redux)
+| State | Owner | Location |
+|---|---|---|
+| UI state (modals, drawers) | Store | e.g. `src/store/slices/ui-slice.ts` |
+| Locale + RTL flag | Store | e.g. `src/store/slices/locale-slice.ts` |
+| Color theme (light/dark) | Theme provider | NOT in the store |
+| Form field state | local `useState` | Inside component |
+| Animation state | local `useState` or animation library | Inside component |
+
+### Typed Hooks (always use these — never raw store hooks)
 
 ```tsx
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-
-const dispatch = useAppDispatch()
-const isOpen = useAppSelector((state) => state.ui.isContactModalOpen)
 ```
 
-**Never** use `useDispatch()` or `useSelector()` directly.
+**Never** use raw `useDispatch()` or `useSelector()` directly.
 
 ### State Ownership Rules
 
-| State | Owner |
-|---|---|
-| Contact modal open/close | Redux (`uiSlice`) |
-| Current locale + RTL flag | Redux (`localeSlice`) |
-| Color theme (light/dark) | `next-themes` — NOT Redux |
-| Form field state | local `useState` inside component |
-| Animation state | local `useState` or Framer Motion |
+Clearly document what belongs where to prevent state misplacement:
+
+- **Global UI state** (modals, drawers, notifications) → store
+- **Navigation state** (current route, locale) → store or URL params
+- **Color theme** → dedicated theme provider (e.g. `next-themes`)
+- **Form field state** → local `useState`
+- **Animation state** → local `useState` or animation library
 
 ---
 
-## Theme — next-themes
+## Theme
+
+If using a theme provider (e.g. `next-themes`):
 
 ```tsx
 // Provider configured in src/providers/index.tsx
 <ThemeProvider defaultTheme="system" attribute="class">
 ```
 
-- Adds `.dark` class to `<html>` when dark mode is active
 - Access theme: `const { theme, setTheme } = useTheme()` from `next-themes`
-- Do not store theme in Redux
+- Do not store theme in the state store
 
 ---
 
 ## Custom Hooks (`src/hooks/`)
 
-**`useContactForm`** — `src/hooks/use-contact-form.ts`
-- Form state, validation, and submission
-- Dispatches to Redux for modal state
+Document project-specific hooks here:
 
-**`useStackingCards`** — `src/hooks/use-stacking-cards.ts`
-- GSAP ScrollTrigger stacking animation for Portfolio section
-- Returns ref to attach to card container
+| Hook | Purpose |
+|---|---|
+| `useContactForm` | Form state, validation, and submission |
 
 ---
 
 ## See also
 
-For the Redux/Apollo state boundary (UI vs remote data), see [`data-graphql.md`](./data-graphql.md).
-
-For Redux dispatch patterns in e2e (opening ContactModal via `window.__store__.dispatch`, asserting locale persistence after reload), see [`../workflow/e2e.md`](../workflow/e2e.md).
-
 ### External reference
 
-Sapan rules in this file are authoritative; external references are framework-level guidance — load when sapan rules don't cover the case.
+project rules in this file are authoritative; external references are framework-level guidance — load when project rules don't cover the case.
 
 - [`external/react/react-best-practices/`](../external/react/react-best-practices/) — hook usage, state colocation, derived-state patterns
-- [`external/data/apollo-client/`](../external/data/apollo-client/) — Apollo state management (`InMemoryCache`, reactive variables — sapan does NOT use reactive variables). **Load only when Apollo is in use** to understand the Redux/Apollo boundary documented above (Redux for UI state; Apollo for remote data + cache).

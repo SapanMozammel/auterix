@@ -27,7 +27,7 @@ Optional message hint: `$ARGUMENTS`
 
 3. **Draft a 1–2 sentence message that explains WHY, not WHAT.** The diff already shows what.
    - Bad: `update Hero component`
-   - Good: `fix(hero): mount canvas on iPad Safari by deferring R3F initialization to a useLayoutEffect post-mount guard`
+   - Good: `fix(hero): defer canvas initialization to useLayoutEffect to fix mount order on Safari`
 
 4. **Stage only files that belong to this logical change — by name.** NEVER `git add -A` or `git add .`.
    - Group related files. If the diff spans unrelated changes, **stop and ask** whether to split into multiple commits.
@@ -35,7 +35,7 @@ Optional message hint: `$ARGUMENTS`
 5. **Before staging, scan for secrets.** Refuse and STOP if any of these are about to be committed:
    - `.env`, `.env.*` (except `.env.example`)
    - `*credentials*`, `*.pem`, `*.key`, `*.p12`
-   - Any file containing `BEGIN RSA PRIVATE KEY`, `aws_secret_access_key`, `STRIPE_SECRET`, `JWT_SECRET`, `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, `UPSTASH_REDIS_REST_TOKEN`, or any sapan env var that's NOT prefixed with `NEXT_PUBLIC_`
+   - Any file containing `BEGIN RSA PRIVATE KEY`, `aws_secret_access_key`, `STRIPE_SECRET`, `JWT_SECRET`, or any server-side API key / secret token that's NOT prefixed with `NEXT_PUBLIC_`
    - If the user explicitly asks to commit one of these, **ask once more** with the file list spelled out before proceeding.
 
 6. **Commit with a HEREDOC** so the body formats correctly:
@@ -66,8 +66,8 @@ Optional message hint: `$ARGUMENTS`
 
 ## Notes
 
-- **Co-author trailer:** `Claude Opus 4.7 (1M context) <noreply@anthropic.com>` — current sapan convention. The trailer is always appended; never replace it.
+- **Co-author trailer:** `Claude Opus 4.7 (1M context) <noreply@anthropic.com>` — current project convention. The trailer is always appended; never replace it.
 - This project uses **pnpm**. Hooks (Prettier via PostToolUse in `.claude/settings.json`, lint-staged when introduced) run via pnpm — never substitute npm/npx.
-- **Sapan scope conventions** (use as the `<scope>` in `<type>(<scope>):`): `hero`, `header`, `footer`, `portfolio`, `experience`, `testimonials`, `workflow`, `blog`, `faq`, `articles`, `contact`, `i18n`, `theme`, `seo`, `a11y`, `animation`, `tokens`, `redux`, `data`, `routing`, `tests`, `docs`, `deps`, `tooling`, `release`. Match an existing one when the change fits; introduce a new one only when none apply.
+- **Scope conventions** (use as the `<scope>` in `<type>(<scope>):`): derive from the project's component or module names. Common generic scopes: `i18n`, `theme`, `seo`, `a11y`, `animation`, `tokens`, `data`, `routing`, `tests`, `docs`, `deps`, `tooling`, `release`. Match an existing one when the change fits; introduce a new one only when none apply.
 - If `$ARGUMENTS` is provided, treat it as a hint for the subject line — but still rewrite to focus on WHY and conform to the prefix conventions above.
-- Scope is optional — `feat: ship Hashnode-driven blog feed` is fine when the change is broad enough that a single scope would mislead.
+- Scope is optional — `feat: add blog feed` is fine when the change is broad enough that a single scope would mislead.

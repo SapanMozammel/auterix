@@ -1,11 +1,11 @@
 ---
-description: Review staged or recent sapan changes for security, a11y, hydration, performance, effects/state, and sapan code conventions. Auto-writes a follow-up PRD on Critical/Warning findings.
+description: Review staged or recent project changes for security, a11y, hydration, performance, effects/state, and project code conventions. Auto-writes a follow-up PRD on Critical/Warning findings.
 allowed-tools: Read, Grep, Glob, Bash(git diff*), Bash(git diff --cached*), Bash(git log*), Bash(git status*), Bash(git rev-parse*), Bash(pnpm run lint*), Bash(pnpm run test*), Bash(pnpm run type:check*)
 ---
 
 # Code Review
 
-Review the current sapan portfolio changes for quality, security, a11y, and convention compliance.
+Review the current project changes for quality, security, a11y, and convention compliance.
 
 ## Input
 
@@ -18,14 +18,14 @@ Scope (optional): `$ARGUMENTS`
 
 ## Skills to load FIRST (before the gate or diff)
 
-Invoke each via the **Skill** tool. **Sapan rules in `CLAUDE.md` and `.claude/skills/{architecture,design-system,workflow}/` override external skill guidance on conflict.**
+Invoke each via the **Skill** tool. **project rules in `CLAUDE.md` and `.claude/skills/{architecture,design-system,workflow}/` override external skill guidance on conflict.**
 
 - `react-best-practices` — React quality checklist for TSX files (component structure, hooks, a11y, perf, TS).
 - `vercel-react-best-practices` — load before judging Priority 4 (Performance).
 - `next-best-practices` — load before judging Priority 2 (Hydration & RSC).
 - `web-design-guidelines` — load before judging Priority 1 (Security & A11y).
 - `no-use-effect` — load before judging Priority 5 (Effects & State).
-- `apollo-client` — load **only** when reviewing files that import from `src/lib/apollo/`. Rules apply only when Apollo is in use.
+- Load any data-fetching library skill only when the reviewed files import from that library.
 
 ## Flags
 
@@ -81,18 +81,14 @@ Apply checks **only to changed code**. Report issues only when >80% confident. D
 
 ### Priority 3: Data Layer (Critical / Warning)
 
-**Sapan is static-content first.** Static data lives in `src/data/{content,config}/` and is imported directly by Server Components. Data-layer rules below apply ONLY to files that import from `src/lib/apollo/` (Apollo is foundation-only — no endpoint set until a real query lands).
+Follow project data-fetching conventions per `architecture/data.md` and any data library skills loaded. Common issues:
 
-When Apollo IS in use:
+- Inline query/operation definitions in components — should live in dedicated operation files and be imported
+- Hand-typed query/response results when generated types are available
+- `useEffect` wrapping data-fetching hooks — most libraries manage their own lifecycle
+- Missing error handling on mutations/queries
 
-- `useQuery` / `useSuspenseQuery` should generally be the choice; `useQuery` requires explicit `loading` and `error` handling before reading `data`
-- `useMutation` without `onError` (sapan should add a generic `onError` helper once the first mutation lands)
-- Inline `gql` template literals in components — operations live in `src/lib/apollo/operations/*.graphql` and are imported via codegen-generated documents
-- Hand-typed query results — use generated types from `src/types/graphql/`, never hand-roll
-- Reactive variables and `@client` directives — **forbidden** (Redux owns UI state; Apollo owns remote data)
-- `useEffect` wrapping any Apollo hook — Apollo manages its own lifecycle
-
-When Apollo is NOT in use: skip P3 entirely. Static-data routes in `src/data/{content,config}/` are correct by design.
+When no data-fetching library is in use: skip P3 entirely. Static-data routes are correct by design.
 
 ### Priority 4: Performance (Warning)
 
@@ -101,56 +97,51 @@ When Apollo is NOT in use: skip P3 entirely. Static-data routes in `src/data/{co
 - Animations without `motion-safe:` / `prefers-reduced-motion` gate
 - Missing Suspense boundary around RSC data dependency that streams
 - List rendering without stable `key` (array index for dynamic lists is a bug)
-- Three.js / R3F components rendered eagerly when offscreen (should pause via `IntersectionObserver`)
-- Unbounded GraphQL queries (when Apollo is in use) — no `first` / pagination on potentially large lists
+- Heavy 3D / canvas components rendered eagerly when offscreen (should pause or lazy-load)
+- Unbounded queries (when using a data-fetching library) — no `first` / pagination on potentially large lists
 
 ### Priority 5: Effects & State (Warning)
 
-- `useEffect` for derived state — sapan rule: **no-direct-useEffect** — prefer derivation, `useMemo`, event handlers, key-based reset, `useSyncExternalStore`
+- `useEffect` for derived state — project rule: **no-direct-useEffect** — prefer derivation, `useMemo`, event handlers, key-based reset, `useSyncExternalStore`
 - Missing or excess deps in remaining effects
-- Cleanup function missing for subscriptions, listeners, intervals, timeouts, GSAP contexts
+- Cleanup function missing for subscriptions, listeners, intervals, timeouts, animation contexts
 - `useMemo` / `useCallback` overused (no dep on heavy compute) or underused (passed to memoized children)
-- Local state (`useState`) holding values that belong in Redux — `isContactModalOpen` belongs in `uiSlice`; `currentLocale` / `isRTL` belong in `localeSlice`
-- Raw `useDispatch()` / `useSelector()` instead of typed `useAppDispatch()` / `useAppSelector()` from `@/store/hooks`
-- Theme stored in Redux instead of `next-themes` (theme is `next-themes`'s responsibility — `.dark` class on `<html>`)
+- Local state (`useState`) holding values that belong in the project's state store (per `architecture/state.md`)
+- Raw store hooks instead of typed wrappers (per `architecture/state.md`)
+- Theme stored in state when the project delegates it to a theme provider
 
 ### Priority 6: Conventions & Readability (Suggestion / Warning)
 
-**Sapan-canonical rules** (per `CLAUDE.md` Code Conventions + sapan skills):
+**project-canonical rules** (per `CLAUDE.md` Code Conventions + project skills):
 
 - Relative imports (`../../`) instead of `@/` path alias
 - `any` type, `// @ts-ignore`, `// @ts-nocheck` introduced in new code (strict mode forbids)
-- `interface` keyword used for props or type definitions — sapan uses `type` only
-- `function Foo() {}` declaration — sapan uses arrow functions only (`const Foo = () => {}`)
+- `interface` keyword used for props or type definitions — project uses `type` only
+- `function Foo() {}` declaration — project uses arrow functions only (`const Foo = () => {}`)
 - String concatenation or template literals for className composition — must use `cn()` from `@/lib/utils`
-- Hardcoded hex colors / arbitrary CSS values (`#4a4ded`, `[16px]`) — must use sapan tokens (`text-primary`, `p-4`)
-- Hardcoded color values that duplicate sapan tokens (`bg-[#ffffff]` → `bg-white`)
+- Hardcoded hex colors / arbitrary CSS values (e.g. `#ff0000`, `[16px]`) — must use project tokens (`text-primary`, `p-4`)
+- Hardcoded color values that duplicate project tokens (`bg-[#ffffff]` → `bg-white`)
 - Inline `style={{}}` for static values — prefer Tailwind utilities or `@utility` SCSS classes
-- Both `export const Foo` AND `export default Foo` for the same component — sapan rule: one or the other (`export default` at the bottom)
-- `font-bungee` outside `Logo.tsx` or brand watermarks — sapan rule: logo/watermark only
-- Font classes outside sapan registry (`font-sans`, `font-serif`, `font-mono`) — sapan rule: use only `font-dm` / `font-hg` / `font-cg` / `font-bungee` / `font-arabic`
-- Internal navigation using `next/link` directly instead of `Link` from `@/i18n/navigation` (locale-aware)
-- External navigation (`https://`, `mailto:`, `tel:`) using `Link` from `@/i18n/navigation` instead of `NextLink` from `next/link`
-- "Senior" or seniority claims in user-facing copy — sapan memory: use "Frontend Developer", never "Senior" (overclaiming breaks trust)
-- Specific response-time windows ("24 hours", "within X days") in user copy — sapan memory: use "as soon as possible"
-- Legal vs brand name confusion: `legalName` JSON-LD field and copyright must say "Mozammel Ali"; everywhere else (UI, navigation, branding) is "Sapan Mozammel"
-- Testimonial copy framing — sapan memory: peer/collaborator voice only; never "hired", "brought on", "first hire"
-- Module structure changed but `CLAUDE.md` / `docs/DEVELOPMENT_GUIDE.md` not updated
-- Vitest test missing for new logic (sapan tests live in `tests/` outside `src/`, NOT `__tests__/` next to source)
-- PRD update overwriting `[✅]` history — sapan rule: PRD history is sacred, preserve completed steps
-- `[x]` markers used in PRD checklists — sapan rule: use `[⬜]` / `[🔄]` / `[✅]` only
+- Both `export const Foo` AND `export default Foo` for the same component — project rule: one or the other (`export default` at the bottom)
+- Font classes outside project registry — project font registry is closed (per `design-system/typography.md`)
+- Internal navigation not using the project's locale-aware Link helper (per `architecture/routing.md`)
+- External navigation (`https://`, `mailto:`, `tel:`) using the internal locale-aware Link instead of `NextLink`
+- Project-canonical copy conventions violated (per `CLAUDE.md`)
+- Module structure changed but `CLAUDE.md` not updated
+- Vitest test missing for new logic (project tests live in `tests/` outside `src/`, NOT `__tests__/` next to source)
+- PRD update overwriting `[✅]` history — project rule: PRD history is sacred, preserve completed steps
+- `[x]` markers used in PRD checklists — project rule: use `[⬜]` / `[🔄]` / `[✅]` only
 
 ## What NOT to Flag
 
-- **`bg-light dark:bg-slate-900` pairing** — sapan-canonical pair (memory rule); never flag as "color tokens don't match"
+- **Project-canonical design pairs** (per `design-system/colors.md` and `CLAUDE.md`)
 - **Formatting issues** — Prettier handles via PostToolUse hook in `.claude/settings.json`
 - **Pre-existing issues in untouched files** unless they pose a critical security risk
 - **Stylistic preferences** with no rule backing
 - **Adding type hints to code outside the diff** (scope creep)
 - **<80% confidence findings** (better to under-flag than over-flag)
-- **Intentional viewport-relative values** in known locations per `design-system/spacing.md` (Hero `-mb-[20vw]`, Technologies `pt-[20vw]`, SectionTitle watermark sizes, admin dashboard `em` values)
-- **`font-bungee` in `Logo.tsx` or brand watermark contexts** — that IS the allowed use
-- **Apollo P3 rules on non-Apollo files** — gate by `import` statements pointing at `@/lib/apollo/`
+- **Intentional viewport-relative values** in known locations per `design-system/spacing.md`
+- **Data-fetching library rules on files that don't use that library** — gate by import statements
 
 ## Output Format
 
@@ -188,7 +179,7 @@ End every review with one of:
 **Verdict: APPROVE**
 ```
 
-## Auto-PRD-on-violations (sapan memory rule — NOT opt-in)
+## Auto-PRD-on-violations (project memory rule — NOT opt-in)
 
 When the review finds **any Critical or Warning** issues, write or update a follow-up PRD at `.claude/plans/[scope-slug]-review/prd.md` so the user can run `/implement [scope-slug]-review` to apply fixes.
 
@@ -200,7 +191,7 @@ When the review finds **any Critical or Warning** issues, write or update a foll
 
 **PRD structure:**
 
-- Standard sapan PRD layout: Context, Affected Files, Implementation Steps, Verification, Risks
+- Standard project PRD layout: Context, Affected Files, Implementation Steps, Verification, Risks
 - Each violation is a separate `[⬜] Step N: <fix description>` entry under Implementation Steps
 - Severity prefixes the step description: `[Critical]` or `[Warning]`
 - Quote the original line + the suggested fix verbatim
@@ -209,4 +200,4 @@ When the review finds **any Critical or Warning** issues, write or update a foll
 
 **Final prompt to user:** "Ready? Run `/implement [scope-slug]-review`"
 
-This behavior carries over from the deprecated `/audit` command per sapan's memory rule — *"Always create/update PRD after audit if violations found, never skip"* — and is **not optional**. The `code-reviewer` agent enforces the same policy.
+This behavior is **not optional**. The `code-reviewer` agent enforces the same policy.

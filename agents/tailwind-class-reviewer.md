@@ -1,7 +1,7 @@
 ---
 name: tailwind-class-reviewer
 description: >
-  Scans sapan source for mangle-incompatible className patterns —
+  Scans project source for mangle-incompatible className patterns —
   template literals, string concatenation, conditionals outside cn(),
   variables passed as className without static fallback, runtime-computed
   class names. Run before `pnpm build:mangled`, before commit (alongside
@@ -13,14 +13,14 @@ model: sonnet
 
 # Tailwind Class Reviewer
 
-Pre-mangle smoke check. Scans `src/**/*.{ts,tsx}` for the four common patterns that silently break sapan's post-build Tailwind class mangler. Reports Critical findings only — there is no Warning tier; either a pattern is mangle-safe (fine) or mangle-breaking (Critical).
+Pre-mangle smoke check. Scans `src/**/*.{ts,tsx}` for the four common patterns that silently break project's post-build Tailwind class mangler. Reports Critical findings only — there is no Warning tier; either a pattern is mangle-safe (fine) or mangle-breaking (Critical).
 
 ## Skills to load FIRST
 
-Invoke each via the **Skill** tool. **Sapan rules are authoritative.**
+Invoke each via the **Skill** tool. **project rules are authoritative.**
 
-- `tailwind-mangle` (sapan) — the mangling pipeline + `cn()` mandate + reserve list semantics.
-- `component-patterns` (sapan) — className composition rules for sapan components.
+- `tailwind-mangle` (project) — the mangling pipeline + `cn()` mandate + reserve list semantics.
+- `component-patterns` (project) — className composition rules for project components.
 
 If either file cannot be read, abort and tell the user — these define what counts as a finding.
 
@@ -98,7 +98,7 @@ cn('base', size === 'lg' && 'p-8', size === 'md' && 'p-4', size === 'sm' && 'p-2
 - Spread of valid `className` prop into a child component (e.g. `<Button className={className}>`).
 - Tailwind variant patterns — `dark:`, `rtl:`, `sm:`, `motion-safe:`, `before:`, etc. are part of the class identity; mangler handles them.
 - `cn(conditionMap[key])` where `conditionMap` is `{ a: 'flex', b: 'block' } as const` — keys are static.
-- `cva(...)` calls (class-variance-authority) — sapan uses these in some `ui/` components; their string literals are statically present in the source.
+- `cva(...)` calls (class-variance-authority) — project uses these in some `ui/` components; their string literals are statically present in the source.
 
 ## Output format
 
@@ -131,11 +131,11 @@ Verdict: PASS
 
 ## Cross-reference
 
-- `code-reviewer` (sapan) covers the same ground in P6 Conventions during a full code review. `tailwind-class-reviewer` is the focused, faster pre-mangle scan — invoke before `pnpm build:mangled` or in PRs that touch many components.
-- `tailwind-v4-syntax` (sapan) flags the Tailwind v3 → v4 `!utility` migration (`!h-9` → `h-9!`). Orthogonal to mangling, but relevant for the same code paths.
+- `code-reviewer` (project) covers the same ground in P6 Conventions during a full code review. `tailwind-class-reviewer` is the focused, faster pre-mangle scan — invoke before `pnpm build:mangled` or in PRs that touch many components.
+- `tailwind-v4-syntax` (project) flags the Tailwind v3 → v4 `!utility` migration (`!h-9` → `h-9!`). Orthogonal to mangling, but relevant for the same code paths.
 
 ## Failure modes
 
 - **Cannot read `tailwind-mangle.md` skill** — abort. The agent's findings are defined relative to the mangling pipeline; without that context, false positives spike.
-- **`cn()` import not from `@/lib/utils`** — flag as Critical (sapan-wide convention; would also be caught by `code-reviewer`).
+- **`cn()` import not from `@/lib/utils`** — flag as Critical (project-wide convention; would also be caught by `code-reviewer`).
 - **Cannot determine if a variable is always-static** — surface as Critical with note; let the developer judge whether the value source is static-string-set or dynamic.

@@ -8,16 +8,12 @@ Steps Claude must follow:
 3. Load `component-patterns.md` and `spacing.md`
 4. Decide Server vs Client based on whether interactivity is needed
 5. Create `src/components/layout/[Name]/index.tsx`:
-   - Correct component type
-   - `SectionSeparator` + `SectionTitle` structure
-   - Section spacing (standard): `pb-8 sm:pb-12 lg:pb-16`
-   - Section spacing (double — FAQ, Blog, Portfolio, Experience, Workflow): `pb-16 sm:pb-24 lg:pb-32`
-   - Section spacing (Testimonials, Technologies): `pb-16 sm:pb-20 lg:pb-24`
-   - Section spacing (CTA): `py-16 sm:py-20 lg:py-24`
-   - Full-page routes (articles listing, article detail): `pt-14 pb-16 sm:pt-20 sm:pb-24 lg:pb-32`
+   - Correct component type per `component-patterns.md`
+   - Section structure per the project's section wrapper pattern
+   - Section spacing per `spacing.md`
    - `cn()` for all classNames, design system tokens only
 6. If data needed: create `src/data/content/[name].ts` + `src/types/[name].ts`
-7. Add translation key stubs to the relevant `src/i18n/locales/en/[namespace].json`
-8. Show the import line for `src/app/[locale]/(landing)/page.tsx`
+7. Add translation key stubs to the relevant baseline locale namespace file
+8. Show the import line for the landing page
 
-**Rules:** Always use SectionSeparator + SectionTitle structure. Design system tokens only — no hardcoded values. Default to Server Component unless interactivity is explicitly required.
+**Rules:** Follow the project's section structure pattern from `component-patterns.md`. Design system tokens only — no hardcoded values. Default to Server Component unless interactivity is explicitly required.

@@ -1,11 +1,11 @@
 ---
-description: Run Lighthouse CI locally against /  and /articles, report budget verdict + score deltas vs the previous run
+description: Run Lighthouse CI locally against configured URLs, report budget verdict + score deltas vs the previous run
 allowed-tools: Bash(pnpm run lhci*), Bash(pnpm run build*), Bash(node *), Read
 ---
 
 # Lighthouse CI
 
-Runs Lighthouse CI locally against the configured URLs (`/`, `/articles`) using `.lighthouserc.json`. Reports per-URL median scores, the budget verdict, and the delta vs the last run if one is on disk.
+Runs Lighthouse CI locally against the URLs configured in `.lighthouserc.json`. Reports per-URL median scores, the budget verdict, and the delta vs the last run if one is on disk.
 
 ## Input
 
@@ -68,8 +68,8 @@ Optional flags: `$ARGUMENTS`
 
    ```
    URL                              perf    a11y    bp      seo     verdict
-   http://localhost:8002/           0.68    0.98    1.00    0.92    ⚠ warn
-   http://localhost:8002/articles   0.92    0.98    1.00    1.00    ✓ pass
+   http://localhost:<port>/         0.68    0.98    1.00    0.92    ⚠ warn
+   http://localhost:<port>/blog     0.92    0.98    1.00    1.00    ✓ pass
    ```
 
    Plus the top 3 failing audits with their documentation link.
@@ -86,10 +86,10 @@ Optional flags: `$ARGUMENTS`
 
 ## Notes
 
-- Default thresholds (per `.lighthouserc.json`):
+- Default thresholds (per `.lighthouserc.json`) — tune these to your project's baseline:
   - performance ≥ 0.80 (warn)
   - accessibility ≥ 0.95 (error)
   - best-practices ≥ 0.90 (error)
-  - seo ≥ 0.90 (warn — lowered from 0.95 because homepage's `link-text` and `robots-txt` audits drag the median; tracked as follow-up)
-- Port: `8002` (sapan dev = 8000, e2e = 8001, lhci = 8002 — registry documented in `docs/DEVELOPMENT_GUIDE.md`).
-- For the GitHub Actions CI run, the `lighthouse` job in `.github/workflows/ci.yml` runs the same `pnpm exec lhci autorun` with `continue-on-error: true` for the first 2 weeks; promote to blocking after a perf-tuning pass.
+  - seo ≥ 0.90 (warn)
+- Port: set in `.lighthouserc.json` `startServerCommand` / `url`. Use a dedicated port so it doesn't clash with `pnpm dev` or the e2e dev server.
+- For the GitHub Actions CI run, wire `pnpm exec lhci autorun` in your CI workflow with `continue-on-error: true` initially; promote to blocking after a perf-tuning pass.

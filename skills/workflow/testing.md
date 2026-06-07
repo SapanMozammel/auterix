@@ -33,9 +33,13 @@ tests/
 
 ## Global Mocks (setup.tsx)
 
-Applied globally — do **not** re-mock in individual test files:
+Applied globally — do **not** re-mock in individual test files. Document your project's global mocks here:
 
-`next/link` · `next/image` · `next-themes` · `next-intl` · `@/i18n/navigation` · `next/navigation` · `framer-motion` · `gsap` / `ScrollTrigger` · `@react-three/fiber` · `@react-three/drei` · `matchMedia` · `IntersectionObserver` · `ResizeObserver`
+- Browser APIs: `matchMedia`, `IntersectionObserver`, `ResizeObserver`
+- Next.js: `next/link`, `next/image`, `next/navigation`
+- i18n: locale navigation helpers (if using next-intl or similar)
+- Animation libraries: `framer-motion`, `gsap` / `ScrollTrigger`, `@react-three/fiber`, etc.
+- Theme: theme provider (if using `next-themes` or similar)
 
 ## test-utils.tsx
 
@@ -49,10 +53,10 @@ import { render } from '../test-utils'
 ## What to Test
 
 - **Utilities** (`src/lib/utils/`) — pure functions, edge cases
-- **Redux slices** — initial state, action creators, state transitions
+- **State slices** — initial state, action creators, state transitions
 - **Components** — rendered text, conditional classes, user interactions, open/closed state
 - **Data integrity** — required fields, unique IDs, sequential ordering
-- **i18n completeness** — all locale namespaces have all keys present in `en/` baseline
+- **i18n completeness** — all locale namespaces have all keys present in the baseline locale (if applicable)
 
 ## What NOT to Test
 
@@ -72,11 +76,11 @@ import { render } from '../test-utils'
 
 ## See also
 
-For Playwright e2e conventions, see [`e2e.md`](./e2e.md) — sapan-canonical project matrix, fixture catalog, wait strategy, and mock-everything-external rule. Vitest+RTL conventions in this file remain authoritative for unit/component tests.
+For Playwright e2e conventions, see [`e2e.md`](./e2e.md) — project-canonical project matrix, fixture catalog, wait strategy, and mock-everything-external rule. Vitest+RTL conventions in this file remain authoritative for unit/component tests.
 
 ### External reference
 
-Sapan rules in this file are authoritative; external references are framework-level guidance — load when sapan rules don't cover the case.
+project rules in this file are authoritative; external references are framework-level guidance — load when project rules don't cover the case.
 
 - [`external/testing/playwright-best-practices/`](../external/testing/playwright-best-practices/) — Playwright fundamentals (POM, fixtures, mocking via `page.route()`, axe-core a11y, visual regression, console-error monitoring). **Load only when writing Playwright e2e specs.** Cited from `workflow/e2e.md`.
 - [`external/testing/e2e-testing-patterns/`](../external/testing/e2e-testing-patterns/) — patterns reference (selector strategy, fixture composition, parallelism, flake mitigation). Pair with `playwright-best-practices`.

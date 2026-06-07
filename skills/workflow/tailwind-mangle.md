@@ -1,11 +1,11 @@
 ---
 name: tailwind-mangle
-description: "Sapan's production-only Tailwind class mangler. Runs as a post-build pass over .next/ output (bundler-agnostic — works on Turbopack). Triggers when authoring or reviewing components that use `cn()`, when wiring deploy commands, when running `pnpm build:mangled` locally, or when interpreting a `tw-X` class in production support."
+description: "project's production-only Tailwind class mangler. Runs as a post-build pass over .next/ output (bundler-agnostic — works on Turbopack). Triggers when authoring or reviewing components that use `cn()`, when wiring deploy commands, when running `pnpm build:mangled` locally, or when interpreting a `tw-X` class in production support."
 ---
 
-# Tailwind Class Mangling (sapan, post-build)
+# Tailwind Class Mangling (project, post-build)
 
-Sapan ships production builds with mangled Tailwind class names — `flex items-center px-4` becomes `tw-a tw-b tw-c` in the served HTML and CSS. The mangler is a Node script (`scripts/mangle.mjs`) that runs **after** `pnpm build` and rewrites `.next/` artifacts in place. It is bundler-agnostic and works on Turbopack (sapan's default).
+project ships production builds with mangled Tailwind class names — `flex items-center px-4` becomes `tw-a tw-b tw-c` in the served HTML and CSS. The mangler is a Node script (`scripts/mangle.mjs`) that runs **after** `pnpm build` and rewrites `.next/` artifacts in place. It is bundler-agnostic and works on Turbopack (project's default).
 
 ## When mangling runs
 
@@ -49,18 +49,18 @@ These follow from the post-build extraction model — anything dynamic that does
 - **Static class strings only.** `cn('p-4')` and `cn(conditionMap[key])` where keys are static strings are fine. `cn(\`p-${n}\`)` and `cn(apiResponse.className)` are not.
 - **Runtime DOM class manipulation is auto-handled.** If you call `el.classList.add('foo')`, the mangler scans the emitted JS and adds `foo` to the reserve list automatically. No manual reserve registration needed.
 - **Variants pass through.** `dark:`, `rtl:`, `sm:`/`md:`/`lg:`, `motion-reduce:`, `motion-safe:`, `before:`/`after:`, etc. are all part of the class identity. Each `variant:base` combo gets its own `tw-X` slot, distinct from the unprefixed base. Compound variants like `dark:before:bg-success` work the same way.
-- **Custom `@utility` classes get mangled too.** `text-heading-xlarge`, `text-paragraph-medium`, `font-cg`, `glow-blob-primary` — all auto-discovered from emitted CSS.
+- **Custom `@utility` classes get mangled too.** Any classes defined via `@utility` in your CSS (e.g. `text-heading-xlarge`, `font-display`) are auto-discovered from emitted CSS.
 
 ## What's reserved
 
 Built-in seed: `dark`, `light` (next-themes default strategy classes — runtime-set via `classList`).
 
-Auto-detected per build: every literal argument passed to `classList.{add,remove,toggle,replace}("…")` anywhere in the emitted JS. Sapan's current reserve list (auto-detected as of 2026-05-03) includes:
+Auto-detected per build: every literal argument passed to `classList.{add,remove,toggle,replace}("…")` anywhere in the emitted JS. Common examples of what ends up in the reserve list:
 
-- `dark`, `light` — next-themes
-- `font-arabic`, `font-dm` — locale-driven body font swap
-- `bg-primary`, `bg-secondary-300` — runtime-set color toggles
-- `block-interactivity-`, `allow-interactivity-` — R3F interactivity prefixes
+- `dark`, `light` — theme strategy classes (e.g. next-themes)
+- locale-driven body font swap classes
+- runtime-set color or layout toggles
+- any library-specific interactivity marker classes
 
 If you add a new `classList.add("X")` call in any future PR, `X` is automatically reserved on the next mangled build.
 
@@ -97,7 +97,7 @@ Before running `pnpm build:mangled`, invoke the `tailwind-class-reviewer` agent 
 
 ## See also
 
-- `architecture/component-patterns.md` — the `cn()` mandate sapan-wide.
-- `design-system/typography.md` — custom `@utility` classes (`text-heading-xlarge`, `font-cg`) get mangled in prod.
+- `architecture/component-patterns.md` — the `cn()` mandate project-wide.
+- `design-system/typography.md` — custom `@utility` classes get mangled in prod.
 - `workflow/tailwind-v4-syntax.md` — important modifier `h-9!` (suffix) interacts cleanly with mangling.
 - `workflow/tailwind-diagnostics.md` — v3 alias names (`flex-shrink-0`, `bg-opacity-*`, etc.) are NOT emitted by v4's generator and therefore silently drop out of the mangler. Run `/fix-tw-diagnostics` before `pnpm build:mangled` to ensure every class in source has a canonical CSS counterpart.

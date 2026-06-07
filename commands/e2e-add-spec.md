@@ -5,7 +5,7 @@ allowed-tools: Bash(pnpm exec playwright test*), Bash(pnpm exec tsc -p tsconfig.
 
 # E2E Add Spec
 
-Delegates to the `e2e-spec-author` agent to author a new Playwright e2e spec for the sapan portfolio. The agent reads sapan's e2e conventions before writing, decides scope / project matrix / mock surface, scaffolds the spec, and runs it on `chromium-desktop` for fast feedback.
+Delegates to the `e2e-spec-author` agent to author a new Playwright e2e spec. The agent reads project's e2e conventions before writing, decides scope / project matrix / mock surface, scaffolds the spec, and runs it on `chromium-desktop` for fast feedback.
 
 ## Input
 
@@ -45,8 +45,8 @@ Examples:
 5. **Report:**
    - Spec file path
    - Project matrix coverage
-   - Mocks added (Resend, Turnstile, GraphQL when Apollo is in use)
-   - Source files the spec reads for assertions (translation JSON, content TS files)
+   - Mocks added (external service mocks per `workflow/e2e.md` fixture catalog)
+   - Source files the spec reads for assertions (translation files, content data files)
    - Manual review notes — flag any structural selector, allow-list entry, or `test.skip` gate
    - Reminder: **the user reviews the spec before commit.** This command does not stage, commit, or push.
 
@@ -55,7 +55,7 @@ Examples:
 - **Never push.** Stops at the new spec file + the chromium-desktop run output.
 - **Never commit.** The user reviews and runs `/commit-staged` when ready.
 - **Never extend the agent's tool surface** — if the agent says it needs more, surface that to the user; do not silently broaden it.
-- **Refuse to scaffold a spec that hits real external services.** All third-party POSTs / scripts must be mocked via `page.route()` or the existing fixtures (`mockContact`, `mockTurnstile`).
+- **Refuse to scaffold a spec that hits real external services.** All third-party POSTs / scripts must be mocked via `page.route()` or the existing fixtures (see `workflow/e2e.md` for the fixture catalog).
 - **Always run the new spec on `chromium-desktop`** before reporting. A spec that hasn't been run isn't done.
 - If the spec fails, report the failure verbatim and stop. Do not "fix" by broadening assertions.
 
@@ -63,4 +63,4 @@ Examples:
 
 - This command is the user-facing entry point; the heavy lifting lives in `.claude/agents/e2e-spec-author.md`. Update the agent for any change to spec authoring conventions; this command's process should stay thin.
 - For a Lighthouse run instead of a new spec, see `/lhci`.
-- See [.claude/skills/workflow/e2e.md](../skills/workflow/e2e.md) for sapan e2e conventions.
+- See [.claude/skills/workflow/e2e.md](../skills/workflow/e2e.md) for project e2e conventions.

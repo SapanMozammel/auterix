@@ -1,17 +1,17 @@
 # Architecture — GraphQL Data (Apollo Client 4.x)
 
-Sapan's Apollo Client conventions. Apollo runs **alongside** Redux: Redux owns UI state, Apollo owns remote data + its cache. The runtime is wired in `src/lib/apollo/`; this skill is the convention layer that sits on top.
+Project's Apollo Client conventions. Apollo runs **alongside** the state store: the store owns UI state, Apollo owns remote data + its cache. The runtime is wired in `src/lib/apollo/`; this skill is the convention layer that sits on top.
 
-This skill is a thin extension of sapan's architecture skills. It cites and links — it does NOT duplicate component-pattern, state, or no-effect rules.
+This skill is a thin extension of project's architecture skills. It cites and links — it does NOT duplicate component-pattern, state, or no-effect rules.
 
 ## Required reading first
 
-Before authoring any GraphQL operation or component, read these sapan skills (authoritative — sapan rules win when external Apollo guidance conflicts):
+Before authoring any GraphQL operation or component, read these project skills (authoritative — project rules win when external Apollo guidance conflicts):
 
 - [`component-patterns.md`](./component-patterns.md) — Server-component-default rule, RSC vs Client decision tree, arrow functions, `type` over `interface`, `cn()`, `export default` at bottom
-- [`data.md`](./data.md) — when to keep static (`src/data/content/*`) vs go remote
+- [`data.md`](./data.md) — when to keep static vs go remote
 - [`state.md`](./state.md) — Redux ownership of UI state; do not introduce reactive variables or `@client` directives
-- [`routing.md`](./routing.md) — locale-aware fetching with next-intl
+- [`routing.md`](./routing.md) — locale-aware fetching and the project's i18n library
 - [`../workflow/no-use-effect.md`](../workflow/no-use-effect.md) — Apollo hooks own their own lifecycle; never wrap them in `useEffect`
 - [`../workflow/testing.md`](../workflow/testing.md) — Vitest + RTL conventions for any Apollo test
 - [`../design-system/colors.md`](../design-system/colors.md), [`typography.md`](../design-system/typography.md), [`spacing.md`](../design-system/spacing.md) — token-only when scaffolding loading skeletons or any visible UI
@@ -22,9 +22,9 @@ If any of those change, reread before authoring Apollo code. This skill extends 
 
 Defer to [`data.md`](./data.md) for the static-vs-remote choice. Apollo only enters once you've decided remote.
 
-- Static content (blogs list snapshot, portfolio metadata, FAQ) → `src/data/content/*` import — no Apollo
-- Live, schema-shaped data (Hashnode posts, GitHub repo stats, custom CMS) → Apollo
-- Fire-and-forget REST mutations with no caching benefit (contact form via Resend) → REST in `src/app/api/*` — not Apollo
+- Static content (e.g. marketing copy, metadata, FAQs) → local data import — no Apollo
+- Live, schema-shaped data from your GraphQL-backed CMS or API → Apollo
+- Fire-and-forget REST mutations with no caching benefit (e.g. form submissions) → REST in `src/app/api/*` — not Apollo
 
 ## 2. RSC vs Client decision tree
 
@@ -42,20 +42,20 @@ RSC `query()` is preferred whenever the data is read-once-per-render. It elimina
 
 Anchored to [`state.md`](./state.md).
 
-- **Redux** owns UI state (`uiSlice`, `localeSlice`)
+- **State store** owns UI state (see `state.md` for slice/store names)
 - **Apollo** owns remote data + its cache
-- **Reactive variables** are NOT used (Redux already owns the surface)
+- **Reactive variables** are NOT used (the state store already owns the surface)
 - **`@client` directives / Apollo Local State** are NOT used (same reason)
 
-If you find yourself wanting to put a UI flag in Apollo's cache, stop and put it in `uiSlice` instead.
+If you find yourself wanting to put a UI flag in Apollo's cache, stop and put it in the state store instead.
 
 ## 4. i18n boundary
 
 Anchored to [`routing.md`](./routing.md).
 
 - RSC `query()` calls inside `[locale]` segments must accept `params.locale` if the data is locale-scoped — pass it through to the operation as a variable
-- Client queries inside locale-aware components read locale from `useLocale()` (next-intl) — never hand-build it from URL parts
-- Translation keys (UI copy) are never fetched via GraphQL — they live in `src/i18n/locales/*`
+- Client queries inside locale-aware components read locale from the project's locale hook (see `routing.md`) — never hand-build it from URL parts
+- Translation keys (UI copy) are never fetched via GraphQL — they live in the project's locale message files
 
 ## 5. Auth boundary
 
@@ -115,18 +115,18 @@ Anchored to [`../workflow/testing.md`](../workflow/testing.md).
 
 - Vitest + RTL with `MockedProvider` from `@apollo/client/testing` for component tests
 - Playwright `mockGraphQL` fixture in `e2e/fixtures.ts` — intercept the endpoint URL via `page.route()` with deterministic JSON responses
-- Same network-mock discipline as Resend / Turnstile — never hit a real GraphQL endpoint in CI
+- Same network-mock discipline as any external service — never hit a real GraphQL endpoint in CI
 
 ## 13. Slash commands and agent
 
 - `/gql-codegen` — runs codegen + type-check, surfaces drift
 - `/gql-add-query [feature description]` — delegates to the `graphql-architect` agent
-- `graphql-architect` agent — designs and scaffolds GraphQL operations end-to-end; reads this skill first, sapan architecture skills second, external Apollo skill last
+- `graphql-architect` agent — designs and scaffolds GraphQL operations end-to-end; reads this skill first, project architecture skills second, external Apollo skill last
 
 ## 14. See also
 
-- External: [`../external/data/apollo-client/`](../external/data/apollo-client/) — Apollographql's general Apollo Client 4.x patterns (cache, fragments, RSC, testing, mutations, troubleshooting). Lower priority than sapan rules — load when this bridge skill doesn't cover the case.
+- External: [`../external/data/apollo-client/`](../external/data/apollo-client/) — Apollographql's general Apollo Client 4.x patterns (cache, fragments, RSC, testing, mutations, troubleshooting). Lower priority than project rules — load when this bridge skill doesn't cover the case.
 
 ---
 
-**Anti-rule reminder.** This skill extends sapan conventions; it must not duplicate them. If you see component-pattern, state, or no-effect rules restated here, collapse the duplication and link to the source.
+**Anti-rule reminder.** This skill extends project conventions; it must not duplicate them. If you see component-pattern, state, or no-effect rules restated here, collapse the duplication and link to the source.

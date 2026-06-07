@@ -1,5 +1,5 @@
 ---
-description: Run sapan's formatter — organize-imports + Prettier + ESLint --fix. Tailwind canonical-class rewrites (including `!utility` → `utility!`) ride along via the wired ESLint rules.
+description: Run project's formatter — organize-imports + Prettier + ESLint --fix. Tailwind canonical-class rewrites (including `!utility` → `utility!`) ride along via the wired ESLint rules.
 allowed-tools: Bash(pnpm run format:all*), Bash(pnpm run lint*), Bash(pnpm run type:check*), Bash(git status:*), Bash(git diff:*), Read, Edit, Glob
 ---
 
@@ -7,8 +7,8 @@ allowed-tools: Bash(pnpm run format:all*), Bash(pnpm run lint*), Bash(pnpm run t
 
 ## Skills to load FIRST
 
-- `tailwind-v4-syntax` (sapan workflow) — reference for the `!utility` → `utility!` syntax. The autofix is performed by `better-tailwindcss/enforce-consistent-important-position`; load the skill to explain a finding to the user if they ask.
-- `tailwind-diagnostics` (sapan workflow) — overview of the four ESLint Tailwind rules that run inside `format:all`.
+- `tailwind-v4-syntax` (project workflow) — reference for the `!utility` → `utility!` syntax. The autofix is performed by `better-tailwindcss/enforce-consistent-important-position`; load the skill to explain a finding to the user if they ask.
+- `tailwind-diagnostics` (project workflow) — overview of the four ESLint Tailwind rules that run inside `format:all`.
 
 ## Process
 

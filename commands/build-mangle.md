@@ -1,5 +1,5 @@
 ---
-description: Run a mangled production build and report class statistics, sample mappings, and a sanity check that known sapan classes survived.
+description: Run a mangled production build and report class statistics, sample mappings, and a sanity check that known project classes survived.
 allowed-tools: Read, Bash(pnpm build:mangled*), Bash(pnpm mangle*), Bash(node*), Bash(grep*), Bash(wc*), Bash(ls*), Bash(cat .tw-patch*)
 ---
 
@@ -11,18 +11,18 @@ Runs `pnpm build:mangled` end-to-end and reports a one-screen summary. Use befor
 
 Invoke via the **Skill** tool:
 
-- `tailwind-mangle` (sapan) — the mangling pipeline + reserve list semantics + reverse-lookup procedure.
+- `tailwind-mangle` (project) — the mangling pipeline + reserve list semantics + reverse-lookup procedure.
 
 ## Steps
 
 1. **Run the full pipeline.** `pnpm build:mangled`. Wait for completion (Turbopack build ~10–20s, mangle pass ~3–5s).
 2. **Verify the mapping file.** Confirm `.tw-patch/class-list.json` exists and is non-empty. If missing, the mangle pass failed — surface the script output.
-3. **Count + sample.** Read `.tw-patch/class-list.json`, report total entries and 5 representative mappings. Pick the samples to span sapan's surface area:
+3. **Count + sample.** Read `.tw-patch/class-list.json`, report total entries and 5 representative mappings. Pick the samples to span project's surface area:
    - one base utility (`flex`, `block`, `grid`, …)
-   - one design-token utility (`text-primary`, `bg-light`)
-   - one variant (`dark:bg-slate-900`, `sm:flex-row`)
-   - one custom `@utility` (`font-cg`, `text-heading-xlarge`)
-   - one arbitrary value (`tracking-[0.3em]`, `dark:bg-black/40`)
+   - one design-token utility (e.g. `text-primary`, `bg-surface`)
+   - one variant (e.g. `dark:bg-slate-900`, `sm:flex-row`)
+   - one custom `@utility` (e.g. `font-display`, `text-heading-xl`)
+   - one arbitrary value (e.g. `tracking-[0.3em]`, `dark:bg-black/40`)
 4. **Sanity check rendered output.** Sample `.next/server/app/_not-found.html` (always prerendered) — every Tailwind class should appear as `tw-X`. If any unmangled Tailwind class survives, the rewrite missed a context — flag it.
 5. **CSS bundle delta.** Read the Tailwind CSS chunk size (largest `.next/static/chunks/*.css` containing `@layer`). Compare to the pre-mangle baseline if known. The expected order of magnitude is 5–15% reduction on the Tailwind chunk specifically.
 6. **Reserve list audit.** Print the reserve list (parse `[mangle] reserved: …` line from script output). If any reserved class is unexpected (e.g., a developer accidentally added `classList.add('p-4')` — which would un-mangle every `p-4`), flag it.
@@ -38,7 +38,7 @@ Invoke via the **Skill** tool:
   • flex → tw-X
   • text-primary → tw-Y
   • dark:bg-slate-900 → tw-Z
-  • font-cg → tw-W
+  • font-display → tw-W
   • tracking-[0.3em] → tw-V
 - Sanity: every Tailwind class in _not-found.html is mangled ✓
 - Mapping file: .tw-patch/class-list.json (committable as CI artifact)

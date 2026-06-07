@@ -44,25 +44,25 @@ What this feature does and why it's needed.
 
 ## Component Type Decision
 - Server or Client? — [answer + reason]
-- Placement: src/components/layout/[Section]/ or src/components/ui/[name]/
+- Placement: `src/components/layout/[Section]/` or `src/components/ui/[name]/`
 
 ## Affected Files
-- src/path/to/file.tsx — what changes and why
+- `src/path/to/file.tsx` — what changes and why
 
 ## New Files
-- src/path/to/new-file.tsx — what it contains
+- `src/path/to/new-file.tsx` — what it contains
 
 ## Data & Types
-- New types: src/types/[name].ts
-- New data: src/data/content/[name].ts or src/data/config/[name].ts
+- New types: `src/types/[name].ts`
+- New data: `src/data/content/[name].ts` or `src/data/config/[name].ts`
 
 ## Design System
-- Colors: exact tokens (e.g. text-primary dark:text-success)
+- Colors: exact tokens (e.g. `text-primary dark:text-success`)
 - Typography: font classes + where used
 - Spacing: container/section patterns
 - Animations: library + duration
 
-## i18n
+## i18n (if applicable)
 - Translation keys needed
 - RTL considerations (if any)
 
@@ -72,17 +72,17 @@ What this feature does and why it's needed.
 - [⬜] Step 3: ...
 
 ## Verification
-- [⬜] pnpm run dev → navigate to...
+- [⬜] `pnpm run dev` → navigate to ...
 - [⬜] Check dark mode
 - [⬜] Check mobile at 375px
-- [⬜] pnpm run type:check
-- [⬜] pnpm run test (if logic/utilities were added or changed)
+- [⬜] `pnpm run type:check`
+- [⬜] `pnpm run test` (if logic/utilities were added or changed)
 ```
 
 ---
 
 ## See also (external reference)
 
-Sapan rules in this file are authoritative; external references are framework-level guidance — load when sapan rules don't cover the case.
+project rules in this file are authoritative; external references are framework-level guidance — load when project rules don't cover the case.
 
-- [`external/nextjs/next-best-practices/`](../external/nextjs/next-best-practices/) — Next.js conventions, RSC boundaries, data patterns, route handlers, image/font optimization. Loaded automatically by `/plan` for any feature that touches Next.js routes or layouts.
+- [`external/nextjs/next-best-practices/`](../external/nextjs/next-best-practices/) — Next.js conventions, RSC boundaries, data patterns, route handlers, image/font optimization.
