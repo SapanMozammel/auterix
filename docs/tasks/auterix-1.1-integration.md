@@ -1,6 +1,6 @@
 # Auterix 1.1 integration and repository handoff
 
-Status: in_progress
+Status: complete
 
 ## Outcome and authority
 
@@ -53,7 +53,13 @@ Recto receives documentation-only handoff changes.
   3 real MongoDB tests, 4 browser/accessibility journeys, builds and dependency audit.
 - Maintained-file formatting and whitespace checks passed. Historical fixture
   bytes retain their independent pinned hash and were excluded from formatting.
-- GitHub PR and remote CI evidence are the remaining integration steps.
+- Review [PR #1](https://github.com/SapanMozammel/auterix/pull/1) is open against
+  `main`, with implementation commit `71f4abf355ed9f08aeed9b6f138e94aaa0775f55`.
+  [PR CI](https://github.com/SapanMozammel/auterix/actions/runs/34041316927)
+  passed all four Node 22/24 × Linux/macOS jobs; the push run also passed.
+- The initial HTTPS push was refused because the OAuth token lacks workflow-file
+  scope. Existing SSH authentication completed the authorized push; no credentials
+  or account scopes were changed. Local secret-pattern scanning also passed.
 - Independent migration review confirmed the identity, fixture, license and
   conflict boundaries. It caught source-relative installed-checker examples;
   those now use absolute consumer paths so the documented commands work without
@@ -66,5 +72,7 @@ its earlier counts describe that revision, not this update.
 
 Native client runtime verification remains the founder's deferred task. Documented
 adapters/manual context do not certify client behavior. No release or merge is
-implicit in a green PR. Next: finish regression fixes, adopt the reviewed bundle,
-run gates, review the exact worktrees, commit, push and open review PRs.
+implicit in a green PR. Next: founder review of PR #1, then separately authorized
+merge/publication and native client checks. The branch contains the implementation
+and this durable evidence; no Recto product or Git changes were included. CI for
+any subsequent documentation commit is visible on the same PR.
