@@ -1,130 +1,94 @@
-# Usage Guide — claude-workflow
+# Auterix — install, update and migrate
 
-How to use this repo as a single source of truth for your Claude Code workflow across multiple projects.
+One workflow. Any AI coding tool.
 
----
+The CLI always requires an explicit absolute project root. Start from a trusted
+checkout or reviewed bundle. `inspect` reports known file names; it does not read
+environment files, install packages, fetch code or execute consumer scripts.
+All `--out` paths must name new files; existing files and symlinks are refused.
 
-## Bootstrapping a new project
+## New or existing repository
 
-Run these commands from your **project root** (requires `gh` CLI, already authenticated):
+1. Run `node bin/workflow.mjs inspect --root /absolute/project`.
+2. Read the repository's existing instructions and project conventions.
+3. Run `node bin/workflow.mjs plan --root /absolute/project --out /absolute/install-plan.json`.
+4. Review creates, unchanged files and conflicts against the source bundle.
+5. Resolve conflicts manually. Move retained project-specific instructions into
+   the project profile/linked docs and preserve the higher-priority policies in
+   AGENTS.md. The installer does not merge unknown instructions; prepare the exact
+   starter content only after preserving/reconciling the original, then replan.
+6. Apply the new plan: `node bin/workflow.mjs apply --root /absolute/project --plan /absolute/install-plan.json`.
+7. Populate `.ai/project.json`, `AGENTS.md` and the current task. Run the installed
+   checker, relevant project checks and a representative cross-tool handoff.
 
-```bash
-mkdir -p .claude/plans
+Each profile command declares `id`, `command`, `mode` (`read-only`, `local-write`
+or `external-write`) and `status` (`available` or `deferred`). A deferred command
+also requires `owner`, `trigger` and `fallback`, so missing capabilities have a
+concrete route to completion. Declaring a command never causes its execution.
+The installed read-only checker accepts no arguments to use the current project,
+or `--root /absolute/project`; mutating adoption always requires an explicit root.
 
-TMP=$(mktemp -d)
-gh repo clone SapanMozammel/claude-workflow "$TMP" -- --depth=1 --quiet
+A bundle can be selected for plan and apply with
+`--bundle /absolute/workflow-bundle.json`. The exact same bundle must be used for
+both. The digest covers all files and metadata; editing the plan or changing
+target files invalidates it. Digest validation detects changes, not authorship.
 
-cp -r "$TMP/agents"            .claude/agents
-cp -r "$TMP/commands"          .claude/commands
-cp -r "$TMP/skills"            .claude/skills
-cp    "$TMP/settings.json"     .claude/settings.json
-cp    "$TMP/CLAUDE.template.md" CLAUDE.md
+## Updating
 
-rm -rf "$TMP"
+For the 1.0.0 source-name transition, read the
+[Auterix 1.1 migration notes](docs/migration-1.1.md) first.
+
+Use `update-plan` with the new reviewed checkout or bundle:
+
+```sh
+node bin/workflow.mjs update-plan --root /absolute/project --bundle /absolute/new-bundle.json --out /absolute/update-plan.json
+node bin/workflow.mjs apply --root /absolute/project --bundle /absolute/new-bundle.json --plan /absolute/update-plan.json
+node /absolute/project/.ai/tools/check.mjs --root /absolute/project
 ```
 
-Then edit `CLAUDE.md` to describe your project's stack, commands, and conventions.
+The update replaces only unchanged managed files. Project-owned AGENTS, manifest,
+profile and tasks are preserved. Local managed edits, missing managed files and
+upstream removals require explicit reconciliation; no automatic merge/delete is
+performed. A repeated unchanged update writes no managed content.
 
----
+Consumer distributions should pin both version and source digest and retain the
+reviewed bundle or release reference. Keep application rules in the profile so
+workflow updates can be reviewed independently of application code.
 
-## Syncing an existing project
+## Legacy Claude migration
 
-When you update a skill, agent, or command in this repo, pull the changes into any project without touching its plans or CLAUDE.md:
+The retired sync script exits nonzero without fetching or writing anything.
+Inventory `.claude/settings.json`, hooks, commands, agents, skills, plans and local
+permissions separately. Preserve project plans and genuine project rules. Read
+and reconcile old behavior before removing or disabling it. The new installer
+does not copy these paths and does not disable pre-existing hooks for you.
 
-```bash
-# From your project root:
-TMP=$(mktemp -d)
-gh repo clone SapanMozammel/claude-workflow "$TMP" -- --depth=1 --quiet
-bash "$TMP/sync.sh"
-rm -rf "$TMP"
-```
+Do not copy `settings.json` from this repository into consumers. Its historical
+permissions and hidden format hooks are outside the maintained baseline. Imported
+skills require separate license, provenance, relevance and instruction review.
 
-What `sync.sh` overwrites: `agents/`, `commands/`, `skills/`, `settings.json`
-What it **never touches**: `plans/`, `settings.local.json`, `CLAUDE.md`
+## Recovery and ejection
 
----
+Before adoption, preserve the project in its normal version-control workflow.
+For write failures, `.ai/workflow.writer.json` contains prior contents and the
+plan digest. Inspect and recover the listed files manually, then remove the
+journal only after verifying consistency. A journal blocks later updates and
+checks so partial adoption cannot silently appear successful. It contains only
+the managed/adoption target files; do not add secrets to those files.
 
-## What lives where
+`node bin/workflow.mjs eject-plan --root /absolute/project` is read-only. It lists
+unchanged managed files eligible for reviewed removal and locally edited files
+to preserve. Remove discovery links and managed files as one reviewed change;
+retain project tasks, decisions, handoffs and independent policies. If nothing
+has changed since adoption, reverting its commit is the simplest rollback.
 
-| Location | What goes here | Examples |
-|---|---|---|
-| This repo (`claude-workflow`) | Generic, reusable workflow | Slash commands, agents, external skills |
-| Project `.claude/plans/` | Project-specific PRDs | `why-render/prd.md`, `auth-flow/prd.md` |
-| Project `CLAUDE.md` | Project-specific instructions | Stack, file conventions, commands |
-| Project `.claude/settings.local.json` | Local-only permissions | Custom build scripts, local tools |
+## Extending and verifying support
 
-**Rule of thumb:** if it applies to more than one project, it belongs in this repo. If it's specific to one project, it stays in that project.
+Add portable guidance to `baseline/managed` and project starter defaults to
+`baseline/project`. Keep vendor bridges limited to discovery. Add a current
+official source and setup requirements to the adapter registry, then add static
+tests. Record actual client/version execution separately using the installed
+tool-verification template; never promote support based on file presence alone.
 
----
-
-## Improving the workflow
-
-1. Edit the relevant file in `~/Sites/claude-workflow`
-2. Test it in one project first
-3. Commit and push to `main`
-4. Run `sync.sh` in projects that need the update
-
-```bash
-cd ~/Sites/claude-workflow
-# ... edit a skill or command ...
-git add <file>
-git commit -m "feat(commands): improve /commit message format"
-git push
-```
-
----
-
-## Adding a new skill
-
-1. Create the file under `skills/` (use kebab-case):
-   ```
-   skills/workflow/my-new-skill.md
-   ```
-2. Reference it in the relevant slash command or agent that loads it
-3. Commit + push → sync to projects that need it
-
----
-
-## Adding a new slash command
-
-1. Create `commands/my-command.md`
-2. Follow the existing command format (see any file in `commands/` as a template)
-3. Add it to the `CLAUDE.md` commands table in projects that will use it
-
----
-
-## Project-specific settings
-
-If a project needs extra permissions (e.g. a build script, a custom tool), add them to `.claude/settings.local.json` in that project — not here:
-
-```json
-{
-  "permissions": {
-    "allow": [
-      "Bash(bash scripts/build.sh)"
-    ]
-  }
-}
-```
-
-`settings.local.json` is in `.gitignore` in this repo and is never overwritten by `sync.sh`.
-
----
-
-## Repo structure
-
-```
-claude-workflow/
-├── agents/          # Sub-agent definitions (code-reviewer, test-writer, etc.)
-├── commands/        # Slash commands (/commit, /push, /pr, /plan, /implement, etc.)
-├── skills/
-│   ├── architecture/    # Component patterns, routing, state, data
-│   ├── design-system/   # Colors, typography, spacing tokens
-│   ├── workflow/        # Testing, feature-planning, no-use-effect, etc.
-│   └── external/        # React, TypeScript, Next.js, Playwright, Apollo skills
-├── settings.json        # Base permissions + PostToolUse Prettier hooks
-├── CLAUDE.template.md   # Starter template for new project CLAUDE.md
-├── sync.sh              # Safe sync script for existing projects
-├── USAGE.md             # This file
-└── README.md            # Quick-start reference
-```
+Run `node --test` before proposing a source update. No publish/tag/push/PR action
+is implicit in these instructions or commands.

@@ -1,0 +1,15 @@
+{
+  "name": "auterix",
+  "version": "1.1.0",
+  "private": true,
+  "license": "MIT",
+  "description": "One workflow. Any AI coding tool.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test",
+    "check": "node --test"
+  }
+}
