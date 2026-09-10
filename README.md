@@ -5,11 +5,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen)](package.json)
 [![Tests: 65 Passing](https://img.shields.io/badge/Tests-65%20Passing-emerald)](test/)
-[![Studio: Vercel](https://img.shields.io/badge/Web%20Studio-auterix.vercel.app-sky)](studio/)
+[![Studio: Vercel](https://img.shields.io/badge/Web%20Studio-auterix.vercel.app-sky)](https://auterix.vercel.app)
+[![Get Auterix Pro](https://img.shields.io/badge/Pro%20Suite-$29%20Instant%20Access-orange)](https://tenantdefense.gumroad.com/l/auterix)
 
-Auterix is a deterministic, tool-neutral autonomous context protocol and multi-agent engineering workflow. Projects define shared architectural invariants, task lifecycles, and verification gates once, while Auterix compiles, verifies, and locks them across **Cursor, Claude Code, Google Antigravity, GitHub Copilot, OpenAI Codex, and Augment**.
+Auterix is a deterministic, tool-neutral autonomous context protocol and multi-agent engineering workflow. Projects define shared architectural invariants, task lifecycles, and verification gates once, while Auterix compiles, verifies, and locks them across **Cursor, Claude Code, Google Antigravity, GitHub Copilot, OpenAI Codex, Windsurf, Cline, and Augment Code**.
 
-> **Live Web Studio:** Configure, auto-detect your stack, and export unified AI configs visually at **[auterix.vercel.app](studio/)**.
+> **Live Web Studio:** Configure, auto-detect your stack, and export unified AI configs visually at **[auterix.vercel.app](https://auterix.vercel.app)**.
+> **Commercial Pro Suite:** Production stacks, runnable templates, pre-commit AI guardrails, and automated CI PR bots available at **[Gumroad ($29)](https://tenantdefense.gumroad.com/l/auterix)**.
 
 ---
 
@@ -17,7 +19,7 @@ Auterix is a deterministic, tool-neutral autonomous context protocol and multi-a
 
 | Challenge with Raw Prompts / Rules | How Auterix Solves It |
 | :--- | :--- |
-| **Tool Fragmentation:** Maintaining separate `.cursorrules`, `CLAUDE.md`, and `.agents/` leads to out-of-sync rules. | **Single Canonical Source:** Auterix synchronizes all 6 client adapters with zero drift. |
+| **Tool Fragmentation:** Maintaining separate `.cursorrules`, `CLAUDE.md`, and `.agents/` leads to out-of-sync rules. | **Single Canonical Source:** Auterix synchronizes all 8 client adapters with zero drift. |
 | **Silent Regressions:** AI claims "task done" without running tests or verifying constraints. | **Deterministic Verification:** Staged writer guards, content-addressed hash locks, and pre-commit checks. |
 | **Context Window Rot:** Massive prompt files cause LLM attention degradation and blow token budgets. | **Progressive Disclosure:** Hierarchical 3-tiered context loading (Core Invariants ➔ Stack Blueprints ➔ Task Contracts). |
 | **Lost Chat State:** Switching between Cursor (inline) and Claude/Antigravity (deep refactoring) resets progress. | **Cross-Agent Task Contracts:** Formal `.ai/tasks/` state machine preserves active progress across all tools. |
@@ -26,14 +28,16 @@ Auterix is a deterministic, tool-neutral autonomous context protocol and multi-a
 
 ## Supported AI Client Adapters
 
-| AI Assistant / Client | Entrypoint Managed by Auterix | Discovery Contract |
-| :--- | :--- | :--- |
-| **Cursor** | `.cursor/rules/workflow.mdc` | Always-applied MDC discovery rule |
-| **Claude Code** | `CLAUDE.md` | Root memory and verification commands |
-| **Google Antigravity** | `.agents/rules/workflow.md` | Workspace rule with bounded tool actions |
-| **GitHub Copilot** | `.github/copilot-instructions.md` | Repository-level custom instructions |
-| **OpenAI Codex** | `AGENTS.md` | Canonical agent instruction standard |
-| **Augment Code** | `.augment/rules/workflow.md` | Workspace developer assistant rule |
+| AI Assistant / Client | Entrypoint Managed by Auterix | Native Structure | Discovery Contract |
+| :--- | :--- | :--- | :--- |
+| **Cursor** | `.cursor/rules/workflow.mdc` | `.cursor/rules/*.mdc`, `.cursor/commands/` | Always-applied MDC discovery rule |
+| **Claude Code** | `CLAUDE.md` | `.claude/commands/`, `.claude/skills/`, `.claudeignore` | Root memory and verification commands |
+| **Google Antigravity** | `.agents/rules/workflow.md` | `.agents/rules/`, `.agents/skills/`, `.agents/agents/` | Workspace rule with bounded tool actions |
+| **GitHub Copilot** | `.github/copilot-instructions.md` | `.github/prompts/` | Repository-level custom instructions |
+| **OpenAI Codex** | `AGENTS.md` | `.ai/tasks/`, `.ai/commands/` | Canonical agent instruction standard |
+| **Windsurf / Codeium** | `.windsurfrules` | `.windsurf/workflows/` | Global Cascade rules and workflows |
+| **Cline / Roo Code** | `.clinerules` | Mode-specific rules (Plan, Act, Review) | Root agentic persona contract |
+| **Augment Code** | `.augment/rules/workflow.md` | Context guidelines | Workspace developer assistant rule |
 
 *See [tool support](docs/tool-support.md) for adapter setup and verification status.*
 
