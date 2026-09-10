@@ -1,6 +1,6 @@
 # Auterix — install, update and migrate
 
-One workflow. Any AI coding tool.
+One workflow. 8 native AI tools. Universal agent standard.
 
 The CLI always requires an explicit absolute project root. Start from a trusted
 checkout or reviewed bundle. `inspect` reports convention/CI file names and bounded

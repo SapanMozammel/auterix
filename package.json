@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "private": true,
   "license": "MIT",
-  "description": "One workflow. Any AI coding tool.",
+  "description": "One workflow. 8 native AI tools. Universal agent standard.",
   "type": "module",
   "engines": {
     "node": ">=22"
