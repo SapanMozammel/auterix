@@ -1,0 +1,7 @@
+{
+  "name": "@atlas/web",
+  "private": true,
+  "dependencies": {
+    "@atlas/contracts": "workspace:*"
+  }
+}

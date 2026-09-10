@@ -1,0 +1,9 @@
+{
+  "name": "atlas-search-fixture",
+  "private": true,
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "check": "node tools/check.cjs",
+    "postinstall": "node tools/check.cjs"
+  }
+}

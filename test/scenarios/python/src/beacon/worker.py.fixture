@@ -1,0 +1,5 @@
+MAX_ATTEMPTS = 3
+
+
+def may_retry(attempts: int) -> bool:
+    return 0 <= attempts < MAX_ATTEMPTS

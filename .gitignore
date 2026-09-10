@@ -1,0 +1,7 @@
+settings.local.json
+plans/
+.DS_Store
+
+# Auterix Pro Commercial Deliverables (Protected from Public GitHub)
+dist_pro/
+profiles/

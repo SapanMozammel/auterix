@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "name": "Your project",
+  "stack": "Describe the existing stack; do not assume a framework.",
+  "commands": [],
+  "protectedBoundaries": [],
+  "architectureDocuments": [],
+  "designDocuments": [],
+  "externalReferences": [],
+  "deferrals": [],
+  "notes": "Project-owned. Inventory existing conventions, document root commands, and link accepted decisions before implementation."
+}

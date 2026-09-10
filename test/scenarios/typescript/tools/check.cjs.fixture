@@ -1,0 +1,7 @@
+const fs = require('node:fs');
+
+// Synthetic execution witness: adoption must never invoke this consumer command.
+fs.writeFileSync('consumer-command-ran.txt', 'TypeScript consumer command executed.\n');
+if (!fs.readFileSync('packages/contracts/query.ts', 'utf8').includes('minimumQueryLength = 2')) {
+  process.exitCode = 1;
+}

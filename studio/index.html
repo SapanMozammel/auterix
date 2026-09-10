@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auterix Studio — One Workflow. Any AI Coding Tool.</title>
+  <meta name="description" content="The deterministic context protocol and multi-agent workflow engine for Cursor, Claude Code, Google Antigravity, Copilot, Codex, and Augment. Zero context drift.">
+  <meta name="keywords" content="AI coding, Cursor rules, Claude Code, Google Antigravity, GitHub Copilot, Codex, Augment, AI context protocol, multi-agent workflow, prompt drift">
+  <meta name="author" content="Sapan Mozammel">
+  <meta name="theme-color" content="#06090f">
+  <link rel="canonical" href="https://auterix.vercel.app">
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://auterix.vercel.app">
+  <meta property="og:title" content="Auterix Studio — One Workflow. Any AI Coding Tool.">
+  <meta property="og:description" content="Eliminate prompt fragmentation. Configure your architectural rules once across Cursor, Claude Code, Antigravity, Copilot, Codex, and Augment.">
+  <meta property="og:image" content="https://auterix.vercel.app/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="675">
+  <meta property="og:site_name" content="Auterix">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://auterix.vercel.app">
+  <meta name="twitter:title" content="Auterix Studio — One Workflow. Any AI Coding Tool.">
+  <meta name="twitter:description" content="Deterministic multi-agent context protocol for Cursor, Claude Code, Antigravity & Copilot.">
+  <meta name="twitter:image" content="https://auterix.vercel.app/assets/og-image.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2338bdf8%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><path d=%22M12 2L2 7L12 12L22 7L12 2Z%22/><path d=%22M2 17L12 22L22 17%22/><path d=%22M2 12L12 17L22 12%22/></svg>">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/styles.css">
+
+  <!-- JSZip for in-browser client-side bundling without server dependency -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Auterix",
+    "operatingSystem": "All",
+    "applicationCategory": "DeveloperApplication",
+    "description": "Deterministic autonomous context protocol and multi-agent workflow engine for AI coding tools.",
+    "url": "https://auterix.vercel.app",
+    "author": {
+      "@type": "Person",
+      "name": "Sapan Mozammel",
+      "url": "https://github.com/SapanMozammel"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Navigation -->
+    <header class="top-nav">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 17L12 22L22 17" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 12L12 17L22 12" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Auterix</span>
+          <span class="brand-tag">Studio v1.2</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="#studio" class="nav-link">Studio</a>
+        <a href="#architecture" class="nav-link">Architecture</a>
+        <a href="#comparison" class="nav-link">Compare</a>
+        <a href="#pro-section" class="nav-link">Pricing</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+      </nav>
+
+      <div class="nav-links">
+        <a href="https://github.com/SapanMozammel/auterix" target="_blank" rel="noopener" class="nav-btn ghost">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <a href="#pro-section" class="nav-btn primary">
+          <span>Get Auterix Pro</span>
+          <span class="badge-pill">$29</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Hero Header -->
+    <section class="hero-section">
+      <div class="hero-badge">
+        <span class="ping-dot"></span>
+        Deterministic Autonomous Context Protocol
+      </div>
+      <h1 class="hero-title">
+        One workflow. <span class="gradient-text">Any AI coding tool.</span>
+      </h1>
+      <p class="hero-desc">
+        Eliminate prompt fragmentation. Configure your architectural rules once, and Auterix compiles, verifies, and locks them across <strong>Cursor, Claude Code, Google Antigravity, GitHub Copilot, Codex, Windsurf, Cline, and Augment</strong> with zero context drift.
+      </p>
+
+      <div class="hero-metrics">
+        <div class="metric-item">
+          <span class="metric-val">8</span>
+          <span class="metric-label">AI Tool Adapters</span>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <span class="metric-val">100%</span>
+          <span class="metric-label">Client-Side</span>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <span class="metric-val">Zero</span>
+          <span class="metric-label">Telemetry / Leaks</span>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric-item">
+          <span class="metric-val">SHA-256</span>
+          <span class="metric-label">Hash Locked</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Studio Main Workspace -->
+    <main class="studio-grid" id="studio">
+      <!-- Left Column: Controls & Configuration -->
+      <section class="config-panel card">
+        <div class="panel-header">
+          <div class="panel-step">Step 1</div>
+          <h2>Select AI Client Adapters</h2>
+        </div>
+        <p class="panel-desc">Choose which AI assistants your team uses. Auterix will maintain identical project rules across all of them.</p>
+        
+        <div class="adapters-grid" id="adapters-container">
+          <!-- Populated dynamically by app.js -->
+        </div>
+
+        <div class="panel-header mt-8">
+          <div class="panel-step">Step 2</div>
+          <h2>Stack Blueprint & Architecture</h2>
+        </div>
+        <p class="panel-desc">Select a production profile or paste your project manifest to auto-detect your stack.</p>
+
+        <div class="stack-selector-box">
+          <div class="stack-label-row">
+            <label for="stack-select">Production Blueprint</label>
+            <span id="stack-badge-tag" class="stack-badge-tag pro">PRO BLUEPRINT</span>
+          </div>
+          <select id="stack-select" class="custom-select">
+            <option value="baseline">Standard Multi-Agent Baseline (Universal Free)</option>
+            <option value="nextjs-supabase" selected>Next.js 15 App Router + Supabase RLS + TypeScript (Pro)</option>
+            <option value="fastapi-sqlalchemy">FastAPI + Async SQLAlchemy 2.0 + Pydantic v2 (Pro)</option>
+            <option value="enterprise-node">Enterprise Node.js 22 + Fastify/Express + Clean Architecture (Pro)</option>
+            <option value="ai-agent-pipeline">AI & Autonomous Agent Engineering Pipeline (Pro)</option>
+          </select>
+        </div>
+
+        <!-- Intelligent Stack Auto-Detector Dropzone -->
+        <div class="auto-detector-zone" id="drop-zone">
+          <div class="drop-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <div class="drop-text">
+            <strong>Auto-Detect Stack</strong>
+            <span>Drop your <code>package.json</code> or <code>pyproject.toml</code> here</span>
+          </div>
+          <input type="file" id="file-input" accept=".json,.toml,.yaml,.yml" class="hidden-input">
+        </div>
+        <div id="detect-badge" class="detect-result hidden"></div>
+
+        <div class="panel-header mt-8">
+          <div class="panel-step">Step 3</div>
+          <h2>Guardrails & Architectural Gates</h2>
+        </div>
+        <div class="guardrails-list">
+          <label class="checkbox-row">
+            <input type="checkbox" id="guard-strict-types" checked>
+            <div class="checkbox-text">
+              <strong>Strict Type Safety & Zero Any</strong>
+              <span>Forces AI to write explicit Zod/Pydantic schemas and forbids type coercions.</span>
+            </div>
+          </label>
+          <label class="checkbox-row">
+            <input type="checkbox" id="guard-security-rls" checked>
+            <div class="checkbox-text">
+              <strong>Security & Secret Leaks Protection</strong>
+              <span>Blocks exposing service role keys or sensitive variables to client-side bundles.</span>
+            </div>
+          </label>
+          <label class="checkbox-row">
+            <input type="checkbox" id="guard-token-saver" checked>
+            <div class="checkbox-text">
+              <strong>Progressive Token Disclosure</strong>
+              <span>Hierarchical rules preserve context window attention and reduce token costs.</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- Export Actions -->
+        <div class="action-footer">
+          <button id="btn-copy-cli" class="btn-action secondary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span>Copy NPX Command</span>
+          </button>
+          <button id="btn-download-zip" class="btn-action primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>Download Config Bundle (.zip)</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Right Column: Live Context & Code Inspector -->
+      <section class="preview-panel card">
+        <div class="preview-mode-switch">
+          <button id="mode-rules" class="mode-tab-btn active">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            <span>AI Rule Config (Free Core)</span>
+          </button>
+          <button id="mode-pro" class="mode-tab-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span>Pro Boilerplate & CI Bot (Private Repo 🔒)</span>
+          </button>
+        </div>
+
+        <div class="preview-header">
+          <div class="tabs-scroll" id="file-tabs">
+            <!-- Tabs injected dynamically -->
+          </div>
+          <button id="btn-copy-file" class="btn-small ghost" title="Copy Current File">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span>Copy</span>
+          </button>
+        </div>
+
+        <!-- Pro Stack Alert Banner -->
+        <div class="pro-stack-alert" id="pro-stack-alert">
+          <div class="pro-stack-alert-text">
+            <span class="pro-pill">PRO BLUEPRINT</span>
+            <span id="pro-alert-title">Previewing Next.js 15 App Router + Supabase RLS (Pro)</span>
+          </div>
+          <a href="#pro-section" class="pro-stack-cta-btn">
+            <span>Unlock Full Suite ($29)</span>
+            <span>&rarr;</span>
+          </a>
+        </div>
+
+        <div class="code-container" id="code-container">
+          <div class="file-destination-badge" id="file-destination">
+            Path: <code id="dest-path">.cursor/rules/workflow.mdc</code>
+          </div>
+          <pre class="code-block"><code id="code-content">// Generating unified AI instructions...</code></pre>
+
+          <!-- Locked Pro Overlay (Visible when viewing Pro Boilerplates) -->
+          <div class="pro-locked-overlay hidden" id="pro-locked-overlay">
+            <div class="lock-shield-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <div class="lock-headline">Included in Auterix Pro Private Repository</div>
+            <p class="lock-subtext">5 Complete runnable starter codebases, PostgreSQL RLS migrations, pre-commit AI hook, and GitHub Action PR audit bot.</p>
+            <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="lock-cta-btn">
+              <span>Unlock Pro License & Private Repo Invite ($29)</span>
+              <span>&rarr;</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="hash-security-footer">
+          <div class="hash-status">
+            <span class="status-indicator"></span>
+            <span>SHA-256 Hash Lock Active</span>
+          </div>
+          <div class="hash-info">Deterministic content-addressed adoption</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- The Dual-Repository Architecture Section -->
+    <section class="architecture-section" id="architecture">
+      <div class="section-badge">SMART DUAL-REPOSITORY ARCHITECTURE</div>
+      <h2 class="section-title">Open-Source Core. Enterprise-Grade Pro.</h2>
+      <p class="section-subtitle">
+        Auterix is engineered as a clean two-repository architecture so you get complete open-source transparency for your core workflow, plus optional production-ready boilerplates and CI compliance in a private repository.
+      </p>
+
+      <div class="dual-repo-grid">
+        <!-- Public Repo Card -->
+        <div class="repo-card public">
+          <div class="repo-card-header">
+            <div class="repo-type-tag">PUBLIC REPOSITORY</div>
+            <h3>Auterix Community Core</h3>
+            <div class="repo-badge-pill">MIT License • 100% Free</div>
+            <p class="repo-card-desc">The open-source multi-agent context protocol and CLI engine. Everything individual developers need to eliminate prompt drift across 6 AI tools.</p>
+          </div>
+          <div class="repo-card-path">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            <code>github.com/SapanMozammel/auterix</code>
+          </div>
+          <ul class="repo-features">
+            <li>✅ Full Auterix Node.js 22+ CLI Engine</li>
+            <li>✅ 8 Native Tool Adapters (Claude Code, Cursor, Antigravity, Copilot, Codex, Windsurf, Cline, Augment)</li>
+            <li>✅ Full <code>.claude/</code> Commands & Skills, <code>.cursor/rules/</code>, <code>.agents/</code></li>
+            <li>✅ Content-Addressed SHA-256 Hash Locks</li>
+            <li>✅ Staged Adoption & Atomic Rollbacks</li>
+            <li>✅ 100% Client-Side In-Browser Studio</li>
+          </ul>
+          <a href="https://github.com/SapanMozammel/auterix" target="_blank" rel="noopener" class="repo-btn ghost">
+            <span>Star & Fork on GitHub</span>
+            <span>&rarr;</span>
+          </a>
+        </div>
+
+        <!-- Private Repo Card -->
+        <div class="repo-card pro">
+          <div class="popular-ribbon">RECOMMENDED</div>
+          <div class="repo-card-header">
+            <div class="repo-type-tag pro">PRIVATE REPOSITORY + INSTANT ZIP</div>
+            <h3>Auterix Pro Production Suite</h3>
+            <div class="repo-badge-pill pro">$29 One-Time • Lifetime Updates</div>
+            <p class="repo-card-desc">Production stack boilerplates, automated GitHub PR compliance bots, and local pre-commit guardrails that prevent AI hallucinations in commercial codebases.</p>
+          </div>
+          <div class="repo-card-path pro">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <code>SapanMozammel/auterix-pro (Private GitHub Invite)</code>
+          </div>
+          <ul class="repo-features">
+            <li>✅ <strong>Everything in Community Core</strong></li>
+            <li>✅ <strong>5 Production Stack Starter Repos</strong> (Next.js 15, FastAPI, Node 22, AI Agent, Expo)</li>
+            <li>✅ <strong>Auterix Pre-Commit AI Guardrail Hook</strong> (stops bad AI code locally)</li>
+            <li>✅ <strong>PR Compliance GitHub Action Bot</strong> (fails bad AI code in CI/CD)</li>
+            <li>✅ <strong>Standalone Offline Desktop Studio App</strong> (runs air-gapped)</li>
+            <li>✅ <strong>Private GitHub Repo Invite</strong> for continuous upstream updates</li>
+          </ul>
+          <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="repo-btn primary">
+            <span>Get Pro License & Private Repo Invite ($29)</span>
+            <span>&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Comparison Matrix -->
+    <section class="comparison-section" id="comparison">
+      <div class="section-badge">FEATURE MATRIX</div>
+      <h2 class="section-title">Transparent Edition Comparison</h2>
+      <p class="section-subtitle">Choose the right tier for your workflow — from solo hackers to scaling engineering agencies.</p>
+
+      <div class="table-container card">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Feature / Capability</th>
+              <th>Community Core<br><span class="table-sub">$0 (Free)</span></th>
+              <th class="col-highlight">Pro Developer<br><span class="table-sub">$29 (One-Time)</span></th>
+              <th>Agency & Team<br><span class="table-sub">$79 (One-Time)</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Repository Access</td>
+              <td>Public GitHub Repo</td>
+              <td class="col-highlight">Instant ZIP + Private GitHub Invite</td>
+              <td>Instant ZIP + Private GitHub Invite</td>
+            </tr>
+            <tr>
+              <td>AI Adapters Supported</td>
+              <td>All 8 Adapters</td>
+              <td class="col-highlight">All 8 Adapters</td>
+              <td>All 8 Adapters + Custom Org Generator</td>
+            </tr>
+            <tr>
+              <td>Universal Context Engine</td>
+              <td>✅ Included</td>
+              <td class="col-highlight">✅ Included</td>
+              <td>✅ Included</td>
+            </tr>
+            <tr>
+              <td>SHA-256 Hash Lock & Rollbacks</td>
+              <td>✅ Included</td>
+              <td class="col-highlight">✅ Included</td>
+              <td>✅ Included</td>
+            </tr>
+            <tr>
+              <td>Production Stack Starter Repos</td>
+              <td>❌ Universal Only</td>
+              <td class="col-highlight">✅ 5 Complete Production Stacks</td>
+              <td>✅ 5 Complete Production Stacks</td>
+            </tr>
+            <tr>
+              <td>Pre-Commit AI Guardrail Hook</td>
+              <td>❌ Manual</td>
+              <td class="col-highlight">✅ Automated Git Hook</td>
+              <td>✅ Automated Git Hook</td>
+            </tr>
+            <tr>
+              <td>Auterix PR Compliance GitHub Action</td>
+              <td>❌ Not Included</td>
+              <td class="col-highlight">❌ Not Included</td>
+              <td>✅ Automated PR Audit Bot</td>
+            </tr>
+            <tr>
+              <td>Standalone Offline Desktop Studio</td>
+              <td>❌ Web Only</td>
+              <td class="col-highlight">✅ Included (Air-Gapped)</td>
+              <td>✅ Included (Air-Gapped)</td>
+            </tr>
+            <tr>
+              <td>Commercial Client Resale Rights</td>
+              <td>MIT (Own Projects)</td>
+              <td class="col-highlight">Commercial (Own Projects)</td>
+              <td>✅ Unlimited Client Projects & Resale</td>
+            </tr>
+            <tr>
+              <td>Upstream Updates & Support</td>
+              <td>Community Issues</td>
+              <td class="col-highlight">Lifetime Updates via GitHub</td>
+              <td>Priority Engineering Support</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Auterix Pro Pricing Section -->
+    <section class="pro-section" id="pro-section">
+      <div class="pro-badge">PRO ENTERPRISE TIERS</div>
+      <h2 class="pro-title">Scale with Battle-Tested Production Stacks</h2>
+      <p class="pro-subtitle">Everything you need to prevent AI code rot in mission-critical commercial projects.</p>
+
+      <div class="pricing-grid">
+        <!-- Community Card -->
+        <div class="price-card">
+          <div class="price-header">
+            <h3>Community</h3>
+            <div class="price-figure">$0 <span class="period">forever</span></div>
+            <p class="price-desc">Open-source core for individual developers and side-projects.</p>
+          </div>
+          <ul class="feature-list">
+            <li>✅ Full Auterix CLI (npm / npx)</li>
+            <li>✅ All 8 Native AI Adapters (.claude/, .cursor/, .agents/, .github/, .ai/)</li>
+            <li>✅ Universal Baseline Profile</li>
+            <li>✅ Deterministic Content-Hash Lock</li>
+            <li>✅ Atomic Rollback Guards</li>
+            <li>✅ Web Studio Configurator</li>
+          </ul>
+          <a href="https://github.com/SapanMozammel/auterix" target="_blank" rel="noopener" class="card-btn ghost">View on GitHub</a>
+        </div>
+
+        <!-- Pro Developer Card -->
+        <div class="price-card highlight">
+          <div class="popular-ribbon">MOST POPULAR</div>
+          <div class="price-header">
+            <h3>Pro Developer</h3>
+            <div class="price-figure">$29 <span class="period">one-time</span></div>
+            <p class="price-desc">For professional engineers who want production-grade AI code without hallucinations.</p>
+          </div>
+          <ul class="feature-list">
+            <li>✅ <strong>Everything in Community</strong></li>
+            <li>✅ <strong>Next.js 15 App Router + Supabase RLS Blueprint</strong></li>
+            <li>✅ <strong>FastAPI + Async SQLAlchemy 2.0 Blueprint</strong></li>
+            <li>✅ <strong>Enterprise Node.js + Clean Architecture</strong></li>
+            <li>✅ <strong>Autonomous AI Agent Pipeline Blueprint</strong></li>
+            <li>✅ <strong>Pre-Commit AI Guardrail Hook</strong></li>
+            <li>✅ Standalone Offline Desktop Studio App</li>
+            <li>✅ Lifetime Stack & Adapter Updates</li>
+          </ul>
+          <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="card-btn primary">Get Pro Developer License</a>
+        </div>
+
+        <!-- Team & Agency Card -->
+        <div class="price-card">
+          <div class="price-header">
+            <h3>Agency & Team</h3>
+            <div class="price-figure">$79 <span class="period">one-time</span></div>
+            <p class="price-desc">For engineering teams and agencies building client apps with AI assistance.</p>
+          </div>
+          <ul class="feature-list">
+            <li>✅ <strong>Everything in Pro Developer</strong></li>
+            <li>✅ <strong>Auterix PR Compliance GitHub Action</strong></li>
+            <li>✅ Automated PR Audit Bot (stops bad AI code on GitHub)</li>
+            <li>✅ Unlimited Team Member Seats</li>
+            <li>✅ Custom Organization Adapter Generator</li>
+            <li>✅ Commercial Client-Resale Rights</li>
+            <li>✅ Priority Engineering Support</li>
+          </ul>
+          <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="card-btn secondary">Get Agency License</a>
+        </div>
+      </div>
+      <p style="margin-top: 24px; font-size: 13px; color: var(--text-muted); text-align: center;">
+        🔒 Instant private delivery via Gumroad. Includes full <code>.zip</code> bundle + optional GitHub invite to private repository for lifetime updates.
+      </p>
+    </section>
+
+    <!-- Developer FAQ Section -->
+    <section class="faq-section" id="faq">
+      <div class="section-badge">FREQUENTLY ASKED QUESTIONS</div>
+      <h2 class="section-title">Developer Questions Answered</h2>
+      <p class="section-subtitle">Straightforward answers about our open core, private repository, and privacy.</p>
+
+      <div class="faq-accordion">
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Why is Auterix split into a public repo and a private repo?</span>
+            <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-answer">
+            The core Auterix CLI engine, the universal context protocol, and the 6 vendor adapters (Cursor, Claude Code, Antigravity, Copilot, Codex, Augment) are 100% open-source under the MIT license on GitHub. The commercial Pro repository contains production-ready boilerplates, enterprise database security policies, automated CI GitHub Action bots, and local pre-commit guardrails. Keeping them separate ensures the core protocol remains community-owned while funding ongoing maintenance and new stack blueprints.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>What deliverables do I receive immediately when I purchase Pro?</span>
+            <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-answer">
+            Immediately upon purchase on Gumroad, you get a direct download link to <code>Auterix-Pro-Production-Suite.zip</code> containing all 5 production starter stacks, runnable boilerplate code (Next.js 15, FastAPI, Node 22, Expo, AI Agent Pipeline), the pre-commit hook script, the GitHub Action PR compliance workflow, the offline desktop studio, and your commercial license. You also receive an invitation to the private GitHub repository for lifetime updates.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Does Auterix send my code, prompts, or API keys to external servers?</span>
+            <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-answer">
+            <strong>Never.</strong> Auterix has zero external telemetry, zero tracking scripts, and zero API calls to proprietary servers. The Web Studio generates configurations 100% client-side in your browser using JSZip, and the CLI runs entirely on your local machine using standard Node.js without network access.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Can I use the Free open-source version for commercial client projects?</span>
+            <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-answer">
+            Yes! The public Auterix CLI and baseline adapter configurations are licensed under the permissive MIT License. You may use them freely in personal, open-source, or commercial projects. The Pro license gives you full commercial rights to use and adapt our proprietary production boilerplates, security policies, and CI bots across your team or client apps.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Can I switch between Cursor, Claude Code, and Antigravity mid-project?</span>
+            <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-answer">
+            Yes, that is the primary reason Auterix was built! When you run Auterix, it compiles your single canonical architectural contract into native instructions for Cursor (<code>.cursor/rules/workflow.mdc</code>), Claude Code (<code>CLAUDE.md</code>), Google Antigravity (<code>.agents/rules/workflow.md</code>), GitHub Copilot (<code>.github/copilot-instructions.md</code>), Codex (<code>AGENTS.md</code>), and Augment. You can write inline code in Cursor, perform deep refactors in Claude Code CLI, and run multi-agent audits in Antigravity with zero context loss.
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="studio-footer">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="brand-name">Auterix</span>
+          <span class="footer-desc">Deterministic Context Protocol & Multi-Agent Workflow Engine</span>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/SapanMozammel/auterix" target="_blank" rel="noopener">GitHub Repository</a>
+          <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener">Auterix Pro ($29)</a>
+          <a href="#studio">Web Studio</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#faq">FAQ</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Auterix is created by <a href="https://github.com/SapanMozammel" target="_blank" rel="noopener">Sapan Mozammel</a>. Open-source core released under the MIT License.</p>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

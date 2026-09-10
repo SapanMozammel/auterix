@@ -1,0 +1,7 @@
+{
+  "name": "@atlas/contracts",
+  "private": true,
+  "exports": {
+    "./query": "./query.ts"
+  }
+}

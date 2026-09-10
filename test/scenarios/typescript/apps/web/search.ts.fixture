@@ -1,0 +1,3 @@
+import { validQuery } from "../../packages/contracts/query"
+
+export const canSearch = (query: string): boolean => validQuery(query)

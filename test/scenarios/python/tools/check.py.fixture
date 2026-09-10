@@ -1,0 +1,5 @@
+from pathlib import Path
+
+# Synthetic execution witness: adoption must never invoke this consumer command.
+Path("consumer-command-ran.txt").write_text("Python consumer command executed.\n")
+assert "MAX_ATTEMPTS = 3" in Path("src/beacon/worker.py").read_text()
