@@ -931,7 +931,7 @@ ${profile.isPro ? `
 ---
 ### 🚀 Want the Complete Production Boilerplate Repositories & CI Bots?
 This free bundle includes the universal adapter rules, commands, and skills.
-To unlock the production boilerplate templates (safe server actions, PostgreSQL RLS policies, async sessions, and automated GitHub PR compliance bot), get Auterix Pro ($29):
+To unlock the production boilerplate templates (safe server actions, PostgreSQL RLS policies, async sessions, and automated GitHub PR compliance bot), get Auterix Pro ($14):
 👉 https://tenantdefense.gumroad.com/l/auterix
 ` : ""}
 `);

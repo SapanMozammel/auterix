@@ -6,12 +6,12 @@
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen)](package.json)
 [![Tests: 65 Passing](https://img.shields.io/badge/Tests-65%20Passing-emerald)](test/)
 [![Studio: Vercel](https://img.shields.io/badge/Web%20Studio-auterix.vercel.app-sky)](https://auterix.vercel.app)
-[![Get Auterix Pro](https://img.shields.io/badge/Pro%20Suite-$29%20Instant%20Access-orange)](https://tenantdefense.gumroad.com/l/auterix)
+[![Get Auterix Pro](https://img.shields.io/badge/Pro%20Suite-$14%20Instant%20Access-orange)](https://tenantdefense.gumroad.com/l/auterix)
 
 Auterix is a deterministic, tool-neutral autonomous context protocol and multi-agent engineering workflow. Projects define shared architectural invariants, task lifecycles, and verification gates once, while Auterix compiles, verifies, and locks them natively across **Cursor, Claude Code, Google Antigravity, GitHub Copilot, OpenAI Codex, Windsurf, Cline, and Augment Code** — with universal **`AGENTS.md`** compatibility for any autonomous agent.
 
 > **Live Web Studio:** Configure, auto-detect your stack, and export unified AI configs visually at **[auterix.vercel.app](https://auterix.vercel.app)**.
-> **Commercial Pro Suite:** Production stacks, runnable templates, pre-commit AI guardrails, and automated CI PR bots available at **[Gumroad ($29)](https://tenantdefense.gumroad.com/l/auterix)**.
+> **Commercial Pro Suite:** Production stacks, runnable templates, pre-commit AI guardrails, and automated CI PR bots available at **[Gumroad ($14)](https://tenantdefense.gumroad.com/l/auterix)**.
 
 ---
 

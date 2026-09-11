@@ -43,7 +43,11 @@
       "destination": "/studio/$1"
     },
     {
-      "source": "/(.*)",
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/((?!api/).*)",
       "destination": "/studio/$1"
     }
   ]
