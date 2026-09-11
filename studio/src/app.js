@@ -1823,7 +1823,7 @@ function initProUnlocker() {
   const statusElem = document.getElementById("pro-unlock-status");
   const modeLabel = document.getElementById("studio-mode-label");
   const statusDot = document.getElementById("status-dot");
-  const btnOpen = document.getElementById("btn-open-unlock-modal");
+  const btnOpen = document.getElementById("btn-open-unlock-modal") || document.getElementById("btn-open-unlock-modal-nav");
 
   if (!modal) return;
 
@@ -1839,7 +1839,7 @@ function initProUnlocker() {
   }
 
   // Hook all buttons that open the modal
-  document.querySelectorAll(".btn-trigger-unlock-modal, #btn-open-unlock-modal, .lock-have-zip-btn").forEach(btn => {
+  document.querySelectorAll(".btn-trigger-unlock-modal, #btn-open-unlock-modal, #btn-open-unlock-modal-nav, .lock-have-zip-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       openModal();
@@ -1957,6 +1957,8 @@ function initProUnlocker() {
       statusElem.className = "unlock-status error";
     }
   }
+}
+
 // 10.5 Adapter Controls & Instant Search Filter
 function initAdapterControls() {
   const btnAll = document.getElementById("btn-select-all");
@@ -2017,6 +2019,41 @@ function initAdapterControls() {
   }
 }
 
+// 10.6 Interactive Feature Matrix Toggle
+function initMatrixToggle() {
+  const btnToggle = document.getElementById("btn-toggle-access-chart");
+  const wrap = document.querySelector(".access-chart-table-wrap");
+  const bottomBtn = document.querySelector(".btn-collapse-matrix-bottom");
+
+  if (!btnToggle || !wrap) return;
+
+  function setExpanded(expand) {
+    wrap.classList.toggle("collapsed", !expand);
+    wrap.classList.toggle("expanded", expand);
+    btnToggle.setAttribute("aria-expanded", expand ? "true" : "false");
+    const textSpan = btnToggle.querySelector(".matrix-toggle-text");
+    if (textSpan) {
+      textSpan.innerHTML = expand
+        ? "&uarr; Collapse Comparison Table"
+        : "Show Full 22-Feature Comparison Table &darr;";
+    }
+  }
+
+  btnToggle.addEventListener("click", (e) => {
+    e.preventDefault();
+    const isCollapsed = wrap.classList.contains("collapsed");
+    setExpanded(isCollapsed);
+  });
+
+  if (bottomBtn) {
+    bottomBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      setExpanded(false);
+      document.getElementById("access-chart")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+}
+
 // 11. Bootstrap Studio
 function bootstrapStudio() {
   renderAdapters();
@@ -2030,6 +2067,7 @@ function bootstrapStudio() {
   initCopyPrompts();
   initNavigation();
   initActions();
+  initMatrixToggle();
   compileAll();
 }
 
@@ -2038,3 +2076,4 @@ if (document.readyState === "loading") {
 } else {
   bootstrapStudio();
 }
+

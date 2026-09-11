@@ -1084,29 +1084,34 @@ export async function updateUserAction(rawData: unknown) {
         <!-- Community Tier -->
         <div class="pricing-card free-tier">
           <div class="pricing-header">
+            <div class="plan-tier-badge free">OPEN PROTOCOL</div>
             <div class="plan-name">Community</div>
             <div class="plan-price">$0</div>
             <div class="plan-period">Free forever &bull; Open Source (MIT)</div>
           </div>
-          <p class="plan-desc">Essential multi-agent context compiler &amp; shared memory protocol for any codebase.</p>
+          <p class="plan-desc">Multi-agent context compiler &amp; shared memory protocol for any codebase.</p>
           <ul class="plan-features">
-            <li><span>✔</span> <strong>All 21 AI tool adapters</strong> (Cursor, Claude, Copilot, Windsurf, Devin, etc.)</li>
+            <li><span>✔</span> <strong>All 21 AI tool adapters</strong> (Cursor, Claude, Copilot, Windsurf, Devin...)</li>
             <li><span>✔</span> <strong>Cross-Agent Shared Memory</strong> (<code>.ai/memory.md</code> persistent context)</li>
             <li><span>✔</span> <strong>Token-Optimized Schema Extractor</strong> (Drizzle, Prisma, SQL)</li>
             <li><span>✔</span> <strong>Headless GitHub Action</strong> ($0.00 compute cost PR check)</li>
             <li><span>✔</span> <strong>Official VS Code Extension</strong> (live status telemetry &amp; drift alerts)</li>
             <li><span>✔</span> <strong>Deterministic SHA-256 Hash Lock</strong> &amp; zero-dependency CLI</li>
-            <li><span>✔</span> 100% In-browser compilation &bull; zero telemetry &bull; zero server leaks</li>
+            <li><span>✔</span> <strong>100% In-Browser Compilation</strong> (zero telemetry &bull; zero server leaks)</li>
           </ul>
           <div class="plan-action">
+            <div class="plan-member-hint">
+              <span>Open-Source Protocol &bull; MIT License</span>
+            </div>
             <a href="#studio" class="btn-plan free">Open Free Web Studio</a>
           </div>
         </div>
 
         <!-- Pro Developer Tier -->
         <div class="pricing-card pro-tier featured">
-          <div class="featured-badge">MOST POPULAR</div>
+          <div class="featured-badge">★ MOST POPULAR</div>
           <div class="pricing-header">
+            <div class="plan-tier-badge pro">COMMERCIAL BUNDLE</div>
             <div class="plan-name">Pro Developer</div>
             <div class="plan-price">$14</div>
             <div class="plan-period">One-time payment &bull; Lifetime bundle access</div>
@@ -1114,14 +1119,17 @@ export async function updateUserAction(rawData: unknown) {
           <p class="plan-desc">5 Production starter codebases, 11 blueprints, RLS policies, and pre-commit AI hooks.</p>
           <ul class="plan-features">
             <li><span>✔</span> <strong>Everything in Community</strong>, plus:</li>
-            <li><span>✔</span> <strong>5 Complete Runnable Production Starters</strong> (Next.js 15, FastAPI, Node, Expo, Cloudflare)</li>
-            <li><span>✔</span> <strong>11 Hardened Component Blueprints</strong> (RAG, Session Guard, Stripe, Drizzle+pgvector, Docker)</li>
+            <li><span>✔</span> <strong>5 Runnable Production Starters</strong> (Next.js, FastAPI, Node, Expo, Edge)</li>
+            <li><span>✔</span> <strong>11 Hardened Component Blueprints</strong> (RAG, Stripe, Auth, pgvector, Docker)</li>
             <li><span>✔</span> <strong>Bank-Grade PostgreSQL RLS</strong> migrations &amp; schemas</li>
             <li><span>✔</span> <strong>Pre-Commit AI Guardrail Hook</strong> (<code>pre-commit-guard.sh</code>)</li>
-            <li><span>✔</span> <strong>Standalone Offline Desktop Studio</strong></li>
-            <li><span>✔</span> Commercial project rights for your own applications</li>
+            <li><span>✔</span> <strong>Standalone Offline Desktop Studio</strong> HTML GUI bundle</li>
+            <li><span>✔</span> <strong>Commercial License</strong> for your own personal &amp; SaaS apps</li>
           </ul>
           <div class="plan-action">
+            <div class="plan-member-hint">
+              <span>Commercial License &bull; Lifetime Updates</span>
+            </div>
             <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="btn-plan pro glow-button">
               <span>Get Instant Pro Access ($14) &rarr;</span>
             </a>
@@ -1131,6 +1139,7 @@ export async function updateUserAction(rawData: unknown) {
         <!-- Agency & Team Tier -->
         <div class="pricing-card agency-tier">
           <div class="pricing-header">
+            <div class="plan-tier-badge agency">TEAMS &amp; CLIENTS</div>
             <div class="plan-name">Agency &amp; Teams</div>
             <div class="plan-price">$39</div>
             <div class="plan-period">One-time payment &bull; Private GitHub sync</div>
@@ -1141,9 +1150,9 @@ export async function updateUserAction(rawData: unknown) {
             <li><span>✔</span> <strong>Direct GitHub Invitation</strong> to private <code>auterix-pro</code> repo</li>
             <li><span>✔</span> <strong>Continuous Git Sync</strong>: <code>git pull</code> for all future updates &amp; stacks</li>
             <li><span>✔</span> <strong>Automated GitHub Action PR Bot</strong> for CI auditing</li>
-            <li><span>✔</span> Unlimited client &amp; commercial client delivery rights</li>
+            <li><span>✔</span> <strong>Unlimited Client Delivery Rights</strong> (zero per-seat licensing)</li>
             <li><span>✔</span> <strong>Full White-Label Rights</strong> (remove Auterix branding in client handoffs)</li>
-            <li><span>✔</span> Priority support on GitHub issue tracker</li>
+            <li><span>✔</span> <strong>Priority Support</strong> on GitHub issue tracker</li>
           </ul>
           <div class="plan-action">
             <div class="plan-existing-user">
@@ -1167,9 +1176,15 @@ export async function updateUserAction(rawData: unknown) {
           <p class="access-chart-subtitle">
             Compare capabilities across the Free Open-Source Protocol, Pro Developer Suite, and Agency &amp; Team licenses.
           </p>
+          <div class="access-chart-toggle-bar">
+            <button type="button" id="btn-toggle-access-chart" class="btn-toggle-matrix" aria-expanded="false">
+              <span class="matrix-toggle-icon">⚡</span>
+              <span class="matrix-toggle-text">Show Full 22-Feature Comparison Table &darr;</span>
+            </button>
+          </div>
         </div>
 
-        <div class="access-chart-table-wrap">
+        <div class="access-chart-table-wrap collapsed">
           <table class="access-chart-table">
             <thead>
               <tr>
@@ -1180,38 +1195,76 @@ export async function updateUserAction(rawData: unknown) {
               </tr>
             </thead>
             <tbody>
-              <!-- Category 1 -->
-              <tr class="category-row">
-                <td colspan="4">🧠 1. Universal AI Protocol &amp; Context Engine</td>
-              </tr>
-              <tr>
+              <!-- Core Summary Rows (Always Visible in Compact Mode) -->
+              <tr class="summary-highlight-row">
                 <td>
-                  <span class="feature-title">21 Native AI Tool Adapters</span>
-                  <span class="feature-sub">Cursor, Claude Code, Copilot, Windsurf, Devin, Lovable, v0, Roo, Aider + 12 more</span>
+                  <span class="feature-title">Universal AI Tool Adapters</span>
+                  <span class="feature-sub">Cursor, Claude Code, Copilot, Windsurf, Devin, Antigravity + 15 more</span>
                 </td>
-                <td class="col-free"><span class="cell-check">✔ Included</span></td>
-                <td class="col-pro"><span class="cell-check">✔ Included</span></td>
-                <td class="col-agency"><span class="cell-check">✔ Included</span></td>
+                <td class="col-free"><span class="cell-check">✔ 21 Tools</span></td>
+                <td class="col-pro"><span class="cell-check">✔ 21 Tools</span></td>
+                <td class="col-agency"><span class="cell-check">✔ 21 Tools</span></td>
               </tr>
-              <tr>
+              <tr class="summary-highlight-row">
                 <td>
                   <span class="feature-title">Cross-Agent Shared Memory</span>
-                  <span class="feature-sub"><code>.ai/memory.md</code> persistent context, decisions, and anti-patterns module</span>
+                  <span class="feature-sub"><code>.ai/memory.md</code> persistent context, decisions, and anti-patterns</span>
                 </td>
                 <td class="col-free"><span class="cell-check">✔ Included</span></td>
                 <td class="col-pro"><span class="cell-check">✔ Included</span></td>
                 <td class="col-agency"><span class="cell-check">✔ Included</span></td>
               </tr>
-              <tr>
+              <tr class="summary-highlight-row">
+                <td>
+                  <span class="feature-title">Runnable Production Starters</span>
+                  <span class="feature-sub">Next.js 15, FastAPI, Node Fastify, Expo Mobile, Cloudflare Workers</span>
+                </td>
+                <td class="col-free"><span class="cell-cross">&mdash;</span></td>
+                <td class="col-pro"><span class="cell-pro-badge">5 Full Apps</span></td>
+                <td class="col-agency"><span class="cell-agency-badge">5 Full Apps</span></td>
+              </tr>
+              <tr class="summary-highlight-row">
+                <td>
+                  <span class="feature-title">Component Blueprints &amp; RLS</span>
+                  <span class="feature-sub">11 security blueprints, PostgreSQL RLS migrations, pre-commit AI hooks</span>
+                </td>
+                <td class="col-free"><span class="cell-cross">&mdash;</span></td>
+                <td class="col-pro"><span class="cell-check">✔ 11 Blueprints</span></td>
+                <td class="col-agency"><span class="cell-check">✔ 11 Blueprints</span></td>
+              </tr>
+              <tr class="summary-highlight-row">
+                <td>
+                  <span class="feature-title">Automated GitHub Actions PR Bot</span>
+                  <span class="feature-sub">Turnkey CI audit bot halting non-compliant AI-generated code</span>
+                </td>
+                <td class="col-free"><span class="cell-cross">&mdash;</span></td>
+                <td class="col-cross">&mdash;</td>
+                <td class="col-agency"><span class="cell-agency-badge">Turnkey CI Bot</span></td>
+              </tr>
+              <tr class="summary-highlight-row">
+                <td>
+                  <span class="feature-title">Upstream Sync &amp; Rights</span>
+                  <span class="feature-sub">Commercial license and distribution model</span>
+                </td>
+                <td class="col-free">MIT (Own Apps)</td>
+                <td class="col-pro">Commercial (Own Apps)</td>
+                <td class="col-agency"><span class="cell-agency-badge">Unlimited Clients + Git Sync</span></td>
+              </tr>
+
+              <!-- Detailed Categorized Rows (Revealed on Expand) -->
+              <tr class="category-row detailed-row">
+                <td colspan="4">🧠 1. Universal AI Protocol &amp; Context Engine</td>
+              </tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Token-Optimized Schema Extractor</span>
-                  <span class="feature-sub"><code>extract-schema</code> parses Drizzle, Prisma, and SQL schemas to high-density Markdown</span>
+                  <span class="feature-sub"><code>extract-schema</code> parses Drizzle, Prisma, and SQL schemas</span>
                 </td>
                 <td class="col-free"><span class="cell-check">✔ Included</span></td>
                 <td class="col-pro"><span class="cell-check">✔ Included</span></td>
                 <td class="col-agency"><span class="cell-check">✔ Included</span></td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Deterministic SHA-256 Hash Lock</span>
                   <span class="feature-sub">Content-addressed verification engine preventing unreviewed rule drift</span>
@@ -1220,7 +1273,7 @@ export async function updateUserAction(rawData: unknown) {
                 <td class="col-pro"><span class="cell-check">✔ Included</span></td>
                 <td class="col-agency"><span class="cell-check">✔ Included</span></td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Headless GitHub Action Audit</span>
                   <span class="feature-sub"><code>action.yml</code> checks PR compliance in &lt;1.5s at $0.00 compute cost</span>
@@ -1229,16 +1282,16 @@ export async function updateUserAction(rawData: unknown) {
                 <td class="col-pro"><span class="cell-check">✔ Included</span></td>
                 <td class="col-agency"><span class="cell-check">✔ Included</span></td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Official VS Code Extension</span>
-                  <span class="feature-sub">Live status bar telemetry (<code>$(shield) Auterix: 21 Tools Synced</code>) &amp; drift alerts</span>
+                  <span class="feature-sub">Live status bar telemetry &amp; drift alerts</span>
                 </td>
                 <td class="col-free"><span class="cell-check">✔ Included</span></td>
                 <td class="col-pro"><span class="cell-check">✔ Included</span></td>
                 <td class="col-agency"><span class="cell-check">✔ Included</span></td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Interactive Terminal TUI &amp; CLI</span>
                   <span class="feature-sub">Zero-dependency ANSI setup wizard (<code>npx auterix</code>) &amp; headless commands</span>
@@ -1247,7 +1300,7 @@ export async function updateUserAction(rawData: unknown) {
                 <td class="col-pro"><span class="cell-check">✔ Included</span></td>
                 <td class="col-agency"><span class="cell-check">✔ Included</span></td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Web Studio Cockpit</span>
                   <span class="feature-sub">Accessible in-browser rule compiler (0ms WASM, zero server transmission)</span>
@@ -1258,10 +1311,10 @@ export async function updateUserAction(rawData: unknown) {
               </tr>
 
               <!-- Category 2 -->
-              <tr class="category-row">
+              <tr class="category-row detailed-row">
                 <td colspan="4">🚀 2. Complete Runnable Production Scaffolds</td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Next.js 15 App Router + Supabase RLS</span>
                   <span class="feature-sub">Server Actions, Zod validation, async cookies &amp; hardware-isolated SQL RLS</span>
@@ -1270,7 +1323,7 @@ export async function updateUserAction(rawData: unknown) {
                 <td class="col-pro"><span class="cell-pro-badge">Full Runnable App</span></td>
                 <td class="col-agency"><span class="cell-agency-badge">Full Runnable App</span></td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Python FastAPI + Async SQLAlchemy 2.0</span>
                   <span class="feature-sub">Asyncpg engine, declarative UUID models, Pydantic v2 &amp; JWT auth</span>
@@ -1279,7 +1332,7 @@ export async function updateUserAction(rawData: unknown) {
                 <td class="col-pro"><span class="cell-pro-badge">Full Runnable App</span></td>
                 <td class="col-agency"><span class="cell-agency-badge">Full Runnable App</span></td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Enterprise Node.js 22 + Fastify 5</span>
                   <span class="feature-sub">Clean architecture, Prisma ORM &amp; Kubernetes health/readiness probes</span>
@@ -1288,7 +1341,7 @@ export async function updateUserAction(rawData: unknown) {
                 <td class="col-pro"><span class="cell-pro-badge">Full Runnable App</span></td>
                 <td class="col-agency"><span class="cell-agency-badge">Full Runnable App</span></td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">React Native &amp; Expo 51+ Mobile</span>
                   <span class="feature-sub">File-system Expo Router &amp; hardware-backed SecureStore token encryption</span>
@@ -1297,7 +1350,7 @@ export async function updateUserAction(rawData: unknown) {
                 <td class="col-pro"><span class="cell-pro-badge">Full Runnable App</span></td>
                 <td class="col-agency"><span class="cell-agency-badge">Full Runnable App</span></td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Cloudflare Workers &amp; Hono Edge API</span>
                   <span class="feature-sub">Sub-10ms global edge API with Cloudflare D1 SQL and KV bindings</span>
@@ -1308,37 +1361,37 @@ export async function updateUserAction(rawData: unknown) {
               </tr>
 
               <!-- Category 3 -->
-              <tr class="category-row">
+              <tr class="category-row detailed-row">
                 <td colspan="4">🛡️ 3. Architectural Blueprints &amp; Security Guardrails</td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">11 Hardened Component Blueprints</span>
-                  <span class="feature-sub">RAG pipeline, session guard, Stripe webhooks, Drizzle+pgvector, Docker, rate limiter, logger</span>
+                  <span class="feature-sub">RAG pipeline, session guard, Stripe webhooks, Drizzle+pgvector, Docker</span>
                 </td>
                 <td class="col-free"><span class="cell-cross">&mdash;</span></td>
                 <td class="col-pro"><span class="cell-check">✔ 11 Blueprints</span></td>
                 <td class="col-agency"><span class="cell-check">✔ 11 Blueprints</span></td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Bank-Grade PostgreSQL RLS Migrations</span>
-                  <span class="feature-sub">Multi-tenant row-level security isolating tenant data at database kernel level</span>
+                  <span class="feature-sub">Multi-tenant row-level security isolating tenant data</span>
                 </td>
                 <td class="col-free"><span class="cell-cross">&mdash;</span></td>
                 <td class="col-pro"><span class="cell-check">✔ Included</span></td>
                 <td class="col-agency"><span class="cell-check">✔ Included</span></td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Local Pre-Commit AI Guardrail Hook</span>
-                  <span class="feature-sub"><code>pre-commit-guard.sh</code> blocks secret leaks, TypeScript errors, and unreviewed AI changes</span>
+                  <span class="feature-sub"><code>pre-commit-guard.sh</code> blocks secret leaks and syntax errors</span>
                 </td>
                 <td class="col-free"><span class="cell-cross">&mdash;</span></td>
                 <td class="col-pro"><span class="cell-check">✔ Included</span></td>
                 <td class="col-agency"><span class="cell-check">✔ Included</span></td>
               </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Standalone Offline Desktop Studio</span>
                   <span class="feature-sub">Offline HTML GUI &amp; <code>Auterix-Pro-Production-Suite.zip</code> bundle</span>
@@ -1349,28 +1402,10 @@ export async function updateUserAction(rawData: unknown) {
               </tr>
 
               <!-- Category 4 -->
-              <tr class="category-row">
+              <tr class="category-row detailed-row">
                 <td colspan="4">🤖 4. CI Automation, Rights &amp; Upstream Delivery</td>
               </tr>
-              <tr>
-                <td>
-                  <span class="feature-title">Automated GitHub Actions PR Bot</span>
-                  <span class="feature-sub">Turnkey CI PR audit bot commenting on PRs and halting non-compliant code</span>
-                </td>
-                <td class="col-free"><span class="cell-cross">&mdash;</span></td>
-                <td class="col-cross">&mdash;</td>
-                <td class="col-agency"><span class="cell-agency-badge">Turnkey CI Bot</span></td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="feature-title">Commercial Distribution Rights</span>
-                  <span class="feature-sub">Deploy in production products</span>
-                </td>
-                <td class="col-free">Own Products (MIT)</td>
-                <td class="col-pro">Own Products (Comm.)</td>
-                <td class="col-agency"><span class="cell-agency-badge">Unlimited Clients</span></td>
-              </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">White-Label Rights</span>
                   <span class="feature-sub">Remove Auterix branding in client deliverables and handoffs</span>
@@ -1379,16 +1414,7 @@ export async function updateUserAction(rawData: unknown) {
                 <td class="col-cross">&mdash;</td>
                 <td class="col-agency"><span class="cell-agency-badge">Full White-Label</span></td>
               </tr>
-              <tr>
-                <td>
-                  <span class="feature-title">Upstream Delivery &amp; Sync</span>
-                  <span class="feature-sub">How updates are delivered as new AI coding tools release</span>
-                </td>
-                <td class="col-free">npm / git clone</td>
-                <td class="col-pro">Gumroad ZIP</td>
-                <td class="col-agency"><span class="cell-agency-badge">Direct git pull</span></td>
-              </tr>
-              <tr>
+              <tr class="detailed-row">
                 <td>
                   <span class="feature-title">Support Channel</span>
                   <span class="feature-sub">Issue resolution and assistance</span>
@@ -1399,6 +1425,12 @@ export async function updateUserAction(rawData: unknown) {
               </tr>
             </tbody>
           </table>
+
+          <div class="matrix-collapse-bottom">
+            <button type="button" class="btn-collapse-matrix-bottom">
+              <span>↑ Collapse Detailed Matrix</span>
+            </button>
+          </div>
         </div>
       </div>
 
