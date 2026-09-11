@@ -391,7 +391,9 @@ const state = {
     tokenSaver: true
   },
   generatedFiles: {},
-  proFiles: {}
+  proFiles: {},
+  isProUnlocked: false,
+  proZipInstance: null
 };
 
 // 5. Content Generators
@@ -637,7 +639,11 @@ function renderCode() {
     if (!currentFile) return;
     document.getElementById("dest-path").textContent = currentFile.path;
     document.getElementById("code-content").textContent = currentFile.content;
-    lockOverlay.classList.remove("hidden");
+    if (state.isProUnlocked) {
+      lockOverlay.classList.add("hidden");
+    } else {
+      lockOverlay.classList.remove("hidden");
+    }
   }
 }
 
@@ -647,10 +653,12 @@ function renderProAlert() {
   const badgeTag = document.getElementById("stack-badge-tag");
 
   if (profile.isPro) {
-    badgeTag.textContent = "PRO BLUEPRINT";
+    badgeTag.textContent = state.isProUnlocked ? "PRO BLUEPRINT (ACTIVE)" : "PRO BLUEPRINT";
     badgeTag.className = "stack-badge-tag pro";
     alertContainer.style.display = "flex";
-    document.getElementById("pro-alert-title").textContent = `Previewing ${profile.name} (Pro)`;
+    document.getElementById("pro-alert-title").textContent = state.isProUnlocked 
+      ? `Active: ${profile.name} (Pro Unlocked)` 
+      : `Previewing ${profile.name} (Pro)`;
   } else {
     badgeTag.textContent = "FREE / COMMUNITY";
     badgeTag.className = "stack-badge-tag free";
@@ -1063,16 +1071,157 @@ To unlock the production boilerplate templates (safe server actions, PostgreSQL 
 ` : ""}
 `);
 
+    // If Pro is unlocked, bundle the full production blueprint files into the download
+    if (state.isProUnlocked && state.proFiles) {
+      for (const key of Object.keys(state.proFiles)) {
+        const item = state.proFiles[key];
+        if (item && item.path && item.content) {
+          zip.file(item.path, item.content);
+        }
+      }
+    }
+
     const blob = await zip.generateAsync({ type: "blob" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `auterix-${state.selectedStack}-config.zip`;
+    a.download = state.isProUnlocked 
+      ? `auterix-${state.selectedStack}-pro.zip` 
+      : `auterix-${state.selectedStack}-config.zip`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   });
+}
+
+
+// 9d. Pro License & ZIP Unlocker
+function initProUnlocker() {
+  const btnOpen = document.getElementById("btn-open-unlock-modal");
+  const btnFromOverlay = document.getElementById("lock-have-zip-btn");
+  const modal = document.getElementById("unlock-modal");
+  const btnClose = document.getElementById("btn-close-modal");
+  const dropzone = document.getElementById("pro-zip-dropzone");
+  const fileInput = document.getElementById("pro-zip-input");
+  const statusElem = document.getElementById("pro-unlock-status");
+  const modeLabel = document.getElementById("studio-mode-label");
+  const statusDot = document.getElementById("status-dot");
+
+  if (!modal) return;
+
+  function openModal() {
+    modal.classList.remove("hidden");
+    if (statusElem) statusElem.classList.add("hidden");
+  }
+
+  if (btnOpen) btnOpen.addEventListener("click", openModal);
+  if (btnFromOverlay) btnFromOverlay.addEventListener("click", openModal);
+
+  if (btnClose) {
+    btnClose.addEventListener("click", () => {
+      modal.classList.add("hidden");
+    });
+  }
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.add("hidden");
+  });
+
+  if (dropzone && fileInput) {
+    dropzone.addEventListener("click", () => fileInput.click());
+
+    dropzone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropzone.classList.add("dragover");
+    });
+
+    dropzone.addEventListener("dragleave", () => {
+      dropzone.classList.remove("dragover");
+    });
+
+    dropzone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropzone.classList.remove("dragover");
+      if (e.dataTransfer.files.length) {
+        verifyProZip(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener("change", (e) => {
+      if (e.target.files.length) {
+        verifyProZip(e.target.files[0]);
+      }
+    });
+  }
+
+  async function verifyProZip(file) {
+    if (!file.name.endsWith(".zip")) {
+      statusElem.innerHTML = "❌ Please provide a <code>.zip</code> file.";
+      statusElem.className = "unlock-status error";
+      statusElem.classList.remove("hidden");
+      return;
+    }
+
+    statusElem.innerHTML = "⏳ Verifying Pro Suite package...";
+    statusElem.className = "unlock-status info";
+    statusElem.classList.remove("hidden");
+
+    try {
+      if (typeof JSZip === "undefined") {
+        throw new Error("JSZip library not loaded");
+      }
+      const zip = await JSZip.loadAsync(file);
+      
+      // Check for Pro suite verification files
+      let isProValid = false;
+      zip.forEach((relativePath) => {
+        if (relativePath.includes("COMMERCIAL-LICENSE-PRO.md") || 
+            relativePath.includes("START_HERE.html") || 
+            relativePath.includes("START-HERE-PRO-GUIDE.md") ||
+            relativePath.includes("06-Auterix-PreCommit-AI-Guardrail")) {
+          isProValid = true;
+        }
+      });
+
+      if (isProValid) {
+        state.isProUnlocked = true;
+        state.proZipInstance = zip;
+        
+        statusElem.innerHTML = "✅ <strong>Auterix Pro Verified!</strong> Full production blueprints and guardrails unlocked.";
+        statusElem.className = "unlock-status success";
+
+        // Update Status Bar
+        if (modeLabel) {
+          modeLabel.innerHTML = 'Studio Mode: <strong style="color: #f59e0b;">🌟 Pro Suite Active</strong>';
+        }
+        if (statusDot) {
+          statusDot.className = "status-dot pro";
+        }
+        if (btnOpen) {
+          btnOpen.innerHTML = "<span>🌟 Pro Unlocked (Active)</span>";
+          btnOpen.classList.add("unlocked");
+        }
+
+        // Hide lock overlay in code container
+        const lockOverlay = document.getElementById("pro-locked-overlay");
+        if (lockOverlay) lockOverlay.classList.add("hidden");
+
+        compileAll();
+
+        setTimeout(() => {
+          modal.classList.add("hidden");
+        }, 1600);
+      } else {
+        statusElem.innerHTML = "❌ Unrecognized package. Please upload the official <code>Auterix-Pro-Production-Suite.zip</code>.";
+        statusElem.className = "unlock-status error";
+      }
+    } catch (err) {
+      console.error("Failed to parse zip:", err);
+      statusElem.innerHTML = "❌ Could not read ZIP archive. Please check file integrity.";
+      statusElem.className = "unlock-status error";
+    }
+  }
 }
 
 // 11. Bootstrap Studio
@@ -1082,6 +1231,7 @@ window.addEventListener("DOMContentLoaded", () => {
   initViewModeSwitch();
   initGuardrails();
   initAutoDetector();
+  initProUnlocker();
   initToolTabs();
   initCopyPrompts();
   initActions();

@@ -197,6 +197,9 @@
               </li>
             </ol>
             <a href="#pro-section" class="pathway-cta-btn pro">Explore Production Stacks ($14) &rarr;</a>
+            <button type="button" class="lock-have-zip-btn" id="lock-have-zip-btn">
+              Already have Pro ZIP? Load it to unlock &rarr;
+            </button>
           </div>
         </div>
       </div>
@@ -226,6 +229,20 @@
     </section>
 
     <!-- Studio Main Workspace -->
+    
+    <!-- Studio Status Bar & Pro Mode Unlocker -->
+    <div class="studio-status-bar">
+      <div class="status-left">
+        <span class="status-dot free" id="status-dot"></span>
+        <span id="studio-mode-label">Studio Mode: <strong>Community (Free)</strong></span>
+      </div>
+      <div class="status-right">
+        <button type="button" id="btn-open-unlock-modal" class="btn-unlock-pro">
+          <span>🌟 Unlock Pro Mode (Have a License?)</span>
+        </button>
+      </div>
+    </div>
+
     <main class="studio-grid" id="studio">
       <!-- Left Column: Controls & Configuration -->
       <section class="config-panel card">
@@ -412,6 +429,9 @@
               <span>Unlock Pro License & Private Repo Invite ($14)</span>
               <span>&rarr;</span>
             </a>
+            <button type="button" class="lock-have-zip-btn" id="lock-have-zip-btn">
+              Already have Pro ZIP? Load it to unlock &rarr;
+            </button>
           </div>
         </div>
 
@@ -506,6 +526,9 @@
           </div>
           <div class="agency-callout-action">
             <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="agency-cta-btn">Get Agency & Team License ($39) &rarr;</a>
+            <button type="button" class="lock-have-zip-btn" id="lock-have-zip-btn">
+              Already have Pro ZIP? Load it to unlock &rarr;
+            </button>
           </div>
         </div>
       </div>
@@ -933,5 +956,51 @@ export async function updateUserAction(input: unknown) {
   </div>
 
   <script type="module" src="src/app.js"></script>
+
+  <!-- Pro Unlock Modal -->
+  <div class="modal-backdrop hidden" id="unlock-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-row">
+          <span class="modal-badge">CLIENT-SIDE VERIFICATION</span>
+          <h3>Unlock Auterix Pro in Web Studio</h3>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-desc">
+          Already purchased Auterix Pro or Agency? Load your <code>Auterix-Pro-Production-Suite.zip</code> below to unlock full production blueprints, PostgreSQL RLS migrations, and local guardrails directly in your browser.
+        </p>
+
+        <div class="modal-dropzone" id="pro-zip-dropzone">
+          <div class="modal-drop-icon">📦</div>
+          <strong>Drop Auterix-Pro-Production-Suite.zip Here</strong>
+          <span>or click to select file from your computer</span>
+          <input type="file" id="pro-zip-input" accept=".zip" class="hidden-input">
+        </div>
+        <div id="pro-unlock-status" class="unlock-status hidden"></div>
+
+        <div class="modal-agency-box">
+          <h4>🤖 Agency & Team License Collaborators:</h4>
+          <p>Need the latest updated Pro Suite from GitHub? As an invited collaborator, you have continuous access:</p>
+          <div class="agency-link-buttons">
+            <a href="https://github.com/SapanMozammel/auterix-pro/releases" target="_blank" rel="noopener" class="agency-link-btn">
+              <span>⬇️ Download Latest ZIP from GitHub Releases</span>
+            </a>
+            <div class="agency-git-cmd">
+              <code>git clone git@github.com:SapanMozammel/auterix-pro.git</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer-note">
+          <span>Don't have Auterix Pro yet?</span>
+          <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="modal-buy-link">Get Instant Pro Access ($14) &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
