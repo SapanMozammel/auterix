@@ -675,6 +675,7 @@ body.dark-theme {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   width: 38px;
   height: 38px;
   border-radius: 8px;
@@ -2511,7 +2512,7 @@ body.dark-theme {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
-  padding: 30px 24px;
+  padding: 28px 24px;
   display: flex;
   flex-direction: column;
   backdrop-filter: blur(20px);
@@ -2613,11 +2614,14 @@ body.dark-theme {
   font-size: 12px;
   color: #cbd5e1;
   line-height: 1.45;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 .plan-features li span {
   color: var(--cyan);
   font-weight: 700;
+  flex-shrink: 0;
 }
 
 /* Action Area with Fixed Alignment & Zero Spacing Issues */
@@ -2627,33 +2631,29 @@ body.dark-theme {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
-.plan-member-hint {
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 10px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-sm);
+.plan-sub-caption {
   font-size: 11px;
   color: #64748b;
   text-align: center;
+  line-height: 1.3;
+  margin-top: 2px;
 }
 
 .btn-plan {
   display: block;
   width: 100%;
-  padding: 13px 20px;
+  padding: 12px 16px;
   text-align: center;
   font-size: 13px;
   font-weight: 800;
   border-radius: var(--radius-md);
   text-decoration: none;
   transition: all 0.2s ease;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .btn-plan.free {
@@ -2736,11 +2736,10 @@ body.dark-theme {
 
 /* Agency Direct Actions & Download Buttons */
 .plan-existing-user {
-  height: 32px;
-  margin: 0;
-  padding: 4px 10px;
+  margin: 0 0 2px 0;
+  padding: 6px 10px;
   background: rgba(245, 158, 11, 0.06);
-  border: 1px solid rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(245, 158, 11, 0.2);
   border-radius: var(--radius-sm);
   text-align: center;
   font-size: 11px;
@@ -2749,7 +2748,7 @@ body.dark-theme {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  flex-wrap: wrap;
+  line-height: 1.35;
 }
 
 .agency-dl-link {
@@ -3894,6 +3893,15 @@ body.dark-theme {
 
   .access-chart-section {
     padding: 24px 16px;
+  }
+
+  .pricing-card {
+    padding: 24px 18px;
+  }
+
+  .btn-plan {
+    font-size: 12.5px;
+    padding: 11px 14px;
   }
 }
 
