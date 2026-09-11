@@ -872,20 +872,149 @@ function initAutoDetector() {
 
 // 9b. Interactive Tool Tabs in Quickstart Section
 function initToolTabs() {
-  const tabs = document.querySelectorAll("#tool-tabs .tool-tab");
-  const panes = document.querySelectorAll(".tool-panes .tool-pane");
+  // Modern guide tabs
+  const guideBtns = document.querySelectorAll(".guide-tab-btn");
+  const guidePanels = document.querySelectorAll(".guide-panel");
 
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      tabs.forEach((t) => t.classList.remove("active"));
-      panes.forEach((p) => p.classList.remove("active"));
+  if (guideBtns.length > 0) {
+    guideBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const guideId = btn.getAttribute("data-guide");
+        guideBtns.forEach((b) => b.classList.remove("active"));
+        guidePanels.forEach((p) => p.classList.remove("active"));
 
-      tab.classList.add("active");
-      const toolId = tab.getAttribute("data-tool");
-      const targetPane = document.getElementById(`pane-${toolId}`);
-      if (targetPane) targetPane.classList.add("active");
+        btn.classList.add("active");
+        const targetPanel = document.getElementById(`guide-panel-${guideId}`);
+        if (targetPanel) targetPanel.classList.add("active");
+      });
+    });
+  }
+
+  // Legacy fallback support
+  const legacyTabs = document.querySelectorAll("#tool-tabs .tool-tab");
+  const legacyPanes = document.querySelectorAll(".tool-panes .tool-pane");
+  if (legacyTabs.length > 0) {
+    legacyTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        legacyTabs.forEach((t) => t.classList.remove("active"));
+        legacyPanes.forEach((p) => p.classList.remove("active"));
+        tab.classList.add("active");
+        const toolId = tab.getAttribute("data-tool");
+        const targetPane = document.getElementById(`pane-${toolId}`);
+        if (targetPane) targetPane.classList.add("active");
+      });
+    });
+  }
+}
+
+// Dynamic Navigation Controller (On-Click + On-Scroll Scrollspy)
+function initNavigation() {
+  const navLinks = document.querySelectorAll(".nav-menu .nav-link");
+  if (!navLinks.length) return;
+
+  const sections = [];
+  navLinks.forEach((link) => {
+    const href = link.getAttribute("href");
+    if (href && href.startsWith("#") && href.length > 1) {
+      const sec = document.querySelector(href);
+      if (sec) {
+        sections.push({ id: href.slice(1), el: sec, link: link });
+      }
+    }
+  });
+
+  // On-Click: Smooth scroll with sticky nav offset & immediate active switch
+  navLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const href = link.getAttribute("href");
+      if (href && href.startsWith("#") && href.length > 1) {
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          navLinks.forEach((l) => {
+            l.classList.remove("active");
+            l.classList.remove("highlight");
+          });
+          link.classList.add("active");
+
+          const navOffset = 80;
+          const elementPosition = target.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+
+          if (history.pushState) {
+            history.pushState(null, null, href);
+          } else {
+            location.hash = href;
+          }
+        }
+      }
     });
   });
+
+  // On-Scroll: Dynamic Scrollspy
+  let isScrolling = false;
+  function updateActiveOnScroll() {
+    const scrollPos = window.scrollY || window.pageYOffset;
+    const windowHeight = window.innerHeight;
+    const docHeight = document.documentElement.scrollHeight;
+
+    // Check if scrolled to bottom of document
+    if (scrollPos + windowHeight >= docHeight - 80) {
+      if (sections.length > 0) {
+        const last = sections[sections.length - 1];
+        navLinks.forEach((l) => {
+          l.classList.remove("active");
+          l.classList.remove("highlight");
+        });
+        last.link.classList.add("active");
+        return;
+      }
+    }
+
+    // Determine current section in view
+    let currentSection = null;
+    const offsetThreshold = 150;
+
+    for (let i = 0; i < sections.length; i++) {
+      const rect = sections[i].el.getBoundingClientRect();
+      if (rect.top <= offsetThreshold && rect.bottom > offsetThreshold) {
+        currentSection = sections[i];
+        break;
+      }
+    }
+
+    if (currentSection) {
+      navLinks.forEach((l) => {
+        l.classList.remove("active");
+        l.classList.remove("highlight");
+      });
+      currentSection.link.classList.add("active");
+    } else if (scrollPos < 250) {
+      // Near top (hero section)
+      navLinks.forEach((l) => {
+        l.classList.remove("active");
+        l.classList.remove("highlight");
+      });
+    }
+  }
+
+  window.addEventListener("scroll", () => {
+    if (!isScrolling) {
+      window.requestAnimationFrame(() => {
+        updateActiveOnScroll();
+        isScrolling = false;
+      });
+      isScrolling = true;
+    }
+  }, { passive: true });
+
+  // Run on initial load
+  updateActiveOnScroll();
 }
 
 // 9c. One-Click Copy Prompt Buttons
