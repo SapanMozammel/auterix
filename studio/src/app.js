@@ -561,6 +561,7 @@ const state = {
   selectedStack: "nextjs-supabase",
   viewMode: "rules", // "rules" | "pro"
   activeTab: "cursor",
+  adapterSearchQuery: "",
   guardrails: {
     strictTypes: true,
     securityRls: true,
@@ -895,12 +896,29 @@ function compileAll() {
 // 7. UI Renderers
 function renderAdapters() {
   const container = document.getElementById("adapters-container");
+  if (!container) return;
   container.innerHTML = "";
 
-  ADAPTERS.forEach(adapter => {
+  const counter = document.getElementById("adapter-counter");
+  if (counter) {
+    counter.textContent = `${state.activeAdapters.size}/${ADAPTERS.length}`;
+  }
+
+  const query = (state.adapterSearchQuery || "").toLowerCase().trim();
+  const filtered = query
+    ? ADAPTERS.filter(a => a.name.toLowerCase().includes(query) || a.file.toLowerCase().includes(query) || a.id.toLowerCase().includes(query))
+    : ADAPTERS;
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="adapter-empty-notice">No AI tools matching "${query}"</div>`;
+    return;
+  }
+
+  filtered.forEach(adapter => {
     const isActive = state.activeAdapters.has(adapter.id);
     const item = document.createElement("div");
     item.className = `adapter-item ${isActive ? "active" : ""}`;
+    item.title = `${adapter.name} (${adapter.file})`;
     item.innerHTML = `
       <input type="checkbox" class="adapter-checkbox" id="check-${adapter.id}" ${isActive ? "checked" : ""}>
       <div class="adapter-info">
@@ -1939,11 +1957,70 @@ function initProUnlocker() {
       statusElem.className = "unlock-status error";
     }
   }
+// 10.5 Adapter Controls & Instant Search Filter
+function initAdapterControls() {
+  const btnAll = document.getElementById("btn-select-all");
+  const btnCore = document.getElementById("btn-select-core");
+  const btnNone = document.getElementById("btn-select-none");
+  const searchInput = document.getElementById("adapter-search-input");
+  const btnClearSearch = document.getElementById("btn-clear-search");
+
+  if (btnAll) {
+    btnAll.addEventListener("click", () => {
+      ADAPTERS.forEach(a => state.activeAdapters.add(a.id));
+      renderAdapters();
+      compileAll();
+    });
+  }
+
+  if (btnCore) {
+    btnCore.addEventListener("click", () => {
+      const coreIds = ["cursor", "claude", "antigravity", "windsurf", "copilot", "cline"];
+      state.activeAdapters.clear();
+      coreIds.forEach(id => state.activeAdapters.add(id));
+      renderAdapters();
+      compileAll();
+    });
+  }
+
+  if (btnNone) {
+    btnNone.addEventListener("click", () => {
+      state.activeAdapters.clear();
+      state.activeAdapters.add("cursor");
+      renderAdapters();
+      compileAll();
+    });
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      state.adapterSearchQuery = e.target.value;
+      if (btnClearSearch) {
+        if (e.target.value) {
+          btnClearSearch.classList.remove("hidden");
+        } else {
+          btnClearSearch.classList.add("hidden");
+        }
+      }
+      renderAdapters();
+    });
+  }
+
+  if (btnClearSearch && searchInput) {
+    btnClearSearch.addEventListener("click", () => {
+      searchInput.value = "";
+      state.adapterSearchQuery = "";
+      btnClearSearch.classList.add("hidden");
+      renderAdapters();
+      searchInput.focus();
+    });
+  }
 }
 
 // 11. Bootstrap Studio
 function bootstrapStudio() {
   renderAdapters();
+  initAdapterControls();
   initStackSelector();
   initViewModeSwitch();
   initGuardrails();

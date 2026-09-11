@@ -506,38 +506,42 @@
             <div class="pane-step-block">
               <div class="step-header">
                 <span class="step-badge">STEP 1</span>
-                <h3>AI Stack Scanner &amp; Detection</h3>
+                <h3>AI Stack Scanner &amp; Ingest</h3>
               </div>
               <p class="step-desc">Drop your project manifest, paste dependencies, or pick a production stack:</p>
 
               <div class="auto-detector-wrapper">
                 <div class="scanner-scanline"></div>
                 
-                <div class="detector-tab-header">
-                  <span class="detector-title">Manifest Ingest (100% Free Forever)</span>
-                  <div class="detector-switch">
-                    <button type="button" id="tab-btn-drop" class="tab-pill active">📂 Drop File</button>
-                    <button type="button" id="tab-btn-paste" class="tab-pill">📝 Paste Text / JSON</button>
-                  </div>
+                <!-- Modern Segmented Control Switch for Step 1 -->
+                <div class="detector-segmented-nav">
+                  <button type="button" id="tab-btn-drop" class="seg-tab-btn active">
+                    <span class="seg-icon">📂</span>
+                    <span class="seg-text">Drop Manifest</span>
+                  </button>
+                  <button type="button" id="tab-btn-paste" class="seg-tab-btn">
+                    <span class="seg-icon">📝</span>
+                    <span class="seg-text">Paste Text / JSON</span>
+                  </button>
                 </div>
 
                 <!-- Dropzone Box -->
                 <div class="drop-zone" id="drop-zone">
                   <div class="drop-icon-pulse">
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="1.8">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="1.8">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                       <polyline points="17 8 12 3 7 8"/>
                       <line x1="12" y1="3" x2="12" y2="15"/>
                     </svg>
                   </div>
-                  <div class="drop-label-main">Drop <code>package.json</code> or <code>requirements.txt</code></div>
+                  <div class="drop-label-main">Drop <code>package.json</code>, <code>requirements.txt</code>, or lockfile</div>
                   <div class="drop-label-sub">or click to browse local filesystem</div>
                   <input type="file" id="file-input" accept=".json,.txt,.lock,.toml,.yaml,.yml" class="hidden-input">
                 </div>
 
                 <!-- Paste Zone Box (Hidden by default) -->
                 <div class="paste-zone hidden" id="paste-zone">
-                  <textarea id="paste-input" placeholder="Paste package.json dependencies, requirements.txt, or list your libraries (e.g. next, supabase, tailwind, fastapi, sqlalchemy)..." rows="4"></textarea>
+                  <textarea id="paste-input" placeholder="Paste package.json dependencies, requirements.txt, or list your libraries (e.g. next, supabase, tailwind, fastapi, sqlalchemy)..." rows="3"></textarea>
                   <button type="button" id="btn-detect-paste" class="btn-detect-now">
                     <span>⚡ Analyze &amp; Detect Stack</span>
                   </button>
@@ -546,17 +550,19 @@
                 <!-- Live Detection Badge Tag -->
                 <div class="detection-status-row" id="detect-badge">
                   <span class="detect-pulse-indicator"></span>
-                  <span class="detect-text" id="stack-badge-tag">Ready: Drop manifest or select a popular blueprint below</span>
+                  <span class="detect-text" id="stack-badge-tag">Ready: Drop manifest or pick a blueprint below</span>
                 </div>
 
-                <!-- Popular Architecture Preset Chips -->
-                <div class="preset-chips-row">
-                  <span class="preset-label">Fast-track blueprints:</span>
-                  <button type="button" class="stack-chip active" data-stack="nextjs">Next.js 15 (App Router)</button>
-                  <button type="button" class="stack-chip" data-stack="fastapi">FastAPI (Async)</button>
-                  <button type="button" class="stack-chip" data-stack="node-clean">Node Clean Arch</button>
-                  <button type="button" class="stack-chip" data-stack="react-native">Expo Mobile</button>
-                  <button type="button" class="stack-chip" data-stack="ai-pipeline">AI Agent Pipeline</button>
+                <!-- Sleek Preset Blueprints Row -->
+                <div class="preset-chips-wrap">
+                  <span class="preset-label">Quick Blueprint:</span>
+                  <div class="preset-chips-list">
+                    <button type="button" class="stack-chip active" data-stack="nextjs">Next.js 15</button>
+                    <button type="button" class="stack-chip" data-stack="fastapi">FastAPI</button>
+                    <button type="button" class="stack-chip" data-stack="node-clean">Node Fastify</button>
+                    <button type="button" class="stack-chip" data-stack="react-native">Expo Mobile</button>
+                    <button type="button" class="stack-chip" data-stack="ai-pipeline">AI Pipeline</button>
+                  </div>
                 </div>
 
                 <!-- Hidden select element for programmatic updates -->
@@ -571,13 +577,30 @@
             </div>
 
             <!-- Step 2: Multi-Agent Neural Matrix -->
-            <div class="pane-step-block">
-              <div class="step-header">
-                <span class="step-badge">STEP 2</span>
-                <h3>Target AI Coding Agents (21 Universal AI Tools)</h3>
+            <div class="pane-step-block" id="step-adapters-block">
+              <div class="step-header-row">
+                <div class="step-header">
+                  <span class="step-badge">STEP 2</span>
+                  <h3>Target AI Tools</h3>
+                  <span id="adapter-counter" class="adapter-counter-pill">21/21</span>
+                </div>
+                <div class="adapter-quick-actions">
+                  <button type="button" id="btn-select-all" class="btn-quick-filter" title="Select all 21 tools">All</button>
+                  <button type="button" id="btn-select-core" class="btn-quick-filter" title="Select core 6 tools">Core (6)</button>
+                  <button type="button" id="btn-select-none" class="btn-quick-filter" title="Clear selection">Clear</button>
+                </div>
               </div>
-              <p class="step-desc">Select which coding tools to synchronize simultaneously:</p>
 
+              <!-- Quick Search / Filter Bar -->
+              <div class="adapters-filter-bar">
+                <div class="filter-search-box">
+                  <span class="search-icon">🔍</span>
+                  <input type="text" id="adapter-search-input" placeholder="Filter 21 tools (Cursor, Claude, Copilot, Devin...)" class="adapter-search-field" autocomplete="off" spellcheck="false">
+                  <button type="button" id="btn-clear-search" class="btn-clear-search hidden" aria-label="Clear search">&times;</button>
+                </div>
+              </div>
+
+              <!-- Bounded High-Density Adapter Matrix (Scrollable max-height: 220px) -->
               <div class="adapters-grid-container" id="adapters-container">
                 <!-- Dynamically populated by app.js with 21 tool adapter items -->
               </div>
@@ -1123,15 +1146,15 @@ export async function updateUserAction(rawData: unknown) {
             <li><span>✔</span> Priority support on GitHub issue tracker</li>
           </ul>
           <div class="plan-action">
-            <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="btn-plan agency">
-              <span>Get Agency &amp; Team Access ($39) &rarr;</span>
-            </a>
             <div class="plan-existing-user">
               <span>Already a member?</span>
               <a href="https://github.com/SapanMozammel/auterix-pro/archive/refs/heads/main.zip" target="_blank" rel="noopener" class="agency-dl-link">
                 📦 Download Latest ZIP (GitHub) &rarr;
               </a>
             </div>
+            <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="btn-plan agency">
+              <span>Get Agency &amp; Team Access ($39) &rarr;</span>
+            </a>
           </div>
         </div>
       </div>
@@ -1554,16 +1577,17 @@ export async function updateUserAction(rawData: unknown) {
             </div>
           </div>
           <p class="footer-mission-statement">
-            The open-source multi-agent workflow standard. Compiling deterministic architectural rules, type invariants, and SHA-256 integrity locks across all 21 major AI coding assistants.
+            The open-source multi-agent workflow standard. Compiling deterministic architectural rules, cross-agent shared memory (<code>.ai/memory.md</code>), token-optimized schema distillation, and SHA-256 integrity locks across all 21 AI coding assistants.
           </p>
           
           <div class="footer-telemetry-chip">
             <span class="telemetry-live-dot"></span>
-            <span>Deterministic Engine &bull; In-Browser WASM &bull; 0 Leaks</span>
+            <span>Cross-Agent Memory &bull; Deterministic Engine &bull; Zero Dependencies</span>
           </div>
 
           <div class="footer-pills-row">
             <span class="footer-mini-badge">MIT License</span>
+            <span class="footer-mini-badge">Zero Dependencies</span>
             <span class="footer-mini-badge">Zero Telemetry</span>
             <span class="footer-mini-badge">100% Client-Side</span>
           </div>
@@ -1571,37 +1595,43 @@ export async function updateUserAction(rawData: unknown) {
 
         <!-- Links Column 1: AI Adapters -->
         <div class="footer-links-pane">
-          <h4 class="footer-pane-heading">AI Tool Adapters</h4>
+          <h4 class="footer-pane-heading">Supported AI Adapters (21)</h4>
           <ul class="footer-links-list">
             <li><a href="#studio">Cursor IDE <span class="link-ext">.cursorrules</span></a></li>
             <li><a href="#studio">Claude Code CLI <span class="link-ext">CLAUDE.md</span></a></li>
             <li><a href="#studio">Google Antigravity <span class="link-ext">.agents/</span></a></li>
             <li><a href="#studio">GitHub Copilot <span class="link-ext">copilot-instructions</span></a></li>
             <li><a href="#studio">Windsurf IDE <span class="link-ext">.windsurfrules</span></a></li>
+            <li><a href="#studio">Devin AI <span class="link-ext">.devin/</span></a></li>
+            <li><a href="#studio">Lovable &amp; v0 <span class="link-ext">context</span></a></li>
             <li><a href="#studio">Roo Code &amp; Cline <span class="link-ext">.clinerules</span></a></li>
+            <li><a href="#studio">Aider CLI <span class="link-ext">.aider.conf.yml</span></a></li>
           </ul>
         </div>
 
         <!-- Links Column 2: Architecture & Workflow -->
         <div class="footer-links-pane">
-          <h4 class="footer-pane-heading">Architecture &amp; Docs</h4>
+          <h4 class="footer-pane-heading">Architecture &amp; Ecosystem</h4>
           <ul class="footer-links-list">
             <li><a href="#pipeline">Autonomous Pipeline</a></li>
             <li><a href="#pathways">Development Pathways</a></li>
-            <li><a href="#architecture">Dual-Repo Architecture</a></li>
+            <li><a href="#access-chart">Master Access Matrix</a></li>
             <li><a href="#comparison">Raw AI vs Auterix Diff</a></li>
             <li><a href="#how-to-use">Starter Prompts Library</a></li>
-            <li><a href="https://github.com/SapanMozammel/auterix" target="_blank" rel="noopener">Public GitHub Core</a></li>
+            <li><a href="https://github.com/SapanMozammel/auterix/blob/main/action.yml" target="_blank" rel="noopener">Headless GitHub Action (Free)</a></li>
+            <li><a href="https://github.com/SapanMozammel/auterix/tree/main/extensions/vscode" target="_blank" rel="noopener">VS Code Extension (Free)</a></li>
+            <li><a href="https://github.com/SapanMozammel/auterix" target="_blank" rel="noopener">Public GitHub Core (MIT)</a></li>
           </ul>
         </div>
 
         <!-- Links Column 3: Commercial & Access -->
         <div class="footer-links-pane">
-          <h4 class="footer-pane-heading">Access &amp; Tiers</h4>
+          <h4 class="footer-pane-heading">Commercial Tiers &amp; Stacks</h4>
           <ul class="footer-links-list">
             <li><a href="#studio">Free Community ($0)</a></li>
             <li><a href="#pricing">Pro Developer Suite ($14)</a></li>
             <li><a href="#pricing">Agency &amp; Teams ($39)</a></li>
+            <li><a href="#access-chart">Feature Entitlement Matrix</a></li>
             <li><a href="https://github.com/SapanMozammel/auterix-pro/archive/refs/heads/main.zip" target="_blank" rel="noopener">Agency: Download Latest ZIP (GitHub)</a></li>
             <li><a href="https://github.com/SapanMozammel/auterix-pro" target="_blank" rel="noopener">Agency: Private GitHub Repo</a></li>
             <li><a href="javascript:void(0)" onclick="document.getElementById('btn-open-unlock-modal-nav').click()">Load Pro Deliverable ZIP</a></li>
@@ -1617,7 +1647,7 @@ export async function updateUserAction(rawData: unknown) {
           &copy; 2026 Sapan Mozammel. Open-source core licensed under MIT.
         </div>
         <div class="footer-bottom-tools">
-          Engineered for Cursor, Claude Code, GitHub Copilot, Windsurf, Devin &amp; 21 Universal AI Tools.
+          Engineered for Cursor, Claude Code, GitHub Copilot, Windsurf, Devin, Lovable, v0 &amp; 21 Universal AI Tools.
         </div>
         <div class="footer-bottom-privacy">
           <span class="privacy-lock">🔒</span>
