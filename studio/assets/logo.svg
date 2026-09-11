@@ -1,0 +1,41 @@
+<svg width="540" height="120" viewBox="0 0 540 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Auterix">
+  <defs>
+    <linearGradient id="fullMarkBg" x1="16" y1="16" x2="104" y2="104" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00c6ff"/>
+      <stop offset="40%" stop-color="#0072ff"/>
+      <stop offset="100%" stop-color="#3a1c71"/>
+    </linearGradient>
+    <linearGradient id="fullChamber" x1="60" y1="34" x2="60" y2="86" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="rgba(0, 242, 254, 0.45)"/>
+      <stop offset="60%" stop-color="rgba(37, 99, 235, 0.55)"/>
+      <stop offset="100%" stop-color="rgba(58, 28, 113, 0.7)"/>
+    </linearGradient>
+    <linearGradient id="fullChevron" x1="60" y1="46" x2="60" y2="73" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e0f2fe"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Brand Mark Squircle Badge -->
+  <g transform="translate(16,16)">
+    <rect width="88" height="88" rx="22" fill="url(#fullMarkBg)"/>
+    <rect x="1" y="1" width="86" height="86" rx="21" stroke="rgba(255,255,255,0.35)" stroke-width="2" fill="none"/>
+    <polygon points="44,18 67,67 21,67" fill="url(#fullChamber)"/>
+    <polygon points="44,30 56,55 44,47 32,55" fill="url(#fullChevron)"/>
+    <g stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M21 67L44 18L67 67" stroke="#ffffff" stroke-width="5.8"/>
+      <path d="M32 55L44 30L56 55" stroke="#ffffff" stroke-width="4.9"/>
+      <path d="M31 45H57" stroke="#ffffff" stroke-width="5.8"/>
+    </g>
+  </g>
+
+  <!-- Wordmark & Badges -->
+  <text x="126" y="66" font-family="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-size="40" font-weight="800" letter-spacing="-0.02em" fill="#ffffff">AUTERIX</text>
+  
+  <!-- Pill Badge -->
+  <rect x="312" y="38" width="88" height="26" rx="6" fill="rgba(0, 242, 254, 0.1)" stroke="rgba(0, 242, 254, 0.3)" stroke-width="1.5"/>
+  <text x="323" y="55" font-family="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-size="12" font-weight="700" letter-spacing="0.08em" fill="#00f2fe">STANDARD</text>
+
+  <!-- Subtitle Tagline -->
+  <text x="128" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-size="16" font-weight="500" letter-spacing="-0.01em" fill="#94a3b8">Autonomous AI Context Engine &amp; Multi-Agent Standard</text>
+</svg>
