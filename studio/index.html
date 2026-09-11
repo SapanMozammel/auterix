@@ -138,6 +138,93 @@
       </div>
     </section>
 
+    
+    <!-- Dual-Pathway Strategy: Existing vs New Projects -->
+    <section class="pathway-section" id="workflow-modes">
+      <div class="pathway-container">
+        <div class="pathway-header text-center">
+          <div class="section-badge">TWO SIMPLE WAYS TO USE AUTERIX</div>
+          <h2 class="section-title">Built for Your Existing Repos and New Apps Alike</h2>
+          <p class="section-subtitle">Whether you have a 5-year-old codebase or are writing line 1 today, Auterix eliminates AI hallucinations without disrupting your existing code.</p>
+        </div>
+
+        <div class="pathway-grid">
+          <!-- Pathway 1: Existing Codebase -->
+          <div class="pathway-card highlighted">
+            <div class="pathway-badge-row">
+              <span class="pathway-badge existing">EXISTING CODEBASE</span>
+              <span class="pathway-time">30-Second Drop-In</span>
+            </div>
+            <h3>Adding to an Existing Project?</h3>
+            <p class="pathway-desc"><strong>Zero code rewrites.</strong> Auterix drops a non-invasive instruction layer into your project root. Your application logic, tests, and dependencies remain 100% untouched.</p>
+            <ol class="pathway-steps">
+              <li>
+                <div class="step-num">1</div>
+                <div><strong>Auto-Detect Stack:</strong> Paste or drop your existing <code>package.json</code> or <code>requirements.txt</code> below.</div>
+              </li>
+              <li>
+                <div class="step-num">2</div>
+                <div><strong>Download AI Layer:</strong> Extract <code>CLAUDE.md</code>, <code>.cursor/</code>, or <code>.agents/</code> directly into your repo root.</div>
+              </li>
+              <li>
+                <div class="step-num">3</div>
+                <div><strong>Instant Senior AI:</strong> Claude and Cursor immediately follow your exact stack rules and stop making junior assumptions.</div>
+              </li>
+            </ol>
+            <a href="#studio" class="pathway-cta-btn">Auto-Detect My Existing Project &darr;</a>
+          </div>
+
+          <!-- Pathway 2: New Greenfield Project -->
+          <div class="pathway-card pro-card">
+            <div class="pathway-badge-row">
+              <span class="pathway-badge pro">NEW PROJECT</span>
+              <span class="pathway-time">Production Starter</span>
+            </div>
+            <h3>Starting a Brand New App?</h3>
+            <p class="pathway-desc">Skip 3 weeks of boilerplate setup. Launch with fully runnable production codebases featuring pre-configured database RLS, auth, and automated CI test harnesses.</p>
+            <ol class="pathway-steps">
+              <li>
+                <div class="step-num">1</div>
+                <div><strong>Select Blueprint:</strong> Choose Next.js 15, FastAPI, Node Clean Architecture, Expo Mobile, or AI Pipeline.</div>
+              </li>
+              <li>
+                <div class="step-num">2</div>
+                <div><strong>Pre-Wired Guardrails:</strong> Includes pre-commit AI hooks and GitHub Action PR audit bots out-of-the-box.</div>
+              </li>
+              <li>
+                <div class="step-num">3</div>
+                <div><strong>Ship to Production:</strong> Bank-grade type safety and zero prompt drift from day one.</div>
+              </li>
+            </ol>
+            <a href="#pro-section" class="pathway-cta-btn pro">Explore Production Stacks ($14) &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3-Step Milestone Overview -->
+    <section class="steps-overview-section">
+      <div class="steps-grid">
+        <div class="step-mini-card">
+          <div class="step-icon-bubble">🎯</div>
+          <h4>1. Detect or Choose</h4>
+          <p>Scan your dependencies or pick a production profile. Rules tailor to your exact libraries.</p>
+        </div>
+        <div class="step-arrow">&rarr;</div>
+        <div class="step-mini-card">
+          <div class="step-icon-bubble">⚡</div>
+          <h4>2. Drop in 1 File or Folder</h4>
+          <p>Drag <code>CLAUDE.md</code> into Claude or open in Cursor. Zero npm install, zero runtime overhead.</p>
+        </div>
+        <div class="step-arrow">&rarr;</div>
+        <div class="step-mini-card">
+          <div class="step-icon-bubble">🛡️</div>
+          <h4>3. Senior-Level Code</h4>
+          <p>Your AI assistant codes like a Staff Engineer — refusing unsafe queries and enforcing boundaries.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- Studio Main Workspace -->
     <main class="studio-grid" id="studio">
       <!-- Left Column: Controls & Configuration -->
@@ -172,22 +259,43 @@
           </select>
         </div>
 
-        <!-- Intelligent Stack Auto-Detector Dropzone -->
-        <div class="auto-detector-zone" id="drop-zone">
-          <div class="drop-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="17 8 12 3 7 8"/>
-              <line x1="12" y1="3" x2="12" y2="15"/>
-            </svg>
+        <!-- Intelligent Stack Auto-Detector Dropzone & Paste Tab -->
+        <div class="auto-detector-wrapper">
+          <div class="detector-tab-header">
+            <span class="detector-title">Auto-Detect Stack (Existing Projects)</span>
+            <div class="detector-switch">
+              <button type="button" id="tab-btn-drop" class="tab-pill active">Drop File</button>
+              <button type="button" id="tab-btn-paste" class="tab-pill">Paste Text / JSON</button>
+            </div>
           </div>
-          <div class="drop-text">
-            <strong>Auto-Detect Stack</strong>
-            <span>Drop your <code>package.json</code> or <code>pyproject.toml</code> here</span>
+
+          <!-- Drop Mode -->
+          <div class="auto-detector-zone" id="drop-zone">
+            <div class="drop-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <div class="drop-text">
+              <strong>Drop Manifest File</strong>
+              <span>Drop <code>package.json</code>, <code>requirements.txt</code>, or click to browse</span>
+            </div>
+            <input type="file" id="file-input" accept=".json,.toml,.yaml,.yml,.txt" class="hidden-input">
           </div>
-          <input type="file" id="file-input" accept=".json,.toml,.yaml,.yml" class="hidden-input">
+
+          <!-- Paste Mode -->
+          <div class="auto-detector-paste hidden" id="paste-zone">
+            <textarea id="paste-input" class="paste-textarea" placeholder="Paste your package.json, requirements.txt, or list of libraries here (e.g. next, supabase, react, typescript)..."></textarea>
+            <button type="button" id="btn-detect-paste" class="btn-detect-action">Analyze & Auto-Configure</button>
+          </div>
+
+          <div id="detect-badge" class="detect-result hidden"></div>
+          <div class="detector-free-note">
+            💡 <strong>100% Free:</strong> Generates unified AI context across all 8 tools for your existing project. (Pro adds runnable boilerplates & continuous Git sync).
+          </div>
         </div>
-        <div id="detect-badge" class="detect-result hidden"></div>
 
         <div class="panel-header mt-8">
           <div class="panel-step">Step 3</div>
@@ -387,6 +495,22 @@
     </section>
 
     <!-- Feature Comparison Matrix -->
+        <!-- Agency Continuous Git Updates Callout -->
+    <section class="agency-callout-section">
+      <div class="agency-callout-card card">
+        <div class="agency-callout-badge">⚡ CONTINUOUS UPSTREAM SYNC</div>
+        <div class="agency-callout-content">
+          <div class="agency-callout-text">
+            <h3>Why Upgrade to Agency ($39)? Live Private GitHub Updates.</h3>
+            <p>AI models, Cursor features, and web frameworks evolve every month. If you buy a static ZIP, your rules become outdated over time. With the <strong>$39 Agency License</strong>, you receive an automated GitHub invitation to our private repository — so you can simply run <code>git pull upstream main</code> to receive every new blueprint, security invariant, and tool adapter automatically forever.</p>
+          </div>
+          <div class="agency-callout-action">
+            <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="agency-cta-btn">Get Agency & Team License ($39) &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="comparison-section" id="comparison">
       <div class="section-badge">FEATURE MATRIX</div>
       <h2 class="section-title">Transparent Edition Comparison</h2>
@@ -469,6 +593,196 @@
     </section>
 
     <!-- Auterix Pro Pricing Section -->
+        <!-- Interactive "How to Use With Your AI Tool" & Starter Prompts Library -->
+    <section class="interactive-guide-section" id="how-to-use">
+      <div class="section-badge">DEVELOPER QUICKSTART</div>
+      <h2 class="section-title">How to Use Auterix with Your AI Tool</h2>
+      <p class="section-subtitle">Click your preferred AI tool to see the 30-second setup and grab ready-to-use prompts.</p>
+
+      <!-- Tool Selector Tabs -->
+      <div class="tool-tabs-container">
+        <div class="tool-tabs" id="tool-tabs">
+          <button class="tool-tab active" data-tool="claude">
+            <span class="tool-tab-icon">🟣</span>
+            <span>Claude (Code & Web)</span>
+          </button>
+          <button class="tool-tab" data-tool="cursor">
+            <span class="tool-tab-icon">⚡</span>
+            <span>Cursor IDE</span>
+          </button>
+          <button class="tool-tab" data-tool="antigravity">
+            <span class="tool-tab-icon">🪐</span>
+            <span>Google Antigravity</span>
+          </button>
+          <button class="tool-tab" data-tool="copilot">
+            <span class="tool-tab-icon">🤖</span>
+            <span>GitHub Copilot & Codex</span>
+          </button>
+        </div>
+
+        <!-- Tool Guide Panes -->
+        <div class="tool-panes">
+          <!-- Claude Pane -->
+          <div class="tool-pane active" id="pane-claude">
+            <div class="pane-grid">
+              <div class="pane-steps">
+                <h4>Using with Claude in 30 Seconds:</h4>
+                <div class="quick-step-row">
+                  <span class="qs-badge">Web</span>
+                  <p><strong>Claude.ai / Claude Projects:</strong> Drag and drop your project's <code>CLAUDE.md</code> into chat (or paste into Project Knowledge).</p>
+                </div>
+                <div class="quick-step-row">
+                  <span class="qs-badge">CLI</span>
+                  <p><strong>Claude Code (Terminal):</strong> Run <code>claude</code> inside your project root. It auto-detects <code>CLAUDE.md</code> and unlocks <code>/plan</code>, <code>/review</code>, and <code>/test</code>!</p>
+                </div>
+                <div class="quick-step-row">
+                  <span class="qs-badge">Result</span>
+                  <p>Claude immediately refuses insecure shortcuts, respects Server/Client boundaries, and enforces PostgreSQL RLS.</p>
+                </div>
+              </div>
+              <div class="pane-prompt-box">
+                <div class="prompt-box-header">
+                  <span class="prompt-title">🚀 First-Time Activation Prompt for Claude</span>
+                  <button class="btn-copy-prompt" data-prompt-id="prompt-claude-init">Copy Prompt</button>
+                </div>
+                <pre class="prompt-code" id="prompt-claude-init">Claude, adopt this CLAUDE.md as your strict project rules. Confirm you understand our architectural boundaries, security policies, and test commands before generating any code.</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cursor Pane -->
+          <div class="tool-pane" id="pane-cursor">
+            <div class="pane-grid">
+              <div class="pane-steps">
+                <h4>Using with Cursor in 30 Seconds:</h4>
+                <div class="quick-step-row">
+                  <span class="qs-badge">1</span>
+                  <p>Open your project folder in Cursor (<code>File &rarr; Open Folder</code>).</p>
+                </div>
+                <div class="quick-step-row">
+                  <span class="qs-badge">2</span>
+                  <p>Cursor automatically ingests <code>.cursorrules</code> and modular <code>.cursor/rules/*.mdc</code> files.</p>
+                </div>
+                <div class="quick-step-row">
+                  <span class="qs-badge">3</span>
+                  <p>Press <code>Cmd+L</code> / <code>Ctrl+L</code> to chat with Cursor AI. Type <code>/plan</code> or ask it to implement any feature.</p>
+                </div>
+              </div>
+              <div class="pane-prompt-box">
+                <div class="prompt-box-header">
+                  <span class="prompt-title">⚡ Safe Feature Implementation Prompt for Cursor</span>
+                  <button class="btn-copy-prompt" data-prompt-id="prompt-cursor-feature">Copy Prompt</button>
+                </div>
+                <pre class="prompt-code" id="prompt-cursor-feature">Based on our project rules in .cursorrules, write a production-ready feature to handle user billing updates. Enforce strict Zod input validation, error boundaries, and safe mutation patterns.</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Antigravity Pane -->
+          <div class="tool-pane" id="pane-antigravity">
+            <div class="pane-grid">
+              <div class="pane-steps">
+                <h4>Using with Google Antigravity:</h4>
+                <div class="quick-step-row">
+                  <span class="qs-badge">1</span>
+                  <p>Auterix automatically exports <code>.agents/rules/workflow.md</code>, <code>.agents/skills/</code>, and agent personas.</p>
+                </div>
+                <div class="quick-step-row">
+                  <span class="qs-badge">2</span>
+                  <p>Antigravity agents run verification gates, security audits, and automated task tracking natively.</p>
+                </div>
+              </div>
+              <div class="pane-prompt-box">
+                <div class="prompt-box-header">
+                  <span class="prompt-title">🪐 Antigravity Verification Gate Prompt</span>
+                  <button class="btn-copy-prompt" data-prompt-id="prompt-ag-audit">Copy Prompt</button>
+                </div>
+                <pre class="prompt-code" id="prompt-ag-audit">Execute the verification-gate skill. Audit the active milestone against all invariants in .agents/rules/workflow.md and produce a structured pass/fail report.</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Copilot Pane -->
+          <div class="tool-pane" id="pane-copilot">
+            <div class="pane-grid">
+              <div class="pane-steps">
+                <h4>Using with GitHub Copilot & Codex:</h4>
+                <div class="quick-step-row">
+                  <span class="qs-badge">1</span>
+                  <p>GitHub Copilot reads <code>.github/copilot-instructions.md</code> automatically in VS Code and JetBrains.</p>
+                </div>
+                <div class="quick-step-row">
+                  <span class="qs-badge">2</span>
+                  <p>Autonomous agents (Codex, Devin, OpenHands) parse root <code>AGENTS.md</code> as the universal standard.</p>
+                </div>
+              </div>
+              <div class="pane-prompt-box">
+                <div class="prompt-box-header">
+                  <span class="prompt-title">🤖 Code Review & Security Audit Prompt</span>
+                  <button class="btn-copy-prompt" data-prompt-id="prompt-copilot-review">Copy Prompt</button>
+                </div>
+                <pre class="prompt-code" id="prompt-copilot-review">Review the staged changes against our copilot-instructions.md. Verify zero `any` types, check for leaked environment secrets, and ensure full test coverage.</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real Code Comparison: Without Auterix vs With Auterix -->
+      <div class="comparison-showcase card mt-12">
+        <div class="showcase-header text-center">
+          <div class="section-badge">REAL-WORLD IMPACT</div>
+          <h3>Without Auterix vs. With Auterix</h3>
+          <p>See why raw AI code causes security breaches and technical debt — and how Auterix enforces senior standards.</p>
+        </div>
+        <div class="diff-grid">
+          <!-- Left: Without Auterix (Red) -->
+          <div class="diff-box bad">
+            <div class="diff-title-bar">
+              <span class="diff-badge bad">❌ Raw AI (Without Auterix)</span>
+              <span class="diff-sub">Vulnerable &bull; Client Leaks &bull; Junior Code</span>
+            </div>
+            <pre class="diff-code"><code>// Client Component ('use client')
+import { createClient } from '@supabase/supabase-js';
+
+// ⚠️ BUG 1: Leaks service role secret to browser!
+const supabase = createClient(URL, process.env.SERVICE_ROLE_KEY);
+
+export default function UpdateUser() {
+  async function onSubmit(data: any) { // ⚠️ BUG 2: 'any' type
+    // ⚠️ BUG 3: Bypasses Row Level Security (RLS) entirely!
+    await supabase.from('users').update(data);
+  }
+  // ⚠️ BUG 4: Missing validation, error boundaries & tests!
+}</code></pre>
+          </div>
+
+          <!-- Right: With Auterix (Green) -->
+          <div class="diff-box good">
+            <div class="diff-title-bar">
+              <span class="diff-badge good">✅ With Auterix Protocol</span>
+              <span class="diff-sub">Strict RSC &bull; Zod Validated &bull; Bank-Grade RLS</span>
+            </div>
+            <pre class="diff-code"><code>// Server Action ('use server')
+import { z } from 'zod';
+import { createServerClient } from '@/lib/supabase/server';
+
+const UpdateSchema = z.object({ email: z.string().email() });
+
+export async function updateUserAction(input: unknown) {
+  const parsed = UpdateSchema.safeParse(input);
+  if (!parsed.success) throw new ValidationError(parsed.error);
+
+  // ✅ Enforces strict tenant RLS isolation
+  const supabase = await createServerClient();
+  return await supabase.from('users').update(parsed.data);
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
     <section class="pro-section" id="pro-section">
       <div class="pro-badge">PRO ENTERPRISE TIERS</div>
       <h2 class="pro-title">Scale with Battle-Tested Production Stacks</h2>

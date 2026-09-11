@@ -723,11 +723,46 @@ function initGuardrails() {
   });
 }
 
-// 9. Auto-Detector (Drag-and-Drop Parser)
+// 9. Enhanced Auto-Detector (Drop & Paste Parser)
 function initAutoDetector() {
   const dropZone = document.getElementById("drop-zone");
   const fileInput = document.getElementById("file-input");
+  const pasteZone = document.getElementById("paste-zone");
+  const pasteInput = document.getElementById("paste-input");
+  const btnDetectPaste = document.getElementById("btn-detect-paste");
+  const tabBtnDrop = document.getElementById("tab-btn-drop");
+  const tabBtnPaste = document.getElementById("tab-btn-paste");
   const badge = document.getElementById("detect-badge");
+
+  if (!dropZone) return;
+
+  // Toggle between Drop and Paste modes
+  if (tabBtnDrop && tabBtnPaste && pasteZone) {
+    tabBtnDrop.addEventListener("click", () => {
+      tabBtnDrop.classList.add("active");
+      tabBtnPaste.classList.remove("active");
+      dropZone.classList.remove("hidden");
+      pasteZone.classList.add("hidden");
+    });
+
+    tabBtnPaste.addEventListener("click", () => {
+      tabBtnPaste.classList.add("active");
+      tabBtnDrop.classList.remove("active");
+      pasteZone.classList.remove("hidden");
+      dropZone.classList.add("hidden");
+      pasteInput.focus();
+    });
+
+    btnDetectPaste.addEventListener("click", () => {
+      const text = pasteInput.value.trim();
+      if (!text) {
+        badge.textContent = "⚠️ Please paste your package.json, requirements.txt, or dependency list.";
+        badge.classList.remove("hidden");
+        return;
+      }
+      analyzeManifestText(text, "pasted text");
+    });
+  }
 
   dropZone.addEventListener("click", () => fileInput.click());
 
@@ -757,42 +792,118 @@ function initAutoDetector() {
   function parseManifestFile(file) {
     const reader = new FileReader();
     reader.onload = (e) => {
-      const content = e.target.result;
-      let detected = "baseline";
-      let reason = "Universal Profile";
-
-      try {
-        if (file.name.endsWith(".json")) {
-          const pkg = JSON.parse(content);
-          const allDeps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
-          
-          if (allDeps["next"] || allDeps["@supabase/supabase-js"]) {
-            detected = "nextjs-supabase";
-            reason = "Detected: Next.js 15 + Supabase + React (Pro)";
-          } else if (allDeps["fastify"] || allDeps["express"]) {
-            detected = "enterprise-node";
-            reason = "Detected: Node.js Enterprise API (Pro)";
-          }
-        } else if (content.includes("fastapi") || content.includes("sqlalchemy")) {
-          detected = "fastapi-sqlalchemy";
-          reason = "Detected: FastAPI + Async SQLAlchemy (Pro)";
-        } else if (content.includes("langchain") || content.includes("llama-index") || content.includes("openai")) {
-          detected = "ai-agent-pipeline";
-          reason = "Detected: AI Agent Pipeline (Pro)";
-        }
-      } catch (err) {
-        console.warn("Could not parse manifest, falling back to auto heuristics.", err);
-      }
-
-      state.selectedStack = detected;
-      document.getElementById("stack-select").value = detected;
-      badge.textContent = `✨ ${reason}`;
-      badge.classList.remove("hidden");
-      compileAll();
+      analyzeManifestText(e.target.result, file.name);
     };
     reader.readAsText(file);
   }
+
+  function analyzeManifestText(content, sourceName) {
+    let detected = "baseline";
+    let tags = [];
+    const lowerContent = content.toLowerCase();
+
+    // 1. Try parsing JSON (package.json)
+    let isJson = false;
+    try {
+      const pkg = JSON.parse(content);
+      isJson = true;
+      const allDeps = {
+        ...(pkg.dependencies || {}),
+        ...(pkg.devDependencies || {}),
+        ...(pkg.peerDependencies || {})
+      };
+      const depKeys = Object.keys(allDeps).map(k => k.toLowerCase());
+
+      // Framework Detection
+      if (depKeys.includes("next") || depKeys.includes("@supabase/supabase-js")) {
+        detected = "nextjs-supabase";
+        tags.push("Next.js 15");
+        if (depKeys.includes("@supabase/supabase-js") || depKeys.includes("@supabase/ssr")) tags.push("Supabase RLS");
+      } else if (depKeys.includes("expo") || depKeys.includes("react-native")) {
+        detected = "baseline";
+        tags.push("React Native / Expo");
+      } else if (depKeys.includes("fastify") || depKeys.includes("express") || depKeys.includes("@nestjs/core")) {
+        detected = "enterprise-node";
+        tags.push(depKeys.includes("fastify") ? "Fastify" : "Express/Node API");
+      }
+
+      // Feature Detection
+      if (depKeys.includes("typescript")) tags.push("TypeScript Strict");
+      if (depKeys.includes("tailwindcss")) tags.push("Tailwind");
+      if (depKeys.includes("prisma") || depKeys.includes("drizzle-orm")) tags.push("ORM Protected");
+    } catch {
+      // Not JSON, fall back to regex / text parsing (requirements.txt, pyproject.toml, plaintext)
+    }
+
+    if (!isJson) {
+      if (lowerContent.includes("fastapi") || lowerContent.includes("sqlalchemy") || lowerContent.includes("uvicorn")) {
+        detected = "fastapi-sqlalchemy";
+        tags.push("FastAPI + Async SQLAlchemy");
+      } else if (lowerContent.includes("langchain") || lowerContent.includes("llama_index") || lowerContent.includes("openai") || lowerContent.includes("anthropic") || lowerContent.includes("pydantic_ai")) {
+        detected = "ai-agent-pipeline";
+        tags.push("AI Agent Pipeline");
+      } else if (lowerContent.includes("next") || lowerContent.includes("supabase")) {
+        detected = "nextjs-supabase";
+        tags.push("Next.js / Supabase");
+      } else if (lowerContent.includes("express") || lowerContent.includes("fastify") || lowerContent.includes("node")) {
+        detected = "enterprise-node";
+        tags.push("Node.js Clean Architecture");
+      }
+    }
+
+    state.selectedStack = detected;
+    const selectElem = document.getElementById("stack-select");
+    if (selectElem) selectElem.value = detected;
+
+    const tagStr = tags.length > 0 ? tags.join(" • ") : "Universal Stack Configuration";
+    badge.innerHTML = `✨ <strong>Auto-Detected:</strong> ${tagStr} <span style="opacity:0.75; font-size:11px;">(from ${sourceName})</span>`;
+    badge.classList.remove("hidden");
+    compileAll();
+  }
 }
+
+// 9b. Interactive Tool Tabs in Quickstart Section
+function initToolTabs() {
+  const tabs = document.querySelectorAll("#tool-tabs .tool-tab");
+  const panes = document.querySelectorAll(".tool-panes .tool-pane");
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach((t) => t.classList.remove("active"));
+      panes.forEach((p) => p.classList.remove("active"));
+
+      tab.classList.add("active");
+      const toolId = tab.getAttribute("data-tool");
+      const targetPane = document.getElementById(`pane-${toolId}`);
+      if (targetPane) targetPane.classList.add("active");
+    });
+  });
+}
+
+// 9c. One-Click Copy Prompt Buttons
+function initCopyPrompts() {
+  const copyButtons = document.querySelectorAll(".btn-copy-prompt");
+
+  copyButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const promptId = btn.getAttribute("data-prompt-id");
+      const promptElem = document.getElementById(promptId);
+      if (!promptElem) return;
+
+      const text = promptElem.textContent.trim();
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = btn.textContent;
+        btn.textContent = "✓ Copied!";
+        btn.classList.add("copied");
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.classList.remove("copied");
+        }, 1800);
+      });
+    });
+  });
+}
+
 
 // 10. Comprehensive Multi-Tool ZIP Bundle Compiler
 function initActions() {
@@ -923,9 +1034,25 @@ Generated from Auterix Studio (https://auterix.vercel.app)
 Stack: ${profile.name} (${profile.isPro ? "Pro Blueprint" : "Community Baseline"})
 
 ## How to Apply:
-1. Extract this zip file into the root of your project.
-2. The AI tool configurations (.claude/, .cursor/, .agents/, .github/, .ai/, etc.) will automatically place into their proper directories.
+1. Extract this zip file into the root of your existing or new project.
+2. The AI tool configurations (.claude/, .cursor/, .agents/, .github/, .ai/, etc.) will place directly into their proper directories.
 3. Open your project in Cursor, Claude Code, Antigravity, Copilot, Windsurf, or Codex!
+
+---
+
+## 📋 4 Ready-to-Use Starter Prompts:
+
+### 1. 🚀 First-Time Activation (Claude & Cursor)
+"Claude, adopt this CLAUDE.md / .cursorrules as your strict project rules. Confirm you understand our architectural boundaries, security policies, and test commands before writing any code."
+
+### 2. 🛡️ Safe Feature Implementation
+"Based on our project rules, implement [feature description]. Follow strict validation, zero-hallucination boundaries, and handle error states gracefully."
+
+### 3. 🔍 Pre-Commit Security Audit
+"Review current changes against our architectural invariants. Check for: 1) Leaked secrets, 2) Insecure database queries, 3) Missing input validation, 4) Type safety errors."
+
+### 4. 🧪 Automated Test Generation
+"Write comprehensive unit and integration tests for [file/function]. Ensure edge case coverage and verify using our project test command."
 
 ${profile.isPro ? `
 ---
@@ -955,6 +1082,8 @@ window.addEventListener("DOMContentLoaded", () => {
   initViewModeSwitch();
   initGuardrails();
   initAutoDetector();
+  initToolTabs();
+  initCopyPrompts();
   initActions();
   compileAll();
 });
