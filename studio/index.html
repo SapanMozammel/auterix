@@ -137,7 +137,7 @@
           <span class="btn-icon">📦</span>
           <span>Get Pro Developer Access ($14)</span>
         </a>
-        <button type="button" class="btn-tertiary-hero" onclick="document.getElementById('btn-open-unlock-modal-nav').click()">
+        <button type="button" class="btn-tertiary-hero btn-trigger-unlock-modal" onclick="document.getElementById('btn-open-unlock-modal-nav').click()">
           <span>Already Purchased? Load ZIP &rarr;</span>
         </button>
       </div>
@@ -1025,7 +1025,7 @@ export async function updateUserAction(rawData: unknown) {
           <div class="prompt-card">
             <div class="prompt-card-header">
               <span class="prompt-badge cyan">⚡ WORKFLOW ACTIVATION</span>
-              <button type="button" class="btn-copy-prompt" data-target="p1-text">Copy Prompt</button>
+              <button type="button" class="btn-copy-prompt" data-prompt-id="p1-text" data-target="p1-text">Copy Prompt</button>
             </div>
             <div class="prompt-body">
               <pre><code id="p1-text">Read the project instructions in the root context file (e.g. .cursorrules or CLAUDE.md). Confirm that you understand our strict architectural boundaries, file placement conventions, and validation rules. Then summarize the 3 most critical rules before writing any code.</code></pre>
@@ -1036,7 +1036,7 @@ export async function updateUserAction(rawData: unknown) {
           <div class="prompt-card">
             <div class="prompt-card-header">
               <span class="prompt-badge violet">🚀 SAFE FEATURE IMPLEMENTATION</span>
-              <button type="button" class="btn-copy-prompt" data-target="p2-text">Copy Prompt</button>
+              <button type="button" class="btn-copy-prompt" data-prompt-id="p2-text" data-target="p2-text">Copy Prompt</button>
             </div>
             <div class="prompt-body">
               <pre><code id="p2-text">Implement [feature description] following our project architectural standards strictly. Ensure all inputs are validated with Zod schemas, server-only code is separated from client components, and appropriate error boundaries are included. Do not bypass existing type definitions.</code></pre>
@@ -1047,7 +1047,7 @@ export async function updateUserAction(rawData: unknown) {
           <div class="prompt-card">
             <div class="prompt-card-header">
               <span class="prompt-badge amber">🛡️ SECURITY &amp; INVARIANT AUDIT</span>
-              <button type="button" class="btn-copy-prompt" data-target="p3-text">Copy Prompt</button>
+              <button type="button" class="btn-copy-prompt" data-prompt-id="p3-text" data-target="p3-text">Copy Prompt</button>
             </div>
             <div class="prompt-body">
               <pre><code id="p3-text">Audit the current working directory for security invariants: (1) Check that no service role or secret keys are imported in client components, (2) Verify all database queries enforce multi-tenant RLS, and (3) Confirm that all Server Actions validate session authentication before mutating data.</code></pre>
@@ -1058,7 +1058,7 @@ export async function updateUserAction(rawData: unknown) {
           <div class="prompt-card">
             <div class="prompt-card-header">
               <span class="prompt-badge emerald">🧪 AUTOMATED TEST GENERATION</span>
-              <button type="button" class="btn-copy-prompt" data-target="p4-text">Copy Prompt</button>
+              <button type="button" class="btn-copy-prompt" data-prompt-id="p4-text" data-target="p4-text">Copy Prompt</button>
             </div>
             <div class="prompt-body">
               <pre><code id="p4-text">Generate comprehensive unit and integration tests for [file path]. Cover happy paths, malformed payloads, unauthorized access attempts, and edge cases. Follow our testing conventions and ensure all mocks respect domain type invariants.</code></pre>
@@ -1432,7 +1432,7 @@ export async function updateUserAction(rawData: unknown) {
       </div>
 
       <!-- Why Private GitHub Repo Box -->
-      <div class="agency-why-box card mt-12">
+      <div class="agency-why-box card mt-12" id="agency-advantage">
         <div class="agency-why-header">
           <span class="agency-why-badge">🌟 THE AGENCY ADVANTAGE</span>
           <h3>Why Join the Private GitHub Repository?</h3>
@@ -1460,18 +1460,25 @@ export async function updateUserAction(rawData: unknown) {
             </div>
           </div>
         </div>
-        <!-- Agency Direct Purchase & Invited Member Actions -->
+        <!-- Agency Direct Purchase & Access Actions -->
         <div class="agency-actions-bar">
           <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="btn-agency-download glow-button">
             <span class="btn-icon">⚡</span>
             <span>Get Agency &amp; Team Access ($39) &rarr;</span>
           </a>
-          <a href="https://github.com/SapanMozammel/auterix-pro" target="_blank" rel="noopener" class="btn-agency-repo">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          <a href="#pricing" class="btn-agency-repo">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <polyline points="19 12 12 19 5 12"></polyline>
             </svg>
-            <span>Invited Members: Open auterix-pro &rarr;</span>
+            <span>Compare All Access Tiers &darr;</span>
           </a>
+          <div class="plan-existing-user">
+            <span>Already invited?</span>
+            <a href="https://github.com/SapanMozammel/auterix-pro" target="_blank" rel="noopener" class="agency-dl-link">
+              Open GitHub Repo &rarr;
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -1661,9 +1668,9 @@ export async function updateUserAction(rawData: unknown) {
             <li><a href="#pricing">Pro Developer Suite ($14)</a></li>
             <li><a href="#pricing">Agency &amp; Teams ($39)</a></li>
             <li><a href="#access-chart">Feature Entitlement Matrix</a></li>
-            <li><a href="https://github.com/SapanMozammel/auterix-pro" target="_blank" rel="noopener">Agency: Member Repo (Invited Only)</a></li>
-            <li><a href="https://github.com/SapanMozammel/auterix-pro/archive/refs/heads/main.zip" target="_blank" rel="noopener">Agency: Member ZIP (Invited Only)</a></li>
-            <li><a href="javascript:void(0)" onclick="document.getElementById('btn-open-unlock-modal-nav').click()">Load Pro Deliverable ZIP</a></li>
+            <li><a href="#agency-advantage">The Agency Advantage</a></li>
+            <li><a href="#pricing">Commercial Stacks &amp; Blueprints</a></li>
+            <li><a href="#unlock-modal" class="btn-trigger-unlock-modal" onclick="document.getElementById('btn-open-unlock-modal-nav').click()">Load Pro Deliverable ZIP</a></li>
             <li><a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener">Gumroad Storefront</a></li>
             <li><a href="#faq">Developer FAQ</a></li>
           </ul>
@@ -1726,8 +1733,8 @@ export async function updateUserAction(rawData: unknown) {
 
         <!-- Agency Member Repository Hint -->
         <div class="modal-agency-hint">
-          <span>Agency member?</span>
-          <a href="https://github.com/SapanMozammel/auterix-pro" target="_blank" rel="noopener">📦 Access auterix-pro on GitHub &rarr;</a>
+          <span>Invited Agency member?</span>
+          <a href="https://github.com/SapanMozammel/auterix-pro" target="_blank" rel="noopener">📦 Access your GitHub repo &rarr;</a>
         </div>
 
         <!-- Direct Purchase Section for Users Without Pro Access -->

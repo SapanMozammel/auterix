@@ -1405,7 +1405,7 @@ function initCopyPrompts() {
 
   copyButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
-      const promptId = btn.getAttribute("data-prompt-id");
+      const promptId = btn.getAttribute("data-prompt-id") || btn.getAttribute("data-target");
       const promptElem = document.getElementById(promptId);
       if (!promptElem) return;
 
