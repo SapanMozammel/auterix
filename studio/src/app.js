@@ -1359,7 +1359,7 @@ function initProUnlocker() {
           closeModal();
         }, 1600);
       } else {
-        statusElem.innerHTML = "❌ Unrecognized package. Please upload the official <code>Auterix-Pro-Production-Suite.zip</code>.";
+        statusElem.innerHTML = "❌ Unrecognized package. Please upload the official <code>Auterix-Pro-Production-Suite.zip</code> or <a href='https://tenantdefense.gumroad.com/l/auterix' target='_blank' rel='noopener' style='color: #818cf8; text-decoration: underline; font-weight: 700;'>purchase Pro access here &rarr;</a>";
         statusElem.className = "unlock-status error";
       }
     } catch (err) {

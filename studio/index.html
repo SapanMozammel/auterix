@@ -1372,6 +1372,33 @@ export async function updateUserAction(rawData: unknown) {
           <span class="status-msg"></span>
         </div>
 
+        <!-- Direct Purchase Section for Users Without Pro Access -->
+        <div class="modal-purchase-cta">
+          <div class="modal-purchase-divider">
+            <span>Don't have Auterix Pro yet?</span>
+          </div>
+          <div class="modal-purchase-box">
+            <div class="modal-purchase-header">
+              <div class="modal-purchase-title-row">
+                <span class="modal-purchase-badge">COMMERCIAL LICENSE</span>
+                <span class="modal-purchase-name">Auterix Pro Production Suite</span>
+              </div>
+              <div class="modal-purchase-price">$14 <small>one-time</small></div>
+            </div>
+            <p class="modal-purchase-desc">
+              Get instant access to 5 complete production stacks, PostgreSQL RLS migrations, pre-commit AI hooks, and automated PR compliance bots.
+            </p>
+            <div class="modal-purchase-actions">
+              <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="btn-modal-purchase glow-button">
+                <span>⚡ Purchase Auterix Pro on Gumroad ($14) &rarr;</span>
+              </a>
+              <a href="#pricing" class="modal-view-tiers-link" onclick="document.getElementById('btn-close-modal').click()">
+                Compare tiers &amp; team licenses &darr;
+              </a>
+            </div>
+          </div>
+        </div>
+
         <div class="modal-privacy-note">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
