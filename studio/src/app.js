@@ -1096,7 +1096,7 @@ To unlock the production boilerplate templates (safe server actions, PostgreSQL 
 }
 
 
-// 9d. Pro License & ZIP Unlocker
+// 9d. Pro Suite ZIP Unlocker
 function initProUnlocker() {
   const modal = document.getElementById("unlock-modal");
   const btnClose = document.getElementById("btn-close-modal");
