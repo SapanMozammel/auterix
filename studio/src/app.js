@@ -3,7 +3,7 @@
  * Runs 100% client-side with zero telemetry or network dependencies.
  */
 
-// 1. Tool Adapter Specifications (8 Supported Tools)
+// 1. Tool Adapter Specifications (21 Supported Tools & Platforms)
 const ADAPTERS = [
   {
     id: "cursor",
@@ -27,6 +27,13 @@ const ADAPTERS = [
     description: "Workspace rules, subagent personas, and modular skills for Google Antigravity"
   },
   {
+    id: "windsurf",
+    name: "Windsurf",
+    file: ".windsurfrules",
+    defaultActive: true,
+    description: "Global rules and cascade workflows for Windsurf / Codeium"
+  },
+  {
     id: "copilot",
     name: "GitHub Copilot",
     file: ".github/copilot-instructions.md",
@@ -41,25 +48,109 @@ const ADAPTERS = [
     description: "Canonical AGENTS.md standard and .ai/tasks/ progression state"
   },
   {
-    id: "windsurf",
-    name: "Windsurf",
-    file: ".windsurfrules",
+    id: "cline",
+    name: "Cline",
+    file: ".clinerules",
     defaultActive: true,
-    description: "Global rules and cascade workflows for Windsurf / Codeium"
+    description: "Architect, Code, and Test mode contracts for Cline"
   },
   {
-    id: "cline",
-    name: "Cline / Roo",
-    file: ".clinerules",
+    id: "roocode",
+    name: "Roo / Kilo Code",
+    file: ".roomodes",
     defaultActive: false,
-    description: "Architect, Code, and Test mode contracts for Cline"
+    description: "Custom multi-mode personas (Architect, Code, Ask, Test) for Roo & Kilo Code"
+  },
+  {
+    id: "aider",
+    name: "Aider",
+    file: "CONVENTIONS.md",
+    defaultActive: false,
+    description: "Autonomous git pairing conventions and .aider.conf.yml config"
+  },
+  {
+    id: "openhands",
+    name: "OpenHands",
+    file: ".openhands_instructions",
+    defaultActive: false,
+    description: "Autonomous agent execution instructions for OpenHands / OpenDevin"
+  },
+  {
+    id: "devin",
+    name: "Devin",
+    file: "DEVIATION.md",
+    defaultActive: false,
+    description: "Autonomous software engineer playbook and task deviations for Devin"
+  },
+  {
+    id: "coderabbit",
+    name: "CodeRabbit",
+    file: ".coderabbit.yaml",
+    defaultActive: false,
+    description: "AI pull request review configuration enforcing Auterix architecture"
+  },
+  {
+    id: "zed",
+    name: "Zed",
+    file: ".zed/settings.json",
+    defaultActive: false,
+    description: "Zed AI assistant prompt templates and workspace settings"
+  },
+  {
+    id: "trae",
+    name: "Trae",
+    file: ".trae/rules/project.md",
+    defaultActive: false,
+    description: "ByteDance Trae AI IDE rules and workspace context"
+  },
+  {
+    id: "continue",
+    name: "Continue.dev",
+    file: ".continue/rules/workflow.md",
+    defaultActive: false,
+    description: "Open-source VS Code & JetBrains AI assistant workflow rules"
   },
   {
     id: "augment",
     name: "Augment Code",
     file: ".augment/rules/workflow.md",
     defaultActive: false,
-    description: "Workspace developer assistant rules for Augment"
+    description: "Enterprise workspace developer assistant rules for Augment"
+  },
+  {
+    id: "tabnine",
+    name: "Tabnine",
+    file: ".tabnine/rules.json",
+    defaultActive: false,
+    description: "Enterprise security and language rules for Tabnine"
+  },
+  {
+    id: "replit",
+    name: "Replit Agent",
+    file: ".replit",
+    defaultActive: false,
+    description: "Replit Agent execution commands and environment rules"
+  },
+  {
+    id: "v0",
+    name: "v0 by Vercel",
+    file: ".prompts/v0-system-prompt.md",
+    defaultActive: false,
+    description: "System prompt blueprint for Next.js 15 RSC generation in v0"
+  },
+  {
+    id: "bolt",
+    name: "Bolt.new",
+    file: ".prompts/bolt-system-prompt.md",
+    defaultActive: false,
+    description: "Fullstack architecture prompt for Bolt.new web development"
+  },
+  {
+    id: "lovable",
+    name: "Lovable",
+    file: ".prompts/lovable-system-prompt.md",
+    defaultActive: false,
+    description: "Supabase & frontend component prompt context for Lovable.dev"
   }
 ];
 
@@ -226,10 +317,95 @@ jobs:
         with: { node-version: "22" }
       - run: node .ai/tools/check.mjs --root .`
     },
+    "rate-limiter.ts": {
+      path: "blueprints/security/rate-limiter.ts",
+      content: `export interface RateLimitConfig { windowMs: number; maxRequests: number; }
+export const RATE_LIMIT_TIERS: Record<string, RateLimitConfig> = {
+  anonymous: { windowMs: 60 * 1000, maxRequests: 20 },
+  freeUser: { windowMs: 60 * 1000, maxRequests: 60 },
+  proUser: { windowMs: 60 * 1000, maxRequests: 300 },
+  aiAgent: { windowMs: 60 * 1000, maxRequests: 120 },
+};
+
+class MemoryRateLimiter {
+  private hits: Map<string, number[]> = new Map();
+  public check(id: string, tier = 'anonymous') {
+    const cfg = RATE_LIMIT_TIERS[tier] || RATE_LIMIT_TIERS.anonymous;
+    const now = Date.now(), start = now - cfg.windowMs;
+    const times = (this.hits.get(id) || []).filter(t => t > start);
+    if (times.length >= cfg.maxRequests) return { success: false, limit: cfg.maxRequests, remaining: 0 };
+    times.push(now);
+    this.hits.set(id, times);
+    return { success: true, limit: cfg.maxRequests, remaining: cfg.maxRequests - times.length };
+  }
+}
+export const globalRateLimiter = new MemoryRateLimiter();`
+    },
+    "session-guard.ts": {
+      path: "blueprints/auth/session-guard.ts",
+      content: `import "server-only";
+import { redirect } from "next/navigation";
+
+export interface SessionUser { id: string; email: string; orgId: string; role: 'owner' | 'admin' | 'member' | 'viewer'; }
+
+export async function requireAuth(): Promise<SessionUser> {
+  // Read session cookie securely on the server
+  const user: SessionUser | null = null; // Replace with auth.getUser()
+  if (!user) redirect("/login");
+  return user;
+}
+
+export async function requireRole(allowedRoles: Array<SessionUser['role']>): Promise<SessionUser> {
+  const user = await requireAuth();
+  if (!allowedRoles.includes(user.role)) redirect("/unauthorized");
+  return user;
+}`
+    },
+    "stripe-webhook.ts": {
+      path: "blueprints/billing/stripe-webhook.ts",
+      content: `import { headers } from "next/headers";
+import { NextResponse } from "next/server";
+
+export async function POST(req: Request) {
+  const body = await req.text();
+  const signature = (await headers()).get("stripe-signature");
+  if (!signature) return NextResponse.json({ error: "Missing signature" }, { status: 400 });
+
+  // In production: stripe.webhooks.constructEvent(body, signature, endpointSecret)
+  // Process checkout.session.completed, customer.subscription.updated idempotently
+  return NextResponse.json({ received: true });
+}`
+    },
+    "drizzle.schema.ts": {
+      path: "blueprints/database/drizzle.schema.ts",
+      content: `import { pgTable, text, timestamp, uuid, varchar, jsonb, boolean, customType } from "drizzle-orm/pg-core";
+
+const vector = customType<{ data: number[] }>({ dataType: () => "vector(1536)" });
+
+export const organizations = pgTable("organizations", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  slug: varchar("slug", { length: 100 }).notNull().unique(),
+  subscriptionTier: varchar("subscription_tier", { length: 50 }).default("free").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const documentEmbeddings = pgTable("document_embeddings", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  orgId: uuid("org_id").references(() => organizations.id, { onDelete: "cascade" }).notNull(),
+  content: text("content").notNull(),
+  embedding: vector("embedding"),
+});`
+    },
     "pre-commit": {
       path: ".git/hooks/pre-commit",
       content: `#!/bin/sh
 # Auterix Pre-Commit Guardrail
+# 1. Prevent secret leaks
+if git diff --cached --name-only | grep -qE '^(\.env|\.env\.local)$'; then
+  echo "❌ [BLOCKED] .env files staged for commit!" && exit 1
+fi
+# 2. Check architecture sync
 node .ai/tools/check.mjs --root . || exit 1`
     }
   },
@@ -481,8 +657,97 @@ ${context}
 `;
 
     case "cline":
-      return `# Cline / Roo Code Custom Instructions
+      return `# Cline Custom Instructions
 # Mode: Autonomous Senior Software Engineer
+
+${context}
+`;
+
+    case "roocode":
+      return JSON.stringify({
+        customModes: [
+          {
+            slug: "architect",
+            name: "Architect",
+            roleDefinition: "High-level software architecture, data modeling, and task decomposition.",
+            groups: ["read"]
+          },
+          {
+            slug: "code",
+            name: "Code",
+            roleDefinition: "High-precision implementation adhering strictly to project architecture.",
+            groups: ["read", "edit"]
+          },
+          {
+            slug: "test",
+            name: "Test",
+            roleDefinition: "Author comprehensive unit, integration, and E2E verification suites.",
+            groups: ["read", "edit", "command"]
+          }
+        ]
+      }, null, 2);
+
+    case "aider":
+      return `# Aider Coding Conventions (Managed by Auterix)
+# Read automatically via .aider.conf.yml
+
+${context}
+`;
+
+    case "openhands":
+      return `# OpenHands Autonomous Instructions
+# Managed by Auterix Engine
+
+${context}
+`;
+
+    case "devin":
+      return `# Devin Playbook & Task Deviations
+# Managed by Auterix
+
+${context}
+`;
+
+    case "coderabbit":
+      return `# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# CodeRabbit AI PR Audit Configuration (Auterix Protocol)
+language: "en-US"
+reviews:
+  profile: "assertive"
+  request_changes_workflow: true
+  high_level_summary: true
+  auto_review:
+    enabled: true
+    base_branches: ["main", "master", "develop"]
+  path_instructions:
+    - path: "**/*.ts"
+      instructions: "Enforce zero untyped any, verified inputs, and alignment with .ai/tasks/active.json."
+`;
+
+    case "zed":
+      return JSON.stringify({
+        assistant: {
+          default_model: "default",
+          version: "2"
+        },
+        context_servers: {
+          auterix: {
+            command: "npx",
+            args: ["auterix", "check"]
+          }
+        }
+      }, null, 2);
+
+    case "trae":
+      return `# Trae AI IDE Project Rules (ByteDance)
+# Managed by Auterix
+
+${context}
+`;
+
+    case "continue":
+      return `# Continue.dev Project Instructions
+# Managed by Auterix
 
 ${context}
 `;
@@ -490,6 +755,47 @@ ${context}
     case "augment":
       return `# Augment Code Workspace Guidelines
 # Managed by Auterix
+
+${context}
+`;
+
+    case "tabnine":
+      return JSON.stringify({
+        version: "1.0.0",
+        rules: [
+          "Enforce strict typing and zero any",
+          "Respect database Row Level Security (RLS)",
+          "Pass verification checks before commit"
+        ]
+      }, null, 2);
+
+    case "replit":
+      return `# Replit Agent Workspace Directives
+${context}
+`;
+
+    case "v0":
+      return `# v0 (Vercel) System Prompt Blueprint
+# Paste this into v0 to guide component & fullstack generation:
+
+You are building components for a production Next.js 15 App Router application managed by Auterix.
+Requirements:
+1. Always use React Server Components where possible; use 'use client' only for interactive state.
+2. Never import secret keys or Supabase service role keys into client components.
+3. Validate all mutations with Zod.
+4. Style with Tailwind CSS utility classes and Lucide icons.
+`;
+
+    case "bolt":
+      return `# Bolt.new Project Architecture Prompt
+# Paste this into Bolt.new when starting or prompting the project:
+
+${context}
+`;
+
+    case "lovable":
+      return `# Lovable.dev Architecture & Schema Prompt
+# Paste this into Lovable when scaffolding screens or database tables:
 
 ${context}
 `;
@@ -534,10 +840,34 @@ function compileAll() {
     }
   }
 
+  const profile = STACK_PROFILES[state.selectedStack] || STACK_PROFILES["baseline"];
+
   // Always generate project manifest
   files["manifest"] = {
     path: ".ai/project.json",
     content: generateProjectManifest(state.selectedStack)
+  };
+
+  // Always generate cross-agent shared memory
+  files["memory"] = {
+    path: ".ai/memory.md",
+    content: `# Auterix Cross-Agent Shared Memory
+# Shared across Cursor, Claude, Antigravity, Windsurf & 21 tools
+
+## 🏛️ Architecture & Stack Decisions
+- Stack: ${profile.name} (${profile.lang})
+- Language: TypeScript / Strict Mode
+- Verification: ${profile.commands.test}
+
+## 🛡️ Security & Invariants
+- Enforce Zero Untyped Any across all code.
+- Database: Strict Row-Level Security (RLS).
+- Secrets: Never commit .env credentials.
+
+## 🚫 Discarded Approaches (Anti-Patterns)
+- Do not bypass server action validation.
+- Do not import service role keys into client components.
+`
   };
 
   state.generatedFiles = files;
@@ -600,7 +930,8 @@ function renderTabs() {
       const btn = document.createElement("button");
       btn.className = `tab-btn ${state.activeTab === key ? "active" : ""}`;
       const adapterObj = ADAPTERS.find(a => a.id === key);
-      btn.textContent = adapterObj ? adapterObj.name : "project.json";
+      const label = adapterObj ? adapterObj.name : (key === "memory" ? "🧠 memory.md" : "project.json");
+      btn.textContent = label;
 
       btn.addEventListener("click", () => {
         state.activeTab = key;
@@ -685,11 +1016,44 @@ function toggleAdapter(id) {
 
 function initStackSelector() {
   const select = document.getElementById("stack-select");
-  select.value = state.selectedStack;
+  const chips = document.querySelectorAll(".stack-chip");
 
-  select.addEventListener("change", (e) => {
-    state.selectedStack = e.target.value;
-    compileAll();
+  const STACK_MAP = {
+    "nextjs": "nextjs-supabase",
+    "nextjs-supabase": "nextjs-supabase",
+    "fastapi": "fastapi-sqlalchemy",
+    "fastapi-sqlalchemy": "fastapi-sqlalchemy",
+    "node-clean": "enterprise-node",
+    "enterprise-node": "enterprise-node",
+    "react-native": "react-native-expo",
+    "react-native-expo": "react-native-expo",
+    "ai-pipeline": "ai-pipeline",
+    "baseline": "baseline"
+  };
+
+  if (select) {
+    select.value = state.selectedStack;
+    select.addEventListener("change", (e) => {
+      const mapped = STACK_MAP[e.target.value] || e.target.value;
+      state.selectedStack = mapped;
+      chips.forEach(c => {
+        const cStack = STACK_MAP[c.getAttribute("data-stack")] || c.getAttribute("data-stack");
+        c.classList.toggle("active", cStack === mapped);
+      });
+      compileAll();
+    });
+  }
+
+  chips.forEach(chip => {
+    chip.addEventListener("click", () => {
+      const raw = chip.getAttribute("data-stack");
+      const mapped = STACK_MAP[raw] || raw;
+      state.selectedStack = mapped;
+      chips.forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      if (select) select.value = mapped;
+      compileAll();
+    });
   });
 }
 
@@ -1045,25 +1409,32 @@ function initCopyPrompts() {
 // 10. Comprehensive Multi-Tool ZIP Bundle Compiler
 function initActions() {
   // Copy current code
-  document.getElementById("btn-copy-file").addEventListener("click", () => {
-    const code = document.getElementById("code-content").textContent;
-    navigator.clipboard.writeText(code).then(() => {
-      const btn = document.getElementById("btn-copy-file");
-      const originalText = btn.innerHTML;
-      btn.innerHTML = "<span>Copied!</span>";
-      setTimeout(() => btn.innerHTML = originalText, 1800);
+  const btnCopyFile = document.getElementById("btn-copy-file");
+  if (btnCopyFile) {
+    btnCopyFile.addEventListener("click", () => {
+      const codeElem = document.getElementById("code-content");
+      const code = codeElem ? codeElem.textContent : "";
+      navigator.clipboard.writeText(code).then(() => {
+        const originalText = btnCopyFile.innerHTML;
+        btnCopyFile.innerHTML = "<span>Copied!</span>";
+        setTimeout(() => btnCopyFile.innerHTML = originalText, 1800);
+      });
     });
-  });
+  }
 
   // Copy NPX Command
-  document.getElementById("btn-copy-cli").addEventListener("click", () => {
-    const adaptersList = Array.from(state.activeAdapters).join(",");
-    const cmd = `npx auterix@latest init --adapters ${adaptersList} --profile ${state.selectedStack}`;
-    navigator.clipboard.writeText(cmd).then(() => {
-      const btn = document.getElementById("btn-copy-cli");
-      const orig = btn.innerHTML;
-      btn.innerHTML = "<span>Copied command!</span>";
-      setTimeout(() => btn.innerHTML = orig, 1800);
+  const copyCmdBtns = document.querySelectorAll("#btn-copy-cli, #btn-copy-hero-cmd");
+  copyCmdBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const heroCmdText = document.getElementById("hero-cmd-text");
+      const cmd = heroCmdText
+        ? heroCmdText.textContent.trim()
+        : `npx auterix@latest init --adapters ${Array.from(state.activeAdapters).join(",")} --profile ${state.selectedStack}`;
+      navigator.clipboard.writeText(cmd).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = "<span>Copied!</span>";
+        setTimeout(() => btn.innerHTML = orig, 1800);
+      });
     });
   });
 
@@ -1165,6 +1536,206 @@ alwaysApply: false
       zip.file(".clinerules", `# Cline Custom Instructions\n${generateUniversalContext(state.selectedStack)}`);
     }
 
+    // 8. Roo Code / Kilo Code
+    if (state.activeAdapters.has("roocode")) {
+      zip.file(".roomodes", generateAdapterContent("roocode", state.selectedStack));
+    }
+
+    // 9. Aider
+    if (state.activeAdapters.has("aider")) {
+      zip.file(".aider.conf.yml", "auto-commits: false\nattribute-author: false\nread: CONVENTIONS.md\n");
+      zip.file("CONVENTIONS.md", generateAdapterContent("aider", state.selectedStack));
+      zip.file(".aiderignore", "node_modules/\n.git/\ndist/\nbuild/\n.next/\ncoverage/\n");
+    }
+
+    // 10. OpenHands
+    if (state.activeAdapters.has("openhands")) {
+      zip.file(".openhands_instructions", generateAdapterContent("openhands", state.selectedStack));
+    }
+
+    // 11. Devin
+    if (state.activeAdapters.has("devin")) {
+      zip.file("DEVIATION.md", generateAdapterContent("devin", state.selectedStack));
+      zip.file(".devin/playbook.md", `# Devin Playbook\n${generateUniversalContext(state.selectedStack)}`);
+    }
+
+    // 12. CodeRabbit
+    if (state.activeAdapters.has("coderabbit")) {
+      zip.file(".coderabbit.yaml", generateAdapterContent("coderabbit", state.selectedStack));
+    }
+
+    // 13. Zed
+    if (state.activeAdapters.has("zed")) {
+      zip.file(".zed/settings.json", generateAdapterContent("zed", state.selectedStack));
+      zip.file(".zed/prompts/plan.md", planCmd);
+      zip.file(".zed/prompts/review.md", reviewCmd);
+    }
+
+    // 14. Trae
+    if (state.activeAdapters.has("trae")) {
+      zip.file(".trae/rules/project.md", generateAdapterContent("trae", state.selectedStack));
+      zip.file(".traerules", generateUniversalContext(state.selectedStack));
+    }
+
+    // 15. Continue.dev
+    if (state.activeAdapters.has("continue")) {
+      zip.file(".continue/rules/workflow.md", generateAdapterContent("continue", state.selectedStack));
+    }
+
+    // 16. Augment Code
+    if (state.activeAdapters.has("augment")) {
+      zip.file(".augment/rules/workflow.md", generateAdapterContent("augment", state.selectedStack));
+    }
+
+    // 17. Tabnine
+    if (state.activeAdapters.has("tabnine")) {
+      zip.file(".tabnine/rules.json", generateAdapterContent("tabnine", state.selectedStack));
+    }
+
+    // 18. Replit Agent
+    if (state.activeAdapters.has("replit")) {
+      zip.file(".replit", `run = "${profile.commands.test}"\nentrypoint = "index.ts"\n`);
+      zip.file(".replit/instructions.md", generateUniversalContext(state.selectedStack));
+    }
+
+    // 19. v0 by Vercel
+    if (state.activeAdapters.has("v0")) {
+      zip.file(".prompts/v0-system-prompt.md", generateAdapterContent("v0", state.selectedStack));
+    }
+
+    // 20. Bolt.new
+    if (state.activeAdapters.has("bolt")) {
+      zip.file(".prompts/bolt-system-prompt.md", generateAdapterContent("bolt", state.selectedStack));
+    }
+
+    // 21. Lovable
+    if (state.activeAdapters.has("lovable")) {
+      zip.file(".prompts/lovable-system-prompt.md", generateAdapterContent("lovable", state.selectedStack));
+    }
+
+    // Pro Deliverables: Only bundled when Pro is unlocked via Gumroad Pro ZIP package
+    if (state.isProUnlocked) {
+      // Automated CI/CD & Testing Blueprints
+      zip.file("playwright.config.ts", `import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './e2e',
+  fullyParallel: true,
+  reporter: [['html', { open: 'never' }], ['list']],
+  use: { baseURL: 'http://localhost:3000', trace: 'on-first-retry' },
+  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }]
+});\n`);
+
+      zip.file("lighthouserc.js", `module.exports = {
+  ci: {
+    collect: { startServerCommand: 'npm run start', url: ['http://localhost:3000/'] },
+    assert: {
+      assertions: {
+        'categories:performance': ['error', { minScore: 0.90 }],
+        'categories:accessibility': ['error', { minScore: 0.95 }]
+      }
+    }
+  }
+};\n`);
+
+      zip.file(".github/workflows/ci.yml", `name: CI Matrix
+on: [push, pull_request]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+      - run: npx auterix check
+      - run: npm test --if-present
+`);
+
+      zip.file(".github/workflows/security-scan.yml", `name: Security & Vulnerability Guardrails
+on: [push, pull_request]
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm audit --audit-level=high
+      - run: node bin/workflow.mjs check
+`);
+
+      // Additional Core Production Blueprints
+      zip.file("blueprints/security/rate-limiter.ts", `export interface RateLimitConfig { windowMs: number; maxRequests: number; }
+export const RATE_LIMIT_TIERS: Record<string, RateLimitConfig> = {
+  anonymous: { windowMs: 60 * 1000, maxRequests: 20 },
+  freeUser: { windowMs: 60 * 1000, maxRequests: 60 },
+  proUser: { windowMs: 60 * 1000, maxRequests: 300 },
+  aiAgent: { windowMs: 60 * 1000, maxRequests: 120 },
+};
+class MemoryRateLimiter {
+  private hits: Map<string, number[]> = new Map();
+  public check(id: string, tier = 'anonymous') {
+    const cfg = RATE_LIMIT_TIERS[tier] || RATE_LIMIT_TIERS.anonymous;
+    const now = Date.now(), start = now - cfg.windowMs;
+    const times = (this.hits.get(id) || []).filter(t => t > start);
+    if (times.length >= cfg.maxRequests) return { success: false, limit: cfg.maxRequests, remaining: 0 };
+    times.push(now);
+    this.hits.set(id, times);
+    return { success: true, limit: cfg.maxRequests, remaining: cfg.maxRequests - times.length };
+  }
+}
+export const globalRateLimiter = new MemoryRateLimiter();\n`);
+
+      zip.file("blueprints/auth/session-guard.ts", `import "server-only";
+import { redirect } from "next/navigation";
+export interface SessionUser { id: string; email: string; orgId: string; role: 'owner' | 'admin' | 'member' | 'viewer'; }
+export async function requireAuth(): Promise<SessionUser> {
+  const user: SessionUser | null = null;
+  if (!user) redirect("/login");
+  return user;
+}
+export async function requireRole(allowedRoles: Array<SessionUser['role']>): Promise<SessionUser> {
+  const user = await requireAuth();
+  if (!allowedRoles.includes(user.role)) redirect("/unauthorized");
+  return user;
+}\n`);
+
+      zip.file("blueprints/billing/stripe-webhook.ts", `import { headers } from "next/headers";
+import { NextResponse } from "next/server";
+export async function POST(req: Request) {
+  const body = await req.text();
+  const sig = (await headers()).get("stripe-signature");
+  if (!sig) return NextResponse.json({ error: "Missing signature" }, { status: 400 });
+  return NextResponse.json({ received: true });
+}\n`);
+
+      zip.file("blueprints/ci-cd/pre-commit-guard.sh", `#!/usr/bin/env bash
+set -eo pipefail
+echo "🛡️  [Auterix] Running pre-commit security checks..."
+if git diff --cached --name-only | grep -qE '^(\\.env|\\.env\\.local)$'; then
+  echo "❌ [BLOCKED] .env files staged for commit!" && exit 1
+fi
+node bin/workflow.mjs check || exit 1
+echo "✅ [Auterix] Pre-commit checks passed!"\n`);
+    }
+
+    zip.file(".ai/memory.md", `# Auterix Cross-Agent Shared Memory
+# Shared across Cursor, Claude, Antigravity, Windsurf & 21 tools
+
+## 🏛️ Architecture & Stack Decisions
+- Stack: ${profile.name} (${profile.lang})
+- Language: TypeScript / Strict Mode
+- Verification: ${profile.commands.test}
+
+## 🛡️ Security & Invariants
+- Enforce Zero Untyped Any across all code.
+- Database: Strict Row-Level Security (RLS).
+- Secrets: Never commit .env credentials.
+
+## 🚫 Discarded Approaches (Anti-Patterns)
+- Do not bypass server action validation.
+- Do not import service role keys into client components.
+`);
+
     // Add instructions and Pro upgrade guide in the zip
     zip.file("AUTERIX-README.md", `# Auterix Multi-Tool AI Config Bundle
 Generated from Auterix Studio (https://auterix.vercel.app)
@@ -1195,7 +1766,7 @@ ${profile.isPro ? `
 ---
 ### 🚀 Want the Complete Production Boilerplate Repositories & CI Bots?
 This free bundle includes the universal adapter rules, commands, and skills.
-To unlock the production boilerplate templates (safe server actions, PostgreSQL RLS policies, async sessions, and automated GitHub PR compliance bot), get Auterix Pro ($14):
+To unlock the production boilerplate templates (safe server actions, PostgreSQL RLS policies, async sessions, and automated GitHub PR compliance bot), get Auterix Pro (\`$14\`):
 👉 https://tenantdefense.gumroad.com/l/auterix
 ` : ""}
 `);
@@ -1250,7 +1821,7 @@ function initProUnlocker() {
   }
 
   // Hook all buttons that open the modal
-  document.querySelectorAll("#btn-open-unlock-modal, .lock-have-zip-btn").forEach(btn => {
+  document.querySelectorAll(".btn-trigger-unlock-modal, #btn-open-unlock-modal, .lock-have-zip-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       openModal();
@@ -1371,7 +1942,7 @@ function initProUnlocker() {
 }
 
 // 11. Bootstrap Studio
-window.addEventListener("DOMContentLoaded", () => {
+function bootstrapStudio() {
   renderAdapters();
   initStackSelector();
   initViewModeSwitch();
@@ -1380,6 +1951,13 @@ window.addEventListener("DOMContentLoaded", () => {
   initProUnlocker();
   initToolTabs();
   initCopyPrompts();
+  initNavigation();
   initActions();
   compileAll();
-});
+}
+
+if (document.readyState === "loading") {
+  window.addEventListener("DOMContentLoaded", bootstrapStudio);
+} else {
+  bootstrapStudio();
+}

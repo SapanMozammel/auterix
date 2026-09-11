@@ -1,0 +1,93 @@
+{
+  "name": "auterix-workflow",
+  "displayName": "Auterix — 21 AI Tools & Multi-Agent Workflow Standard",
+  "description": "Zero-drift multi-agent context standard, SHA-256 integrity locks, and cross-agent memory for Cursor, Claude Code, Copilot, Antigravity, and 21 tools.",
+  "version": "1.2.0",
+  "publisher": "auterix",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Linters",
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "cursor",
+    "claude",
+    "antigravity",
+    "copilot",
+    "windsurf",
+    "ai agents",
+    "context",
+    "prompts"
+  ],
+  "activationEvents": [
+    "workspaceContains:.ai",
+    "workspaceContains:CLAUDE.md",
+    "workspaceContains:.cursorrules",
+    "workspaceContains:.agents",
+    "onStartupFinished"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "auterix.check",
+        "title": "Auterix: Verify AI Rules & Compliance",
+        "category": "Auterix"
+      },
+      {
+        "command": "auterix.sync",
+        "title": "Auterix: Re-Sync All 21 AI Adapters",
+        "category": "Auterix"
+      },
+      {
+        "command": "auterix.recordMemory",
+        "title": "Auterix: Record Decision in Shared Memory",
+        "category": "Auterix"
+      },
+      {
+        "command": "auterix.extractSchema",
+        "title": "Auterix: Extract Active Schema to AI Context",
+        "category": "Auterix"
+      },
+      {
+        "command": "auterix.openStudio",
+        "title": "Auterix: Open Web Studio (Visual Cockpit)",
+        "category": "Auterix"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        { "command": "auterix.check" },
+        { "command": "auterix.sync" },
+        { "command": "auterix.recordMemory" },
+        { "command": "auterix.extractSchema" },
+        { "command": "auterix.openStudio" }
+      ],
+      "editor/context": [
+        {
+          "when": "resourceExtname =~ /\\.(ts|prisma|sql)/",
+          "command": "auterix.extractSchema",
+          "group": "auterix@1"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Auterix",
+      "properties": {
+        "auterix.autoCheckOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically verify AI rule integrity whenever context files are saved."
+        },
+        "auterix.showStatusBarItem": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the Auterix synchronization status bar badge."
+        }
+      }
+    }
+  }
+}

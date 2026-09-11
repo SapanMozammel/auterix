@@ -1,17 +1,18 @@
 # Auterix
 
-**One workflow. 8 native AI tools. Universal agent standard.**
+**One workflow across 21 native AI tools. Universal agent standard.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen)](package.json)
 [![Tests: 65 Passing](https://img.shields.io/badge/Tests-65%20Passing-emerald)](test/)
 [![Studio: Vercel](https://img.shields.io/badge/Web%20Studio-auterix.vercel.app-sky)](https://auterix.vercel.app)
-[![Get Auterix Pro](https://img.shields.io/badge/Pro%20Suite-$14%20Instant%20Access-orange)](https://tenantdefense.gumroad.com/l/auterix)
+[![Get Auterix Pro](https://img.shields.io/badge/Pro%20Suite-%2414%20Instant%20Access-orange)](https://tenantdefense.gumroad.com/l/auterix)
 
-Auterix is a deterministic, tool-neutral autonomous context protocol and multi-agent engineering workflow. Projects define shared architectural invariants, task lifecycles, and verification gates once, while Auterix compiles, verifies, and locks them natively across **Cursor, Claude Code, Google Antigravity, GitHub Copilot, OpenAI Codex, Windsurf, Cline, and Augment Code** — with universal **`AGENTS.md`** compatibility for any autonomous agent.
+Auterix is a deterministic, tool-neutral autonomous context protocol and multi-agent engineering workflow. Projects define shared architectural invariants, task lifecycles, and verification gates once, while Auterix compiles, verifies, and locks them natively across **21 modern AI coding assistants and platforms** — including Cursor, Claude Code, Google Antigravity, Windsurf, GitHub Copilot, Devin, Aider, OpenHands, Cline, Roo Code, CodeRabbit, Zed, Trae, and more.
 
-> **Live Web Studio:** Configure, auto-detect your stack, and export unified AI configs visually at **[auterix.vercel.app](https://auterix.vercel.app)**.
-> **Commercial Pro Suite:** Production stacks, runnable templates, pre-commit AI guardrails, and automated CI PR bots available at **[Gumroad ($14)](https://tenantdefense.gumroad.com/l/auterix)**.
+> 📖 **[Explore the Documentation Hub (docs/)](docs/README.md)** | **[60-Second Quickstart](docs/quickstart.md)** | **[Free vs. Pro vs. Agency Guide](docs/free-vs-pro.md)**  
+> ⚡ **Live Web Studio:** Configure, auto-detect your stack, and export unified AI configs visually at **[auterix.vercel.app](https://auterix.vercel.app)**.  
+> 📦 **Commercial Pro Suite:** Production stacks, runnable templates, pre-commit AI guardrails, and automated CI PR bots available at **[Gumroad (`$14`)](https://tenantdefense.gumroad.com/l/auterix)**.
 
 ---
 
@@ -19,57 +20,76 @@ Auterix is a deterministic, tool-neutral autonomous context protocol and multi-a
 
 | Challenge with Raw Prompts / Rules | How Auterix Solves It |
 | :--- | :--- |
-| **Tool Fragmentation:** Maintaining separate `.cursorrules`, `CLAUDE.md`, and `.agents/` leads to out-of-sync rules. | **Single Canonical Source:** Auterix synchronizes all 8 client adapters with zero drift. |
+| **Tool Fragmentation:** Maintaining separate `.cursorrules`, `CLAUDE.md`, and `.agents/` leads to out-of-sync rules. | **Single Canonical Source:** Auterix synchronizes all 21 client adapters with zero drift. |
 | **Silent Regressions:** AI claims "task done" without running tests or verifying constraints. | **Deterministic Verification:** Staged writer guards, content-addressed hash locks, and pre-commit checks. |
 | **Context Window Rot:** Massive prompt files cause LLM attention degradation and blow token budgets. | **Progressive Disclosure:** Hierarchical 3-tiered context loading (Core Invariants ➔ Stack Blueprints ➔ Task Contracts). |
 | **Lost Chat State:** Switching between Cursor (inline) and Claude/Antigravity (deep refactoring) resets progress. | **Cross-Agent Task Contracts:** Formal `.ai/tasks/` state machine preserves active progress across all tools. |
 
 ---
 
-## Supported AI Client Adapters
+## Supported AI Tools & Platforms (21 Total)
 
-| AI Assistant / Client | Entrypoint Managed by Auterix | Native Structure | Discovery Contract |
-| :--- | :--- | :--- | :--- |
-| **Cursor** | `.cursor/rules/workflow.mdc` | `.cursor/rules/*.mdc`, `.cursor/commands/` | Always-applied MDC discovery rule |
-| **Claude Code** | `CLAUDE.md` | `.claude/commands/`, `.claude/skills/`, `.claudeignore` | Root memory and verification commands |
-| **Google Antigravity** | `.agents/rules/workflow.md` | `.agents/rules/`, `.agents/skills/`, `.agents/agents/` | Workspace rule with bounded tool actions |
-| **GitHub Copilot** | `.github/copilot-instructions.md` | `.github/prompts/` | Repository-level custom instructions |
-| **OpenAI Codex** | `AGENTS.md` | `.ai/tasks/`, `.ai/commands/` | Canonical agent instruction standard |
-| **Windsurf / Codeium** | `.windsurfrules` | `.windsurf/workflows/` | Global Cascade rules and workflows |
-| **Cline / Roo Code** | `.clinerules` | Mode-specific rules (Plan, Act, Review) | Root agentic persona contract |
-| **Augment Code** | `.augment/rules/workflow.md` | Context guidelines | Workspace developer assistant rule |
+Auterix provides native discovery and rules for:
+* **Native AI IDEs:** Cursor (`.cursor/`), Windsurf (`.windsurfrules`), Trae (`.trae/`), Zed (`.zed/`)
+* **Autonomous Terminal Agents:** Claude Code (`CLAUDE.md`), Google Antigravity (`.agents/`), Aider (`CONVENTIONS.md`), OpenHands (`.openhands_instructions`), Devin (`DEVIATION.md`), OpenAI Codex (`AGENTS.md`)
+* **Agent Extensions & Modes:** GitHub Copilot (`.github/copilot-instructions.md`), Cline (`.clinerules`), Roo Code / Kilo Code (`.roomodes`), Continue.dev (`.continue/`), Augment Code, Tabnine
+* **AI PR Review & CI Bots:** CodeRabbit (`.coderabbit.yaml`)
+* **Generative App Builders:** v0 by Vercel, Bolt.new, Lovable.dev, Replit Agent
 
-*See [tool support](docs/tool-support.md) for adapter setup and verification status.*
+*Read the [21 AI Tools Playbook](docs/ai-tools-playbook.md) for full setup runbooks.*
 
 ---
 
-## Quickstart & Adoption
+## Quickstart
 
-Requires **Node.js 22** or later. No package installation, credentials, or network access is required by the core CLI.
-
-### Option A: Interactive Visual Studio (Fastest)
-Open the **[Auterix Web Studio](studio/)** (`auterix.vercel.app`), select your AI clients, drop your `package.json` to auto-detect your stack, and click **"Download Config Bundle"**.
-
-### Option B: Terminal CLI Adoption
-Inspect your repository, plan the adoption, and apply the content-hash lock:
-
+### Option A: Interactive CLI Wizard (Fastest)
+Run directly inside any new or existing repository:
 ```sh
-# 1. Inspect repository conventions and commands
-node bin/workflow.mjs inspect --root /absolute/path/to/project
+npx auterix@latest
+```
+Launches an interactive ANSI wizard to pick your tools, select your production stack, and install pre-commit security hooks.
 
-# 2. Generate preview adoption plan
-node bin/workflow.mjs plan --root /absolute/path/to/project --out /absolute/path/to/install-plan.json
-
-# 3. Apply adoption and verify hash lock
-node bin/workflow.mjs apply --root /absolute/path/to/project --plan /absolute/path/to/install-plan.json
-node bin/workflow.mjs check --root /absolute/path/to/project
+Verify rule integrity at any time:
+```sh
+npx auterix check
 ```
 
-*Select specific adapters with `--adapters cursor,claude` or manual-only with `--adapters none`. Review the [initialization runbook](docs/initialization.md).*
+### Option B: Visual Web Studio (In-Browser)
+Open the **[Auterix Web Studio](https://auterix.vercel.app)**, select your AI clients, drop your `package.json` to auto-detect your stack, and click **"Download Multi-Tool Bundle (.zip)"**. Extract into your project root.
 
-From the adopted repository alone:
+### Option C: VS Code & Cursor Extension
+Install the official **Auterix** extension from [`extensions/vscode/`](extensions/vscode/) for live status bar telemetry (`$(shield) Auterix: 21 Tools Synced`), real-time drift alerts, and 1-click adapter re-sync.
+
+---
+
+## 🧠 Cross-Agent Shared Memory (`.ai/memory.md`)
+
+Log repository decisions, conventions, and discarded anti-patterns so Cursor, Claude, Antigravity, and Windsurf never hallucinate obsolete patterns:
+
 ```sh
-node .ai/tools/check.mjs --root .
+npx auterix memory --category architecture --note "We use Drizzle ORM + pgvector for RAG"
+npx auterix memory --category anti-patterns --note "Do not use client-side Supabase service role keys"
+```
+
+---
+
+## 🗄️ Database Schema Extractor (`npx auterix extract-schema`)
+
+Extract token-compact Markdown schemas from Drizzle ORM, Prisma, or SQL DDL for zero-hallucination query generation:
+
+```sh
+npx auterix extract-schema --file blueprints/database/drizzle.schema.ts
+```
+
+---
+
+## 🤖 Official GitHub Action (`action.yml`)
+
+Add turnkey AI rule compliance audits to your PRs at **`$0.00` cost**:
+
+```yaml
+- name: Auterix AI Workflow Audit
+  uses: SapanMozammel/auterix@main
 ```
 
 ---

@@ -1,0 +1,57 @@
+name: 'Auterix AI Workflow Compliance'
+description: 'Verify multi-agent context rules, SHA-256 lock integrity, and prevent architectural drift in pull requests.'
+author: 'Sapan Mozammel'
+
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  root:
+    description: 'Working root directory of the project to verify.'
+    required: false
+    default: '.'
+  fail-on-drift:
+    description: 'Whether to fail the CI job if rule drift is detected.'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '>=20'
+
+    - name: Run Auterix Verification Check
+      id: auterix_check
+      shell: bash
+      run: |
+        echo "🛡️ Running Auterix Multi-Agent Architecture Verification..."
+        CHECK_OUTPUT=$(node "${{ github.action_path }}/bin/workflow.mjs" check --root "${{ inputs.root }}" 2>&1) || CHECK_STATUS=$?
+        CHECK_STATUS=${CHECK_STATUS:-0}
+
+        echo "check_status=$CHECK_STATUS" >> $GITHUB_OUTPUT
+
+        # Format Step Summary
+        echo "## 🛡️ Auterix Architectural Compliance Audit" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        if [ "$CHECK_STATUS" -eq 0 ]; then
+          echo "### ✅ Status: VERIFIED & INTACT" >> $GITHUB_STEP_SUMMARY
+          echo "All 21 AI coding agent adapters match cryptographic SHA-256 content hashes. Zero architectural drift detected." >> $GITHUB_STEP_SUMMARY
+        else
+          echo "### ❌ Status: ARCHITECTURAL DRIFT DETECTED" >> $GITHUB_STEP_SUMMARY
+          echo "One or more managed AI rules or context manifests have been modified without updating the lockfile." >> $GITHUB_STEP_SUMMARY
+          echo "Run \`npx auterix apply\` locally to re-synchronize adapter rules." >> $GITHUB_STEP_SUMMARY
+        fi
+
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+        echo "$CHECK_OUTPUT" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+        if [ "${{ inputs.fail-on-drift }}" = "true" ] && [ "$CHECK_STATUS" -ne 0 ]; then
+          exit "$CHECK_STATUS"
+        fi

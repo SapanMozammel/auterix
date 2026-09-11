@@ -1,10 +1,20 @@
 {
   "name": "auterix",
   "version": "1.2.0",
-  "private": true,
   "license": "MIT",
-  "description": "One workflow. 8 native AI tools. Universal agent standard.",
+  "description": "One workflow across 21 native AI tools. Universal agent standard.",
   "type": "module",
+  "bin": {
+    "auterix": "./bin/workflow.mjs"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "baseline",
+    "action.yml",
+    "LICENSE",
+    "README.md"
+  ],
   "engines": {
     "node": ">=22"
   },

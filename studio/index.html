@@ -7,20 +7,20 @@
   <!-- Primary Meta Tags -->
   <title>Auterix — Autonomous AI Context Engine &amp; Multi-Agent Workflow Standard</title>
   <meta name="title" content="Auterix — Autonomous AI Context Engine &amp; Multi-Agent Workflow Standard">
-  <meta name="description" content="One workflow. 8 native AI tools. Universal agent standard. Enforce deterministic architectural rules, SHA-256 locks, and auto-detecting adapters across Cursor, Claude Code, Copilot, Windsurf &amp; more.">
+  <meta name="description" content="One workflow. 21 native AI tools. Universal agent standard. Enforce deterministic architectural rules, SHA-256 locks, and auto-detecting adapters across Cursor, Claude Code, Copilot, Windsurf &amp; more.">
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://auterix.vercel.app/">
   <meta property="og:title" content="Auterix — Autonomous AI Context Engine &amp; Multi-Agent Workflow Standard">
-  <meta property="og:description" content="One workflow across 8 native AI tools. Eliminate hallucinations, leaked secrets, and broken auth with deterministic AI rule compiler and CI PR audit bots.">
+  <meta property="og:description" content="One workflow across 21 native AI tools. Eliminate hallucinations, leaked secrets, and broken auth with deterministic AI rule compiler and CI PR audit bots.">
   <meta property="og:image" content="https://auterix.vercel.app/assets/og-image.jpg">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://auterix.vercel.app/">
   <meta property="twitter:title" content="Auterix — Autonomous AI Context Engine &amp; Multi-Agent Workflow Standard">
-  <meta property="twitter:description" content="One workflow across 8 native AI tools. Stop AI hallucinations with deterministic context compiler, SHA-256 rule locks, and auto-detecting adapters.">
+  <meta property="twitter:description" content="One workflow across 21 native AI tools. Stop AI hallucinations with deterministic context compiler, SHA-256 rule locks, and auto-detecting adapters.">
   <meta property="twitter:image" content="https://auterix.vercel.app/assets/og-image.jpg">
 
   <!-- Favicon -->
@@ -49,7 +49,7 @@
       "price": "0.00",
       "priceCurrency": "USD"
     },
-    "description": "Deterministic context compiler, SHA-256 rule locks, and auto-detecting adapters for 8 major AI coding assistants."
+    "description": "Deterministic context compiler, SHA-256 rule locks, and auto-detecting adapters for 21 major AI coding assistants."
   }
   </script>
 </head>
@@ -87,11 +87,12 @@
         <a href="#architecture" class="nav-link">Architecture</a>
         <a href="#how-to-use" class="nav-link">Starter Prompts</a>
         <a href="#pricing" class="nav-link">Access Tiers</a>
+        <a href="https://github.com/SapanMozammel/auterix/tree/main/docs" target="_blank" rel="noopener" class="nav-link">Docs ↗</a>
         <a href="#faq" class="nav-link">FAQ</a>
       </nav>
 
       <div class="nav-actions">
-        <button type="button" id="btn-open-unlock-modal" class="btn-unlock-pro-nav">
+        <button type="button" id="btn-open-unlock-modal-nav" class="btn-unlock-pro-nav btn-trigger-unlock-modal" aria-label="Load Pro Deliverable ZIP package">
           <span class="unlock-icon">📦</span>
           <span>Load Pro ZIP</span>
         </button>
@@ -123,7 +124,7 @@
 
       <p class="hero-subtitle">
         Eliminate hallucinated imports, broken auth, and leaked API keys. Auterix compiles deterministic 
-        architectural rules, SHA-256 integrity locks, and auto-detecting adapters across all 8 leading AI coding assistants.
+        architectural rules, SHA-256 integrity locks, and auto-detecting adapters across 21 leading AI coding assistants.
       </p>
 
       <div class="hero-cta-group">
@@ -144,19 +145,24 @@
       <!-- Quick-Run Shell Box -->
       <div class="hero-terminal-shell">
         <div class="shell-header">
-          <div class="shell-dots">
-            <span class="shell-dot red"></span>
-            <span class="shell-dot yellow"></span>
-            <span class="shell-dot green"></span>
+          <div class="shell-header-left">
+            <div class="shell-dots">
+              <span class="shell-dot red"></span>
+              <span class="shell-dot yellow"></span>
+              <span class="shell-dot green"></span>
+            </div>
+            <span class="shell-title">terminal &mdash; npx auterix@latest</span>
           </div>
-          <span class="shell-title">bash &mdash; autonomous-adopt</span>
+          <span class="shell-badge">100% Free &bull; Zero Config</span>
         </div>
         <div class="shell-body">
           <div class="shell-command-line">
-            <span class="shell-prompt">&gt;</span>
-            <code class="shell-code">npx auterix@latest --adopt</code>
-            <button type="button" class="shell-copy-btn" id="btn-copy-cli" title="Copy CLI Command">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <div class="shell-command-content">
+              <span class="shell-prompt">$</span>
+              <code class="shell-code" id="hero-cmd-text">npx auterix@latest init --adapters cursor,claude,antigravity --profile nextjs-supabase</code>
+            </div>
+            <button type="button" class="shell-copy-btn" id="btn-copy-hero-cmd" title="Copy command">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
               </svg>
@@ -165,7 +171,7 @@
           </div>
           <div class="shell-output-line">
             <span class="output-check">✔</span>
-            <span class="output-text">Detected stack &bull; Synchronized 8 AI agent adapters &bull; SHA-256 hash locked</span>
+            <span class="output-text">Detected stack &bull; Synchronized <strong>21 AI tools</strong> &bull; SHA-256 hash locked</span>
           </div>
         </div>
       </div>
@@ -175,8 +181,8 @@
         <div class="telemetry-item">
           <span class="telemetry-icon cyan">⚡</span>
           <div class="telemetry-info">
-            <strong>8 AI Tools Synchronized</strong>
-            <span>Cursor, Claude, Copilot, Windsurf + 4 more</span>
+            <strong>21 AI Tools Synchronized</strong>
+            <span>Cursor, Claude, Antigravity, Windsurf, Devin, Aider + 15 more</span>
           </div>
         </div>
         <div class="telemetry-item">
@@ -353,7 +359,7 @@
             </div>
           </div>
           <p class="pathway-desc">
-            Non-invasive 30-second drop-in. Zero rewrites to your current code. Auterix parses your existing stack and generates native rule files across all 8 tools.
+            Non-invasive 30-second drop-in. Zero rewrites to your current code. Auterix parses your existing stack and generates native rule files across all 21 tools.
           </p>
           <div class="pathway-steps">
             <div class="p-step">
@@ -462,7 +468,7 @@
       </div>
       <h2 class="section-title text-center">Auterix Studio &bull; Autonomous Context Engine</h2>
       <p class="section-subtitle text-center">
-        Configure your architectural rules once. Auterix compiles, verifies, and exports them across all 8 tools with 0ms in-browser latency.
+        Configure your architectural rules once. Auterix compiles, verifies, and exports them across all 21 tools with 0ms in-browser latency.
       </p>
 
       <!-- Sleek AI Studio Cockpit Window Frame -->
@@ -483,7 +489,7 @@
           </div>
 
           <div class="window-actions">
-            <button type="button" id="btn-open-unlock-modal" class="btn-unlock-pro">
+            <button type="button" id="btn-open-unlock-modal-body" class="btn-unlock-pro btn-trigger-unlock-modal" aria-label="Load Pro Deliverable ZIP package">
               <span class="icon">📦</span>
               <span>Already Purchased? Load Pro ZIP</span>
             </button>
@@ -555,10 +561,10 @@
 
                 <!-- Hidden select element for programmatic updates -->
                 <select id="stack-select" class="hidden-select" aria-label="Architecture Stack">
-                  <option value="nextjs" selected>Next.js 15 App Router + Supabase RLS</option>
-                  <option value="fastapi">FastAPI + Async SQLAlchemy + Pydantic v2</option>
-                  <option value="node-clean">Enterprise Node.js + Clean Architecture</option>
-                  <option value="react-native">React Native + Expo + Zustand</option>
+                  <option value="nextjs-supabase" selected>Next.js 15 App Router + Supabase RLS</option>
+                  <option value="fastapi-sqlalchemy">FastAPI + Async SQLAlchemy + Pydantic v2</option>
+                  <option value="enterprise-node">Enterprise Node.js + Clean Architecture</option>
+                  <option value="react-native-expo">React Native + Expo + Zustand</option>
                   <option value="ai-pipeline">AI Agent Engineering + Eval Pipeline</option>
                 </select>
               </div>
@@ -568,12 +574,12 @@
             <div class="pane-step-block">
               <div class="step-header">
                 <span class="step-badge">STEP 2</span>
-                <h3>Target AI Coding Agents (8 Synced)</h3>
+                <h3>Target AI Coding Agents (21 Universal AI Tools)</h3>
               </div>
               <p class="step-desc">Select which coding tools to synchronize simultaneously:</p>
 
               <div class="adapters-grid-container" id="adapters-container">
-                <!-- Dynamically populated by app.js with 8 tool adapter items -->
+                <!-- Dynamically populated by app.js with 21 tool adapter items -->
               </div>
             </div>
 
@@ -609,7 +615,7 @@
                   <span class="guard-custom-check"></span>
                   <span class="guard-info">
                     <strong>Token Compressor &amp; Deduplicated Memory</strong>
-                    <small>Optimizes prompt overhead across all 8 tools for &lt;2.4k token budget</small>
+                    <small>Optimizes prompt overhead across all 21 tools for &lt;2.4k token budget</small>
                   </span>
                 </label>
               </div>
@@ -1061,7 +1067,7 @@ export async function updateUserAction(rawData: unknown) {
           </div>
           <p class="plan-desc">Essential multi-agent context compiler for any existing codebase.</p>
           <ul class="plan-features">
-            <li><span>✔</span> <strong>All 8 AI tool adapters</strong> (Cursor, Claude, Copilot, etc.)</li>
+            <li><span>✔</span> <strong>All 21 AI tool adapters</strong> (Cursor, Claude, Antigravity, Devin, Aider, etc.)</li>
             <li><span>✔</span> <strong>Web Studio with Stack Auto-Detector</strong></li>
             <li><span>✔</span> <strong>Deterministic SHA-256 Hash Lock</strong></li>
             <li><span>✔</span> <strong>Full Node.js CLI Engine</strong> (<code>--adopt</code>, <code>--check</code>)</li>
@@ -1282,7 +1288,7 @@ export async function updateUserAction(rawData: unknown) {
             </div>
           </div>
           <p class="footer-mission-statement">
-            The open-source multi-agent workflow standard. Compiling deterministic architectural rules, type invariants, and SHA-256 integrity locks across all 8 major AI coding assistants.
+            The open-source multi-agent workflow standard. Compiling deterministic architectural rules, type invariants, and SHA-256 integrity locks across all 21 major AI coding assistants.
           </p>
           
           <div class="footer-telemetry-chip">
@@ -1359,12 +1365,12 @@ export async function updateUserAction(rawData: unknown) {
   <!-- =========================================================================
        IN-BROWSER PRO ZIP UNLOCK MODAL (ZERO SERVER LEAKS)
        ========================================================================= -->
-  <div class="modal-backdrop hidden" id="unlock-modal" style="display: none;">
+  <div class="modal-backdrop hidden" id="unlock-modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="unlock-modal-title">
     <div class="modal-window">
       <div class="modal-header">
         <div class="modal-title-group">
           <span class="modal-icon">📦</span>
-          <h3>Load Your Pro Deliverable ZIP</h3>
+          <h3 id="unlock-modal-title">Load Your Pro Deliverable ZIP</h3>
         </div>
         <button type="button" class="modal-close-btn" id="btn-close-modal" aria-label="Close modal">&times;</button>
       </div>
