@@ -1173,12 +1173,6 @@ export async function updateUserAction(rawData: unknown) {
           <p class="access-chart-subtitle">
             Compare capabilities across the Free Open-Source Protocol, Pro Developer Suite, and Agency &amp; Team licenses.
           </p>
-          <div class="access-chart-toggle-bar">
-            <button type="button" id="btn-toggle-access-chart" class="btn-toggle-matrix" aria-expanded="false">
-              <span class="matrix-toggle-icon">⚡</span>
-              <span class="matrix-toggle-text">Show Full 22-Feature Comparison Table &darr;</span>
-            </button>
-          </div>
         </div>
 
         <div class="access-chart-table-wrap collapsed">
@@ -1422,12 +1416,14 @@ export async function updateUserAction(rawData: unknown) {
               </tr>
             </tbody>
           </table>
+        </div>
 
-          <div class="matrix-collapse-bottom">
-            <button type="button" class="btn-collapse-matrix-bottom">
-              <span>↑ Collapse Detailed Matrix</span>
-            </button>
-          </div>
+        <!-- Matrix Expand/Collapse Action (Bottom of Table) -->
+        <div class="access-chart-toggle-bar">
+          <button type="button" id="btn-toggle-access-chart" class="btn-toggle-matrix" aria-expanded="false">
+            <span class="matrix-toggle-icon">⚡</span>
+            <span class="matrix-toggle-text">Show Full 22-Feature Comparison Table &darr;</span>
+          </button>
         </div>
       </div>
 

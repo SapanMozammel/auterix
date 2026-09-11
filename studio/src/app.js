@@ -2043,6 +2043,9 @@ function initMatrixToggle() {
     e.preventDefault();
     const isCollapsed = wrap.classList.contains("collapsed");
     setExpanded(isCollapsed);
+    if (!isCollapsed) {
+      document.getElementById("access-chart")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   });
 
   if (bottomBtn) {
