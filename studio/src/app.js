@@ -1098,8 +1098,6 @@ To unlock the production boilerplate templates (safe server actions, PostgreSQL 
 
 // 9d. Pro License & ZIP Unlocker
 function initProUnlocker() {
-  const btnOpen = document.getElementById("btn-open-unlock-modal");
-  const btnFromOverlay = document.getElementById("lock-have-zip-btn");
   const modal = document.getElementById("unlock-modal");
   const btnClose = document.getElementById("btn-close-modal");
   const dropzone = document.getElementById("pro-zip-dropzone");
@@ -1107,25 +1105,44 @@ function initProUnlocker() {
   const statusElem = document.getElementById("pro-unlock-status");
   const modeLabel = document.getElementById("studio-mode-label");
   const statusDot = document.getElementById("status-dot");
+  const btnOpen = document.getElementById("btn-open-unlock-modal");
 
   if (!modal) return;
 
   function openModal() {
+    modal.style.display = "flex";
     modal.classList.remove("hidden");
     if (statusElem) statusElem.classList.add("hidden");
   }
 
-  if (btnOpen) btnOpen.addEventListener("click", openModal);
-  if (btnFromOverlay) btnFromOverlay.addEventListener("click", openModal);
+  function closeModal() {
+    modal.style.display = "none";
+    modal.classList.add("hidden");
+  }
+
+  // Hook all buttons that open the modal
+  document.querySelectorAll("#btn-open-unlock-modal, .lock-have-zip-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      openModal();
+    });
+  });
 
   if (btnClose) {
-    btnClose.addEventListener("click", () => {
-      modal.classList.add("hidden");
+    btnClose.addEventListener("click", (e) => {
+      e.preventDefault();
+      closeModal();
     });
   }
 
   modal.addEventListener("click", (e) => {
-    if (e.target === modal) modal.classList.add("hidden");
+    if (e.target === modal) closeModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.style.display === "flex") {
+      closeModal();
+    }
   });
 
   if (dropzone && fileInput) {
@@ -1210,7 +1227,7 @@ function initProUnlocker() {
         compileAll();
 
         setTimeout(() => {
-          modal.classList.add("hidden");
+          closeModal();
         }, 1600);
       } else {
         statusElem.innerHTML = "❌ Unrecognized package. Please upload the official <code>Auterix-Pro-Production-Suite.zip</code>.";
