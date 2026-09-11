@@ -1,8 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" role="img" aria-label="Auterix">
   <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <path d="M 4.2 19.8 L 12 3.8 L 19.8 19.8" stroke-width="2.1"/>
-    <path d="M 8.2 16.5 L 12 9.5 L 15.8 16.5" stroke-width="1.8"/>
-    <path d="M 6.8 13.8 H 12" stroke-width="2.1"/>
-    <path d="M 12 13.8 H 17.2" stroke-width="2.1" stroke-dasharray="2.2 1.6"/>
+    <path d="M 12 2.5 L 4 21" stroke-width="2.1" stroke-linecap="round"/>
+    <path d="M 12 2.5 L 20 21" stroke-width="2.1" stroke-linecap="round"/>
+    <path d="M 7.2 13.8 H 12" stroke-width="2.1" stroke-linecap="round"/>
+    <path d="M 12 13.8 H 16.8" stroke-width="2.1" stroke-linecap="round" stroke-dasharray="2.6 2.1"/>
+    <path d="M 4 21 L 10.8 9.5" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M 20 21 L 13.2 9.5" stroke-width="1.8" stroke-linecap="round"/>
   </g>
 </svg>

@@ -1,31 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 48" width="240" height="48" fill="none" role="img" aria-label="Auterix">
-  <defs>
-    <linearGradient id="logoBg" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#0284c7"/>
-      <stop offset="45%" stop-color="#2563eb"/>
-      <stop offset="100%" stop-color="#4f46e5"/>
-    </linearGradient>
-  </defs>
-  <!-- Mark Container (36x36 at x=6, y=6) -->
-  <g transform="translate(6, 6)">
-    <rect width="36" height="36" rx="8.5" fill="url(#logoBg)"/>
-    <rect x="0.75" y="0.75" width="34.5" height="34.5" rx="7.75" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none"/>
-    <g transform="translate(6, 6) scale(1)" stroke-linecap="round" stroke-linejoin="round" fill="none">
-      <path d="M 4.2 19.8 L 12 3.8 L 19.8 19.8" stroke="#ffffff" stroke-width="2.1"/>
-      <path d="M 8.2 16.5 L 12 9.5 L 15.8 16.5" stroke="#ffffff" stroke-width="1.8"/>
-      <path d="M 6.8 13.8 H 12" stroke="#ffffff" stroke-width="2.1"/>
-      <path d="M 12 13.8 H 17.2" stroke="#38bdf8" stroke-width="2.1" stroke-dasharray="2.2 1.6"/>
-    </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="72" viewBox="0 0 320 72" fill="none" role="img" aria-label="Auterix">
+  <style>
+    .mark-blade { stroke: #38bdf8; }
+    .wordmark { fill: #ffffff; }
+    .badge-rect { fill: rgba(2, 132, 199, 0.12); stroke: rgba(56, 189, 248, 0.35); }
+    .badge-text { fill: #38bdf8; }
+    .subline { fill: #64748b; }
+  </style>
+  <!-- Scaled Mark (1.6667x at x=16, y=16) -->
+  <g transform="translate(16, 16) scale(1.6667)" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path class="mark-blade" d="M 12 2.5 L 4 21" stroke-width="2.1" stroke-linecap="round"/>
+    <path class="mark-blade" d="M 12 2.5 L 20 21" stroke-width="2.1" stroke-linecap="round"/>
+    <path class="mark-blade" d="M 7.2 13.8 H 12" stroke-width="2.1" stroke-linecap="round"/>
+    <path class="mark-blade" d="M 12 13.8 H 16.8" stroke-width="2.1" stroke-linecap="round" stroke-dasharray="2.6 2.1"/>
+    <path class="mark-blade" d="M 4 21 L 10.8 9.5" stroke-width="1.8" stroke-linecap="round"/>
+    <path class="mark-blade" d="M 20 21 L 13.2 9.5" stroke-width="1.8" stroke-linecap="round"/>
   </g>
 
-  <!-- Typography Lockup -->
-  <!-- Wordmark "AUTERIX" -->
-  <text x="54" y="27" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="700" letter-spacing="-0.025em">AUTERIX</text>
-  
-  <!-- Micro-Pill "STANDARD" -->
-  <rect x="144" y="14" width="68" height="17" rx="8.5" fill="rgba(2, 132, 199, 0.12)" stroke="rgba(56, 189, 248, 0.3)" stroke-width="1"/>
-  <text x="178" y="26.5" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif" font-size="9.5" font-weight="700" letter-spacing="0.04em" text-anchor="middle">STANDARD</text>
+  <!-- Wordmark -->
+  <text class="wordmark" x="72" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="26" font-weight="600" letter-spacing="-0.02em">Auterix</text>
 
-  <!-- Subtitle Tagline -->
-  <text x="54" y="41" fill="#64748b" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="500" letter-spacing="-0.01em">Deterministic AI Context Engine</text>
+  <!-- Micro-Pill Tag -->
+  <rect class="badge-rect" x="180" y="21" width="76" height="20" rx="10" stroke-width="1"/>
+  <text class="badge-text" x="218" y="35" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="10" font-weight="700" letter-spacing="0.04em" text-anchor="middle">STANDARD</text>
+
+  <!-- Subline Tagline -->
+  <text class="subline" x="72" y="55" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="12" font-weight="500" letter-spacing="-0.01em">Deterministic AI Context Engine</text>
 </svg>
