@@ -1216,7 +1216,7 @@ function initProUnlocker() {
           statusDot.className = "status-dot pro";
         }
         if (btnOpen) {
-          btnOpen.innerHTML = "<span>🌟 Pro Unlocked (Active)</span>";
+          btnOpen.innerHTML = "<span>🌟 Pro Active (Unlocked)</span>";
           btnOpen.classList.add("unlocked");
         }
 
