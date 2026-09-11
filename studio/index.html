@@ -63,12 +63,13 @@
   </script>
 </head>
 <body>
+  <div class="ambient-glow"></div>
   <div class="app-container">
     <!-- Top Navigation -->
     <header class="top-nav">
       <div class="brand">
         <div class="brand-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M2 17L12 22L22 17" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M2 12L12 17L22 12" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -94,7 +95,7 @@
           <span>📦 Load Pro ZIP</span>
         </button>
         <a href="https://github.com/SapanMozammel/auterix" target="_blank" rel="noopener" class="nav-btn ghost">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
           </svg>
           <span>GitHub</span>
@@ -106,7 +107,7 @@
       </div>
     </header>
 
-    <!-- Hero Header -->
+    <!-- Hero Section -->
     <section class="hero-section">
       <div class="hero-badge">
         <span class="ping-dot"></span>
@@ -156,7 +157,7 @@
       </div>
     </section>
 
-    <!-- Interactive "Choose Your Journey" Navigator -->
+    <!-- Interactive "Choose Your Pathway" Navigator (3 Balanced Columns) -->
     <section class="pathway-section" id="how-it-works">
       <div class="pathway-container">
         <div class="pathway-header text-center">
@@ -223,7 +224,7 @@
           <div class="pathway-card agency-card">
             <div class="pathway-badge-row">
               <span class="pathway-badge agency">AGENCY & TEAMS</span>
-              <span class="pathway-time">Agency & Team Access ($39)</span>
+              <span class="pathway-time">Agency Access ($39)</span>
             </div>
             <h3>Building for Clients or Teams?</h3>
             <p class="pathway-desc">AI tools evolve constantly. Receive automated private GitHub repository invitations for continuous lifetime updates, CI compliance bots, and commercial client rights.</p>
@@ -250,233 +251,264 @@
       </div>
     </section>
 
-    <!-- Studio Main Workspace -->
-    
-    <!-- Studio Status Bar & Pro ZIP Loader -->
-    <div class="studio-status-bar" id="studio-status-bar">
-      <div class="status-left">
-        <span class="status-dot free" id="status-dot"></span>
-        <span id="studio-mode-label">Studio Mode: <strong>Community (Free)</strong></span>
+    <!-- =========================================================================
+         RE-ARCHITECTED STUDIO WORKSPACE (MODERN UNIFIED IDE WINDOW)
+         ========================================================================= -->
+    <section class="studio-section" id="studio">
+      <div class="studio-section-header text-center">
+        <div class="section-badge">INTERACTIVE CONFIGURATOR</div>
+        <h2 class="section-title">Auterix Studio &bull; Unified Context Engine</h2>
+        <p class="section-subtitle">Configure your architectural rules once. Auterix compiles, verifies, and exports them across all 8 tools instantly.</p>
       </div>
-      <div class="status-right">
-        <button type="button" id="btn-open-unlock-modal" class="btn-unlock-pro">
-          <span>📦 Already Purchased? Load Pro ZIP</span>
-        </button>
-      </div>
-    </div>
 
-    <main class="studio-grid" id="studio">
-      <!-- Left Column: Controls & Configuration -->
-      <section class="config-panel card">
-        <!-- Step 1: Stack & Auto-Detector -->
-        <div class="panel-header">
-          <div class="panel-step">Step 1</div>
-          <h2>Detect or Choose Your Stack</h2>
-        </div>
-        <p class="panel-desc">Drop your existing project manifest to auto-detect your libraries, or click a production blueprint:</p>
-        
-        <!-- Intelligent Stack Auto-Detector Dropzone & Paste Tab -->
-        <div class="auto-detector-wrapper">
-          <div class="detector-tab-header">
-            <span class="detector-title">Auto-Detect Stack (Existing Projects)</span>
-            <div class="detector-switch">
-              <button type="button" id="tab-btn-drop" class="tab-pill active">Drop File</button>
-              <button type="button" id="tab-btn-paste" class="tab-pill">Paste Text / JSON</button>
-            </div>
+      <!-- Unified Studio Window Frame -->
+      <div class="studio-window">
+        <!-- Window Titlebar -->
+        <div class="studio-window-titlebar">
+          <div class="window-controls">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="window-title-text">auterix-studio &mdash; unified-context.sh</span>
           </div>
 
-          <!-- Drop Mode -->
-          <div class="auto-detector-zone" id="drop-zone">
-            <div class="drop-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="17 8 12 3 7 8"/>
-                <line x1="12" y1="3" x2="12" y2="15"/>
-              </svg>
-            </div>
-            <div class="drop-text">
-              <strong>Drop Manifest File</strong>
-              <span>Drop <code>package.json</code>, <code>requirements.txt</code>, or click to browse</span>
-            </div>
-            <input type="file" id="file-input" accept=".json,.toml,.yaml,.yml,.txt" class="hidden-input">
+          <div class="window-center-mode" id="studio-status-bar">
+            <span class="status-dot free" id="status-dot"></span>
+            <span id="studio-mode-label">Mode: <strong>Community (Free)</strong></span>
           </div>
 
-          <!-- Paste Mode -->
-          <div class="auto-detector-paste hidden" id="paste-zone">
-            <textarea id="paste-input" class="paste-textarea" placeholder="Paste your package.json, requirements.txt, or list of dependencies here (e.g. next, supabase, react, typescript)..."></textarea>
-            <button type="button" id="btn-detect-paste" class="btn-detect-action">Analyze & Auto-Configure</button>
-          </div>
-
-          <div id="detect-badge" class="detect-result hidden"></div>
-          <div class="detector-free-note">
-            💡 <strong>100% Free:</strong> Auto-detection and AI context generation is free forever for your project. (If you load your Pro ZIP, it also customizes your production boilerplate).
-          </div>
-        </div>
-
-        <div class="stack-selector-box mt-6">
-          <div class="stack-label-row">
-            <label for="stack-select">Or Select Architecture Profile</label>
-            <span id="stack-badge-tag" class="stack-badge-tag pro">PRO BLUEPRINT</span>
-          </div>
-          <select id="stack-select" class="custom-select">
-            <option value="baseline">Standard Multi-Agent Baseline (Universal Free)</option>
-            <option value="nextjs-supabase" selected>Next.js 15 App Router + Supabase RLS + TypeScript (Pro)</option>
-            <option value="fastapi-sqlalchemy">FastAPI + Async SQLAlchemy 2.0 + Pydantic v2 (Pro)</option>
-            <option value="enterprise-node">Enterprise Node.js 22 + Fastify/Express + Clean Architecture (Pro)</option>
-            <option value="ai-agent-pipeline">AI & Autonomous Agent Engineering Pipeline (Pro)</option>
-          </select>
-        </div>
-
-        <!-- Step 2: AI Client Adapters -->
-        <div class="panel-header mt-8">
-          <div class="panel-step">Step 2</div>
-          <h2>Select AI Client Adapters</h2>
-        </div>
-        <p class="panel-desc">Choose which AI assistants your team uses. Auterix generates identical senior rules across all of them:</p>
-        
-        <div class="adapters-grid" id="adapters-container">
-          <!-- Populated dynamically by app.js -->
-        </div>
-
-        <!-- Step 3: Guardrails & Export -->
-        <div class="panel-header mt-8">
-          <div class="panel-step">Step 3</div>
-          <h2>Guardrails & 1-Click Export</h2>
-        </div>
-        <div class="guardrails-list">
-          <label class="checkbox-row">
-            <input type="checkbox" id="guard-strict-types" checked>
-            <div class="checkbox-text">
-              <strong>Strict Type Safety & Zero Any</strong>
-              <span>Forces AI to write explicit Zod/Pydantic schemas and forbids type coercions.</span>
-            </div>
-          </label>
-          <label class="checkbox-row">
-            <input type="checkbox" id="guard-security-rls" checked>
-            <div class="checkbox-text">
-              <strong>Security & Secret Leaks Protection</strong>
-              <span>Blocks exposing service role keys or sensitive variables to client-side bundles.</span>
-            </div>
-          </label>
-          <label class="checkbox-row">
-            <input type="checkbox" id="guard-token-saver" checked>
-            <div class="checkbox-text">
-              <strong>Progressive Token Disclosure</strong>
-              <span>Hierarchical rules preserve context window attention and reduce token costs.</span>
-            </div>
-          </label>
-        </div>
-
-        <!-- Export Actions -->
-        <div class="action-footer">
-          <button id="btn-copy-cli" class="btn-action secondary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-            </svg>
-            <span>Copy NPX Command</span>
-          </button>
-          <button id="btn-download-zip" class="btn-action primary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="7 10 12 15 17 10"/>
-              <line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-            <span>Download Config Bundle (.zip)</span>
-          </button>
-        </div>
-
-        <div class="export-guide-card">
-          <h4>🚀 How to Apply After Downloading:</h4>
-          <ol>
-            <li>Extract the <code>.zip</code> file directly into your project root folder.</li>
-            <li>Your AI tools (Cursor, Claude, Copilot, Antigravity) will auto-read their respective config files.</li>
-            <li>Start chatting — your AI will immediately follow senior engineering invariants!</li>
-          </ol>
-        </div>
-      </section>
-
-      <!-- Right Column: Live Context & Code Inspector -->
-      <section class="preview-panel card">
-        <div class="preview-mode-switch">
-          <button id="mode-rules" class="mode-tab-btn active">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-              <line x1="16" y1="13" x2="8" y2="13"/>
-              <line x1="16" y1="17" x2="8" y2="17"/>
-              <polyline points="10 9 9 9 8 9"/>
-            </svg>
-            <span>AI Rule Config (Free Core)</span>
-          </button>
-          <button id="mode-pro" class="mode-tab-btn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
-            <span>Pro Boilerplate & CI Bot (Private Repo 🔒)</span>
-          </button>
-        </div>
-
-        <div class="preview-header">
-          <div class="tabs-scroll" id="file-tabs">
-            <!-- Tabs injected dynamically -->
-          </div>
-          <button id="btn-copy-file" class="btn-small ghost" title="Copy Current File">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-            </svg>
-            <span>Copy</span>
-          </button>
-        </div>
-
-        <!-- Pro Stack Alert Banner -->
-        <div class="pro-stack-alert" id="pro-stack-alert">
-          <div class="pro-stack-alert-text">
-            <span class="pro-pill">PRO BLUEPRINT</span>
-            <span id="pro-alert-title">Previewing Next.js 15 App Router + Supabase RLS (Pro)</span>
-          </div>
-          <a href="#pro-section" class="pro-stack-cta-btn">
-            <span>Unlock Full Suite ($14)</span>
-            <span>&rarr;</span>
-          </a>
-        </div>
-
-        <div class="code-container" id="code-container">
-          <div class="file-destination-badge" id="file-destination">
-            Path: <code id="dest-path">.cursor/rules/workflow.mdc</code>
-          </div>
-          <pre class="code-block"><code id="code-content">// Generating unified AI instructions...</code></pre>
-
-          <!-- Locked Pro Overlay (Visible when viewing Pro Boilerplates) -->
-          <div class="pro-locked-overlay hidden" id="pro-locked-overlay">
-            <div class="lock-shield-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-            </div>
-            <div class="lock-headline">Included in Auterix Pro Private Repository</div>
-            <p class="lock-subtext">5 Complete runnable starter codebases, PostgreSQL RLS migrations, pre-commit AI hook, and GitHub Action PR audit bot.</p>
-            <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="lock-cta-btn">
-              <span>Get Instant Pro Access ($14) &rarr;</span>
-            </a>
-            <button type="button" class="lock-have-zip-btn">
-              Already purchased on Gumroad? Drop your ZIP here &rarr;
+          <div class="window-actions">
+            <button type="button" id="btn-open-unlock-modal" class="btn-unlock-pro">
+              <span>📦 Already Purchased? Load Pro ZIP</span>
             </button>
           </div>
         </div>
 
-        <div class="hash-security-footer">
-          <div class="hash-status">
-            <span class="status-indicator"></span>
-            <span>SHA-256 Hash Lock Active</span>
+        <!-- Studio Body Grid (Clean 2-Column Split: Controls vs Live Terminal) -->
+        <div class="studio-body-grid">
+          <!-- Left Column: Controls -->
+          <div class="studio-controls-pane">
+            <!-- Step 1: Detect or Choose Stack -->
+            <div class="pane-step-block">
+              <div class="step-header">
+                <span class="step-badge">STEP 1</span>
+                <h3>Stack & Auto-Detection</h3>
+              </div>
+              <p class="step-desc">Drop your existing project manifest, or select a production architecture profile:</p>
+
+              <!-- Auto-Detector Box -->
+              <div class="auto-detector-wrapper">
+                <div class="detector-tab-header">
+                  <span class="detector-title">Auto-Detect Stack (Existing Projects)</span>
+                  <div class="detector-switch">
+                    <button type="button" id="tab-btn-drop" class="tab-pill active">Drop File</button>
+                    <button type="button" id="tab-btn-paste" class="tab-pill">Paste Text / JSON</button>
+                  </div>
+                </div>
+
+                <!-- Drop Mode -->
+                <div class="auto-detector-zone" id="drop-zone">
+                  <div class="drop-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="17 8 12 3 7 8"/>
+                      <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                  </div>
+                  <div class="drop-text">
+                    <strong>Drop Manifest File</strong>
+                    <span>Drop <code>package.json</code>, <code>requirements.txt</code>, or click to browse</span>
+                  </div>
+                  <input type="file" id="file-input" accept=".json,.toml,.yaml,.yml,.txt" class="hidden-input">
+                </div>
+
+                <!-- Paste Mode -->
+                <div class="auto-detector-paste hidden" id="paste-zone">
+                  <textarea id="paste-input" class="paste-textarea" placeholder="Paste your package.json, requirements.txt, or list of dependencies here (e.g. next, supabase, react, typescript)..."></textarea>
+                  <button type="button" id="btn-detect-paste" class="btn-detect-action">Analyze & Auto-Configure</button>
+                </div>
+
+                <div id="detect-badge" class="detect-result hidden"></div>
+                <div class="detector-free-note">
+                  💡 <strong>100% Free:</strong> Auto-detection and AI context generation is free forever for your project. (If you load your Pro ZIP, it also customizes your production boilerplate).
+                </div>
+              </div>
+
+              <!-- Profile Dropdown -->
+              <div class="stack-selector-box mt-4">
+                <div class="stack-label-row">
+                  <label for="stack-select">Or Select Architecture Profile</label>
+                  <span id="stack-badge-tag" class="stack-badge-tag pro">PRO BLUEPRINT</span>
+                </div>
+                <select id="stack-select" class="custom-select">
+                  <option value="baseline">Standard Multi-Agent Baseline (Universal Free)</option>
+                  <option value="nextjs-supabase" selected>Next.js 15 App Router + Supabase RLS + TypeScript (Pro)</option>
+                  <option value="fastapi-sqlalchemy">FastAPI + Async SQLAlchemy 2.0 + Pydantic v2 (Pro)</option>
+                  <option value="enterprise-node">Enterprise Node.js 22 + Fastify/Express + Clean Architecture (Pro)</option>
+                  <option value="ai-agent-pipeline">AI & Autonomous Agent Engineering Pipeline (Pro)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Step 2: Choose AI Adapters -->
+            <div class="pane-step-block mt-6">
+              <div class="step-header">
+                <span class="step-badge">STEP 2</span>
+                <h3>Select AI Client Adapters</h3>
+              </div>
+              <p class="step-desc">Auterix maintains identical senior engineering rules across all your selected assistants:</p>
+
+              <div class="adapters-grid" id="adapters-container">
+                <!-- Injected dynamically by app.js -->
+              </div>
+            </div>
+
+            <!-- Step 3: Guardrails & Export Actions -->
+            <div class="pane-step-block mt-6">
+              <div class="step-header">
+                <span class="step-badge">STEP 3</span>
+                <h3>Guardrails & 1-Click Export</h3>
+              </div>
+
+              <div class="guardrails-list">
+                <label class="checkbox-row">
+                  <input type="checkbox" id="guard-strict-types" checked>
+                  <div class="checkbox-text">
+                    <strong>Strict Type Safety & Zero Any</strong>
+                    <span>Forces AI to write explicit Zod/Pydantic schemas and forbids type coercions.</span>
+                  </div>
+                </label>
+                <label class="checkbox-row">
+                  <input type="checkbox" id="guard-security-rls" checked>
+                  <div class="checkbox-text">
+                    <strong>Security & Secret Leaks Protection</strong>
+                    <span>Blocks exposing service role keys or sensitive variables to client-side bundles.</span>
+                  </div>
+                </label>
+                <label class="checkbox-row">
+                  <input type="checkbox" id="guard-token-saver" checked>
+                  <div class="checkbox-text">
+                    <strong>Progressive Token Disclosure</strong>
+                    <span>Hierarchical rules preserve context window attention and reduce token costs.</span>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Export Buttons -->
+              <div class="action-footer">
+                <button id="btn-copy-cli" class="btn-action secondary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                  </svg>
+                  <span>Copy NPX Command</span>
+                </button>
+                <button id="btn-download-zip" class="btn-action primary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  <span>Download Config Bundle (.zip)</span>
+                </button>
+              </div>
+
+              <!-- Clear 3-Step After-Download Guide -->
+              <div class="export-guide-card">
+                <h4>🚀 How to Apply After Downloading:</h4>
+                <ol>
+                  <li>Extract the <code>.zip</code> file directly into your project root folder.</li>
+                  <li>Your AI tools (Cursor, Claude, Copilot, Antigravity) will auto-read their respective config files.</li>
+                  <li>Start chatting — your AI will immediately follow senior engineering invariants!</li>
+                </ol>
+              </div>
+            </div>
           </div>
-          <div class="hash-info">Deterministic content-addressed adoption</div>
+
+          <!-- Right Column: Live Context & Code Terminal -->
+          <div class="studio-preview-pane">
+            <div class="preview-mode-switch">
+              <button id="mode-rules" class="mode-tab-btn active">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
+                </svg>
+                <span>AI Rule Config (Free Core)</span>
+              </button>
+              <button id="mode-pro" class="mode-tab-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <span>Pro Boilerplate & CI Bot (Private Repo 🔒)</span>
+              </button>
+            </div>
+
+            <div class="preview-header">
+              <div class="tabs-scroll" id="file-tabs">
+                <!-- Injected dynamically -->
+              </div>
+              <button id="btn-copy-file" class="btn-small ghost" title="Copy Current File">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                <span>Copy</span>
+              </button>
+            </div>
+
+            <!-- Pro Stack Alert Banner -->
+            <div class="pro-stack-alert" id="pro-stack-alert">
+              <div class="pro-stack-alert-text">
+                <span class="pro-pill">PRO BLUEPRINT</span>
+                <span id="pro-alert-title">Previewing Next.js 15 App Router + Supabase RLS (Pro)</span>
+              </div>
+              <a href="#pro-section" class="pro-stack-cta-btn">
+                <span>Unlock Full Suite ($14)</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
+
+            <!-- Code Container -->
+            <div class="code-container" id="code-container">
+              <div class="file-destination-badge" id="file-destination">
+                Path: <code id="dest-path">.cursor/rules/workflow.mdc</code>
+              </div>
+              <pre class="code-block"><code id="code-content">// Generating unified AI instructions...</code></pre>
+
+              <!-- Locked Pro Overlay -->
+              <div class="pro-locked-overlay hidden" id="pro-locked-overlay">
+                <div class="lock-shield-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                </div>
+                <div class="lock-headline">Included in Auterix Pro Private Repository</div>
+                <p class="lock-subtext">5 Complete runnable starter codebases, PostgreSQL RLS migrations, pre-commit AI hook, and GitHub Action PR audit bot.</p>
+                <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="lock-cta-btn">
+                  <span>Get Instant Pro Access ($14) &rarr;</span>
+                </a>
+                <button type="button" class="lock-have-zip-btn">
+                  Already purchased on Gumroad? Drop your ZIP here &rarr;
+                </button>
+              </div>
+            </div>
+
+            <div class="hash-security-footer">
+              <div class="hash-status">
+                <span class="status-indicator"></span>
+                <span>SHA-256 Hash Lock Active</span>
+              </div>
+              <div class="hash-info">Deterministic content-addressed adoption</div>
+            </div>
+          </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
 
     <!-- The Dual-Repository Architecture Section -->
     <section class="architecture-section" id="architecture">
@@ -783,7 +815,7 @@
         </div>
       </div>
 
-      <!-- Real Code Comparison: Without Auterix vs With Auterix -->
+      <!-- Real Code Comparison: Without Auterix vs With Auterix (macOS Terminal Style) -->
       <div class="comparison-showcase card mt-12">
         <div class="showcase-header text-center">
           <div class="section-badge">REAL-WORLD IMPACT</div>
@@ -794,8 +826,13 @@
           <!-- Left: Without Auterix (Red) -->
           <div class="diff-box bad">
             <div class="diff-title-bar">
+              <div class="mini-dots">
+                <span class="mini-dot red"></span>
+                <span class="mini-dot yellow"></span>
+                <span class="mini-dot green"></span>
+              </div>
               <span class="diff-badge bad">❌ Raw AI (Without Auterix)</span>
-              <span class="diff-sub">Vulnerable &bull; Client Leaks &bull; Junior Code</span>
+              <span class="diff-sub">Vulnerable &bull; Client Leaks</span>
             </div>
             <pre class="diff-code"><code>// Client Component ('use client')
 import { createClient } from '@supabase/supabase-js';
@@ -815,6 +852,11 @@ export default function UpdateUser() {
           <!-- Right: With Auterix (Green) -->
           <div class="diff-box good">
             <div class="diff-title-bar">
+              <div class="mini-dots">
+                <span class="mini-dot red"></span>
+                <span class="mini-dot yellow"></span>
+                <span class="mini-dot green"></span>
+              </div>
               <span class="diff-badge good">✅ With Auterix Protocol</span>
               <span class="diff-sub">Strict RSC &bull; Zod Validated &bull; Bank-Grade RLS</span>
             </div>
