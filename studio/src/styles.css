@@ -164,25 +164,27 @@ body.dark-theme {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
-  background: rgba(0, 242, 254, 0.05);
-  border: 1px solid rgba(0, 242, 254, 0.3);
-  box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
-  transition: all 0.2s ease;
+  background: linear-gradient(135deg, rgba(14, 20, 36, 0.95), rgba(20, 28, 50, 0.8));
+  border: 1px solid rgba(0, 242, 254, 0.35);
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: visible;
+  padding: 6px;
 }
 
 .brand-symbol:hover {
   border-color: var(--cyan);
-  box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
-  transform: scale(1.04);
+  box-shadow: 0 0 25px rgba(0, 242, 254, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px) scale(1.04);
 }
 
 .brand-symbol.small {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
+  padding: 5px;
 }
 
 .brand-logo-svg {
@@ -209,10 +211,10 @@ body.dark-theme {
 }
 
 .brand-name {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  background: linear-gradient(135deg, #fff 40%, var(--cyan) 100%);
+  letter-spacing: -0.015em;
+  background: linear-gradient(135deg, #ffffff 40%, var(--cyan) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
