@@ -126,7 +126,7 @@ body.dark-theme {
 .app-container {
   position: relative;
   z-index: 1;
-  max-width: 1320px;
+  max-width: 1420px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -164,11 +164,31 @@ body.dark-theme {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(138, 43, 226, 0.3));
-  border: 1px solid var(--cyan);
-  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(0, 242, 254, 0.05);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+  transition: all 0.2s ease;
+  overflow: visible;
+}
+
+.brand-symbol:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+  transform: scale(1.04);
+}
+
+.brand-symbol.small {
+  width: 30px;
+  height: 30px;
+}
+
+.brand-logo-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .symbol-core {
@@ -1093,25 +1113,29 @@ body.dark-theme {
 /* Studio 2-Column Split */
 .studio-body-grid {
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  min-height: 720px;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  min-height: 740px;
+  width: 100%;
+  overflow: hidden;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1150px) {
   .studio-body-grid {
     grid-template-columns: 1fr;
   }
 }
 
 .studio-controls-pane {
-  padding: 24px;
+  padding: 30px 28px;
   border-right: 1px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
   gap: 24px;
+  min-width: 0;
+  background: rgba(10, 15, 26, 0.4);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1150px) {
   .studio-controls-pane {
     border-right: none;
     border-bottom: 1px solid var(--border-subtle);
@@ -1363,20 +1387,23 @@ body.dark-theme {
 /* Multi-Agent Neural Matrix (Step 2) */
 .adapters-grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
 }
 
 .adapter-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  background: rgba(8, 12, 20, 0.6);
+  gap: 12px;
+  padding: 11px 14px;
+  background: rgba(12, 18, 30, 0.6);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  min-width: 0;
 }
 
 .adapter-item:hover {
@@ -1400,12 +1427,17 @@ body.dark-theme {
 .adapter-info {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .adapter-name {
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 700;
   color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .adapter-item.active .adapter-name {
@@ -1414,8 +1446,11 @@ body.dark-theme {
 
 .adapter-file {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 10.5px;
   color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Guardrails Box (Step 3) */
@@ -1466,8 +1501,11 @@ body.dark-theme {
 .studio-preview-pane {
   display: flex;
   flex-direction: column;
-  background: rgba(6, 10, 16, 0.9);
-  padding: 20px;
+  background: rgba(6, 10, 16, 0.95);
+  padding: 26px 24px;
+  min-width: 0;
+  overflow: hidden;
+  width: 100%;
 }
 
 .preview-mode-switch {
@@ -1503,9 +1541,11 @@ body.dark-theme {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   border-bottom: 1px solid var(--border-subtle);
-  margin-bottom: 12px;
-  padding-bottom: 6px;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  min-width: 0;
 }
 
 .tabs-scroll {
@@ -1513,7 +1553,10 @@ body.dark-theme {
   align-items: center;
   gap: 4px;
   overflow-x: auto;
-  max-width: 80%;
+  min-width: 0;
+  flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 }
 
 .tab-btn {
@@ -1600,41 +1643,58 @@ body.dark-theme {
 /* Code Container (Terminal View) */
 .code-container {
   position: relative;
-  background: #05080f;
+  background: #04070d;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 380px;
+  min-height: 420px;
+  min-width: 0;
   overflow: hidden;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .file-destination-badge {
-  padding: 8px 14px;
-  background: rgba(15, 23, 42, 0.7);
+  padding: 9px 16px;
+  background: rgba(15, 23, 42, 0.85);
   border-bottom: 1px solid var(--border-subtle);
   font-family: var(--font-mono);
   font-size: 11px;
   color: #64748b;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .file-destination-badge code {
   color: var(--cyan);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .code-block {
-  padding: 16px;
+  padding: 18px 20px;
   margin: 0;
-  overflow-y: auto;
+  overflow: auto;
   flex: 1;
   font-family: var(--font-mono);
   font-size: 12px;
-  line-height: 1.6;
+  line-height: 1.65;
   color: #e2e8f0;
+  max-width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 242, 254, 0.25) rgba(0, 0, 0, 0.3);
+}
+
+.code-block code {
+  font-family: inherit;
+  display: block;
+  min-width: max-content;
 }
 
 /* Pro Locked Overlay */
