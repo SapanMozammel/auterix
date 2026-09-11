@@ -1,16 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none">
-  <style>
-    path { stroke: #0284c7; }
-    @media (prefers-color-scheme: dark) {
-      path { stroke: #38bdf8; }
-    }
-  </style>
-  <g stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <path d="M 12 2.5 L 4 21" stroke-width="2.1" stroke-linecap="round"/>
-    <path d="M 12 2.5 L 20 21" stroke-width="2.1" stroke-linecap="round"/>
-    <path d="M 7.2 13.8 H 12" stroke-width="2.1" stroke-linecap="round"/>
-    <path d="M 12 13.8 H 16.8" stroke-width="2.1" stroke-linecap="round" stroke-dasharray="2.6 2.1"/>
-    <path d="M 4 21 L 10.8 9.5" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M 20 21 L 13.2 9.5" stroke-width="1.8" stroke-linecap="round"/>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="auterixFavBg" x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="50%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="8" fill="url(#auterixFavBg)"/>
+  <g transform="translate(4,4) scale(1)" fill="none" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 4.2 19.8 L 12 3.8 L 19.8 19.8"/>
+    <path d="M 8.2 16.5 L 12 9.5 L 15.8 16.5"/>
+    <path d="M 6.8 13.8 H 17.2" stroke-dasharray="2.4 1.8"/>
   </g>
 </svg>

@@ -160,8 +160,9 @@ body.dark-theme {
 }
 
 .brand-logo-img {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   display: block;
   flex-shrink: 0;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -172,8 +173,9 @@ body.dark-theme {
 }
 
 .brand-logo-img.small {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
+  border-radius: 6.5px;
 }
 
 .brand-logo-svg {

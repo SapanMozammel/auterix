@@ -1,28 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="320" height="72" viewBox="0 0 320 72" fill="none" role="img" aria-label="Auterix">
-  <style>
-    .mark-blade { stroke: #38bdf8; }
-    .wordmark { fill: #ffffff; }
-    .badge-rect { fill: rgba(2, 132, 199, 0.12); stroke: rgba(56, 189, 248, 0.35); }
-    .badge-text { fill: #38bdf8; }
-    .subline { fill: #64748b; }
-  </style>
-  <!-- Scaled Mark (1.6667x at x=16, y=16) -->
-  <g transform="translate(16, 16) scale(1.6667)" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <path class="mark-blade" d="M 12 2.5 L 4 21" stroke-width="2.1" stroke-linecap="round"/>
-    <path class="mark-blade" d="M 12 2.5 L 20 21" stroke-width="2.1" stroke-linecap="round"/>
-    <path class="mark-blade" d="M 7.2 13.8 H 12" stroke-width="2.1" stroke-linecap="round"/>
-    <path class="mark-blade" d="M 12 13.8 H 16.8" stroke-width="2.1" stroke-linecap="round" stroke-dasharray="2.6 2.1"/>
-    <path class="mark-blade" d="M 4 21 L 10.8 9.5" stroke-width="1.8" stroke-linecap="round"/>
-    <path class="mark-blade" d="M 20 21 L 13.2 9.5" stroke-width="1.8" stroke-linecap="round"/>
+<svg width="880" height="240" viewBox="0 0 880 240" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Auterix">
+  <defs>
+    <linearGradient id="auterixLockupBg" x1="24" y1="24" x2="216" y2="216" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="50%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+  <!-- Mark Container -->
+  <g transform="translate(24, 24)">
+    <rect width="192" height="192" rx="46" fill="url(#auterixLockupBg)"/>
+    <rect x="2" y="2" width="188" height="188" rx="44" stroke="rgba(255, 255, 255, 0.28)" stroke-width="2" fill="none"/>
+    <g transform="translate(48,48) scale(4)" fill="none" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 4.2 19.8 L 12 3.8 L 19.8 19.8"/>
+      <path d="M 8.2 16.5 L 12 9.5 L 15.8 16.5"/>
+      <path d="M 6.8 13.8 H 12"/>
+      <path d="M 12 13.8 H 17.2" stroke="#38bdf8" stroke-dasharray="2.2 1.6"/>
+    </g>
   </g>
-
+  
   <!-- Wordmark -->
-  <text class="wordmark" x="72" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="26" font-weight="600" letter-spacing="-0.02em">Auterix</text>
-
-  <!-- Micro-Pill Tag -->
-  <rect class="badge-rect" x="180" y="21" width="76" height="20" rx="10" stroke-width="1"/>
-  <text class="badge-text" x="218" y="35" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="10" font-weight="700" letter-spacing="0.04em" text-anchor="middle">STANDARD</text>
-
-  <!-- Subline Tagline -->
-  <text class="subline" x="72" y="55" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="12" font-weight="500" letter-spacing="-0.01em">Deterministic AI Context Engine</text>
+  <text x="248" y="148" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="112" font-weight="800" letter-spacing="-2.5" fill="#ffffff">Auterix</text>
+  
+  <!-- Subtitle Tagline -->
+  <text x="252" y="196" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="28" font-weight="500" letter-spacing="-0.5" fill="#64748b">Deterministic AI Context Engine</text>
 </svg>
