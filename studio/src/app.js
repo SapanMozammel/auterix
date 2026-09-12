@@ -962,7 +962,8 @@ function renderTabs() {
     Object.keys(state.proFiles).forEach(key => {
       const btn = document.createElement("button");
       btn.className = `tab-btn pro-tab ${state.activeTab === key ? "active" : ""}`;
-      btn.innerHTML = `🔒 ${key}`;
+      const icon = state.isProUnlocked ? "⚡" : "🔒";
+      btn.innerHTML = `${icon} ${key}`;
 
       btn.addEventListener("click", () => {
         state.activeTab = key;
@@ -1008,6 +1009,25 @@ function renderProAlert() {
     document.getElementById("pro-alert-title").textContent = state.isProUnlocked 
       ? `Active: ${profile.name} (Pro Unlocked)` 
       : `Previewing ${profile.name} (Pro)`;
+
+    const cta = alertContainer.querySelector(".pro-stack-cta-btn");
+    if (cta) {
+      if (state.isProUnlocked) {
+        cta.innerHTML = "<span>✓ Pro Active & Unlocked</span>";
+        cta.removeAttribute("href");
+        cta.style.pointerEvents = "none";
+        cta.style.background = "rgba(16, 185, 129, 0.15)";
+        cta.style.borderColor = "rgba(16, 185, 129, 0.4)";
+        cta.style.color = "#10b981";
+      } else {
+        cta.innerHTML = "<span>Unlock Full Suite ($14)</span><span>&rarr;</span>";
+        cta.setAttribute("href", "#pricing");
+        cta.style.pointerEvents = "auto";
+        cta.style.background = "";
+        cta.style.borderColor = "";
+        cta.style.color = "";
+      }
+    }
   } else {
     badgeTag.textContent = "FREE / COMMUNITY";
     badgeTag.className = "stack-badge-tag free";
@@ -1780,12 +1800,17 @@ Stack: ${profile.name} (${profile.isPro ? "Pro Blueprint" : "Community Baseline"
 ### 4. 🧪 Automated Test Generation
 "Write comprehensive unit and integration tests for [file/function]. Ensure edge case coverage and verify using our project test command."
 
-${profile.isPro ? `
+${!state.isProUnlocked && profile.isPro ? `
 ---
 ### 🚀 Want the Complete Production Boilerplate Repositories & CI Bots?
 This free bundle includes the universal adapter rules, commands, and skills.
 To unlock the production boilerplate templates (safe server actions, PostgreSQL RLS policies, async sessions, and automated GitHub PR compliance bot), get Auterix Pro (\`$14\`):
 👉 https://tenantdefense.gumroad.com/l/auterix
+` : ""}
+${state.isProUnlocked ? `
+---
+### 🌟 Auterix Pro Active
+Production blueprints, database migrations, and security guardrails are included in this download.
 ` : ""}
 `);
 
@@ -1922,13 +1947,14 @@ function initProUnlocker() {
       if (isProValid) {
         state.isProUnlocked = true;
         state.proZipInstance = zip;
+        state.viewMode = "pro";
         
         statusElem.innerHTML = "✅ <strong>Auterix Pro Verified!</strong> Full production blueprints and guardrails unlocked.";
         statusElem.className = "unlock-status success";
 
         // Update Status Bar
         if (modeLabel) {
-          modeLabel.innerHTML = 'Studio Mode: <strong style="color: #f59e0b;">🌟 Pro Suite Active</strong>';
+          modeLabel.innerHTML = 'Studio Mode: <strong style="color: #00f2fe;">🌟 Pro Suite Active (All Blueprints Unlocked)</strong>';
         }
         if (statusDot) {
           statusDot.className = "status-dot pro";
@@ -1936,6 +1962,25 @@ function initProUnlocker() {
         if (btnOpen) {
           btnOpen.innerHTML = "<span>🌟 Pro Active (Unlocked)</span>";
           btnOpen.classList.add("unlocked");
+        }
+
+        // Switch to Pro view mode buttons
+        const btnRules = document.getElementById("mode-rules");
+        const btnPro = document.getElementById("mode-pro");
+        if (btnRules && btnPro) {
+          btnRules.classList.remove("active");
+          btnPro.classList.add("active");
+          btnPro.innerHTML = "<span>🌟 Production Stacks & Blueprints (Active)</span>";
+        }
+
+        // Update download button
+        const downloadBtn = document.getElementById("btn-download-zip");
+        if (downloadBtn) {
+          downloadBtn.innerHTML = `
+            <span class="btn-icon">🌟</span>
+            <span>Download Complete Pro Bundle (.ZIP)</span>
+            <span class="btn-sub">Production Stacks & Blueprints Included</span>
+          `;
         }
 
         // Hide lock overlay in code container
@@ -1946,7 +1991,7 @@ function initProUnlocker() {
 
         setTimeout(() => {
           closeModal();
-        }, 1600);
+        }, 1200);
       } else {
         statusElem.innerHTML = "❌ Unrecognized package. Please upload the official <code>Auterix-Pro-Production-Suite.zip</code> or <a href='https://tenantdefense.gumroad.com/l/auterix' target='_blank' rel='noopener' style='color: #818cf8; text-decoration: underline; font-weight: 700;'>purchase Pro access here &rarr;</a>";
         statusElem.className = "unlock-status error";

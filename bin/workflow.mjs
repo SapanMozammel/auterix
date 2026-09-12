@@ -281,11 +281,14 @@ Commands:
   memory          Read or record to institutional cross-agent memory (.ai/memory.md)
   doctor          Run AI Safety & Readiness Scorecard (0-100% diagnostic)
   bundle          Compile canonical context bundle
+  unpack          Unpack a starter stack or blueprints from an Auterix Pro suite ZIP
 
 Options:
   --root <path>       Working directory (default: cwd)
   --adapters <list>   Comma-separated adapter IDs or 'none'
   --profile <name>    Architecture blueprint profile
+  --starter <name>    Production starter to extract (for unpack)
+  --blueprints        Extract enterprise blueprints and guardrails (for unpack)
   --file <path>       Schema file to extract (for extract-schema)
   --out <path>        Output destination file
   --category <cat>    Memory category (architecture|security|conventions|anti-patterns)
@@ -305,7 +308,7 @@ Options:
     args = rawArgs.slice(1);
   }
 
-  const booleanFlags = new Set(['--yes', '-y', '--pre-commit']);
+  const booleanFlags = new Set(['--yes', '-y', '--pre-commit', '--blueprints']);
   const valueFlags = new Set([
     '--root',
     '--out',
@@ -313,12 +316,14 @@ Options:
     '--bundle',
     '--adapters',
     '--profile',
+    '--starter',
     '--license',
     '--file',
     '--category',
     '--note',
   ]);
 
+  const positional = [];
   const options = {};
   for (let i = 0; i < args.length; i++) {
     const key = args[i];
@@ -331,6 +336,8 @@ Options:
       }
       options[key] = args[i + 1];
       i++;
+    } else if (!key.startsWith('--')) {
+      positional.push(key);
     } else {
       throw new Error(`Invalid option: ${key}`);
     }
@@ -424,6 +431,71 @@ Options:
         if (report.percentage < 100) process.exitCode = 1;
         break;
       }
+      case 'unpack': {
+        const zipFile = positional[0] || options['--bundle'] || options['--file'];
+        if (!zipFile) {
+          throw new Error('Please specify the path to your Pro Suite ZIP. Example: npx auterix unpack ./Auterix-Pro-Production-Suite.zip [--starter nextjs-supabase] [--out ./my-app]');
+        }
+        const resolvedZip = path.resolve(zipFile);
+        if (!fs.existsSync(resolvedZip)) {
+          throw new Error(`Cannot find ZIP archive at: ${resolvedZip}`);
+        }
+
+        const STARTER_MAP = {
+          'nextjs-supabase': '01-NextJS-15-Supabase-RLS',
+          'fastapi-sqlalchemy': '02-FastAPI-Async-SQLAlchemy',
+          'enterprise-node': '03-Enterprise-NodeJS-Clean-Architecture',
+          'react-native-expo': '04-ReactNative-Expo-Mobile',
+          'ai-agent-pipeline': '05-AI-Agent-Engineering-Pipeline',
+        };
+
+        const { execSync } = await import('node:child_process');
+
+        if (options['--blueprints']) {
+          const dest = path.resolve(options['--out'] || options['--root'] || process.cwd());
+          const tmpDir = path.join(dest, '.auterix-tmp-extract');
+          fs.mkdirSync(tmpDir, { recursive: true });
+          execSync(`unzip -q -o "${resolvedZip}" "Auterix-Pro-Production-Suite/blueprints/*" "Auterix-Pro-Production-Suite/06-Auterix-PreCommit-AI-Guardrail/*" "Auterix-Pro-Production-Suite/07-Auterix-PR-Compliance-GitHub-Action/*" -d "${tmpDir}"`);
+          const extractedRoot = path.join(tmpDir, 'Auterix-Pro-Production-Suite');
+          if (fs.existsSync(path.join(extractedRoot, 'blueprints'))) {
+            fs.cpSync(path.join(extractedRoot, 'blueprints'), path.join(dest, 'blueprints'), { recursive: true });
+          }
+          fs.rmSync(tmpDir, { recursive: true, force: true });
+          process.stdout.write(`\n\x1b[32m✔ Successfully extracted Auterix Pro blueprints & guardrails to ${dest}!\x1b[0m\n\n`);
+          result = { status: 'unpacked', type: 'blueprints', destination: dest };
+          break;
+        }
+
+        if (!options['--starter']) {
+          process.stdout.write(`\n\x1b[36mAuterix Pro Production Suite Archive Verified:\x1b[0m ${path.basename(resolvedZip)}\n\nAvailable Starters:\n  1. nextjs-supabase      (Next.js 15 App Router + Supabase PostgreSQL RLS)\n  2. fastapi-sqlalchemy   (Python FastAPI + Async SQLAlchemy 2.0 + JWT)\n  3. enterprise-node      (Node.js 22 + Fastify/Prisma Clean Architecture)\n  4. react-native-expo    (Expo 51+ React Native + SecureStore)\n  5. ai-agent-pipeline    (Agent Evaluation Harness + Structured Inference)\n\n\x1b[1mTo unpack a starter into a new project:\x1b[0m\n  npx auterix unpack "${zipFile}" --starter nextjs-supabase --out ./my-new-app\n\n\x1b[1mTo unpack enterprise blueprints into an existing project:\x1b[0m\n  npx auterix unpack "${zipFile}" --blueprints --out ./my-existing-app\n\n`);
+          result = { status: 'verified', availableStarters: Object.keys(STARTER_MAP) };
+          break;
+        }
+
+        const starterKey = options['--starter'].toLowerCase().trim();
+        const folderName = STARTER_MAP[starterKey];
+        if (!folderName) {
+          throw new Error(`Unknown starter: ${options['--starter']}. Choose from: ${Object.keys(STARTER_MAP).join(', ')}`);
+        }
+
+        const dest = path.resolve(options['--out'] || path.join(process.cwd(), starterKey));
+        fs.mkdirSync(dest, { recursive: true });
+        const tmpDir = path.join(dest, '.auterix-tmp-extract');
+        fs.mkdirSync(tmpDir, { recursive: true });
+        execSync(`unzip -q -o "${resolvedZip}" "Auterix-Pro-Production-Suite/${folderName}/*" -d "${tmpDir}"`);
+        const extractedStarter = path.join(tmpDir, 'Auterix-Pro-Production-Suite', folderName);
+        fs.cpSync(extractedStarter, dest, { recursive: true });
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+
+        // If .ai is not already in the starter, initialize it
+        if (!fs.existsSync(path.join(dest, '.ai'))) {
+          performInit(dest, options['--adapters'] || 'cursor,claude,copilot', starterKey, bundle, true);
+        }
+
+        process.stdout.write(`\n\x1b[32m✔ Successfully unpacked ${folderName} to ${dest}!\x1b[0m\n\x1b[32m✔ Pre-configured with 21 synchronized AI adapters, guardrails, and templates!\x1b[0m\n\nNext steps:\n  cd ${path.relative(process.cwd(), dest) || '.'}\n  npm install (or pip install)\n\n`);
+        result = { status: 'unpacked', starter: starterKey, destination: dest };
+        break;
+      }
       default:
         throw new Error(
           'Usage: node bin/workflow.mjs init|inspect|plan|update-plan|apply|check|eject-plan|extract-schema|memory --root /absolute/project [--adapters cursor,claude,...|none] [--profile nextjs-supabase] [--bundle /absolute/bundle.json] [--plan /absolute/plan.json] [--out /absolute/new.json]; or bundle --out /absolute/new.json',
@@ -431,7 +503,7 @@ Options:
     }
   }
 
-  if (options['--out']) writeNewJson(options['--out'], result);
+  if (command !== 'unpack' && options['--out']) writeNewJson(options['--out'], result);
   else if (result) process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
 } catch (error) {
   process.stderr.write(`workflow: ${error.message}\n`);
