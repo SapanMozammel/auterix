@@ -3062,27 +3062,26 @@ body.dark-theme {
 }
 
 /* ==========================================================================
-   FAQ SECTION (ANIMATED CSS GRID ACCORDION - SAPAN.DEV PATTERN)
+   FAQ SECTION (ANIMATED CSS GRID ACCORDION)
    ========================================================================== */
 .faq-section {
-  padding: 80px 0;
+  padding: 60px 0;
 }
 
 .faq-accordion-wrap {
-  max-width: 820px;
+  max-width: 800px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .faq-item {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg, 16px);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  position: relative;
-  transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .faq-item:hover {
@@ -3090,9 +3089,8 @@ body.dark-theme {
 }
 
 .faq-item.is-open {
-  border-color: rgba(0, 242, 254, 0.38);
-  background: rgba(15, 23, 42, 0.75);
-  box-shadow: 0 8px 32px rgba(0, 242, 254, 0.08), 0 2px 8px rgba(0, 242, 254, 0.04);
+  border-color: rgba(0, 242, 254, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 242, 254, 0.08);
 }
 
 .faq-question {
@@ -3100,17 +3098,21 @@ body.dark-theme {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 20px 24px;
-  background: transparent;
-  border: none;
+  padding: 18px 22px;
   font-family: inherit;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: #f1f5f9;
   cursor: pointer;
   text-align: left;
+  background: transparent;
+  border: none;
   gap: 16px;
-  transition: color 0.25s ease;
+  transition: color 0.2s ease;
+}
+
+.faq-question:hover {
+  color: #ffffff;
 }
 
 .faq-question:focus-visible {
@@ -3118,80 +3120,32 @@ body.dark-theme {
   outline-offset: -2px;
 }
 
-.faq-q-content {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+.faq-question-text {
   flex: 1;
   min-width: 0;
+  line-height: 1.5;
 }
 
-.faq-number {
-  font-size: 13px;
-  font-weight: 800;
-  font-family: var(--font-mono, monospace);
-  color: var(--cyan);
-  flex-shrink: 0;
-  min-width: 22px;
-  letter-spacing: 0.05em;
-  opacity: 0.95;
-}
-
-.faq-title {
-  color: #f1f5f9;
-  line-height: 1.45;
-  transition: color 0.25s ease;
-}
-
-.faq-item:hover .faq-title,
-.faq-item.is-open .faq-title {
-  color: #ffffff;
-}
-
-/* Plus/Minus Rotating Morph Chevron (adapted from sapan.dev) */
 .faq-chevron {
-  position: relative;
+  font-size: 20px;
+  font-weight: 400;
+  color: #64748b;
+  line-height: 1;
   display: inline-flex;
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
   align-items: center;
   justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
 }
 
-.faq-chevron::before,
-.faq-chevron::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 14px;
-  height: 2px;
-  background-color: var(--cyan);
-  border-radius: 9999px;
-  transform-origin: center;
-  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+.faq-item.is-open .faq-chevron {
+  transform: rotate(45deg);
+  color: var(--cyan);
 }
 
-/* Closed state: horizontal and vertical cross to form '+' */
-.faq-chevron::before {
-  transform: translate(-50%, -50%) rotate(-180deg);
-}
-
-.faq-chevron::after {
-  transform: translate(-50%, -50%) rotate(-90deg);
-}
-
-/* Open state: both rotate to 0deg to form '-' */
-.faq-item.is-open .faq-chevron::before {
-  transform: translate(-50%, -50%) rotate(0deg);
-}
-
-.faq-item.is-open .faq-chevron::after {
-  transform: translate(-50%, -50%) rotate(0deg);
-}
-
-/* Grid Height Transition (sapan.dev 0fr -> 1fr approach) */
+/* CSS Grid Animation (sapan.dev 0fr -> 1fr approach) */
 .faq-collapse {
   display: grid;
   grid-template-rows: 0fr;
@@ -3207,19 +3161,14 @@ body.dark-theme {
 }
 
 .faq-answer {
-  padding: 0 24px 22px 24px;
-  font-size: 13.5px;
+  padding: 0 22px 18px;
+  font-size: 13px;
   color: #94a3b8;
-  line-height: 1.65;
-}
-
-.faq-answer-inner {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding-top: 16px;
+  line-height: 1.6;
 }
 
 .faq-answer p {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .faq-answer p:last-child {
