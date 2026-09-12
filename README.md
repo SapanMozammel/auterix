@@ -6,6 +6,8 @@
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen)](package.json)
 [![Tests: 90 Passing](https://img.shields.io/badge/Tests-90%20Passing-emerald)](test/)
 [![npm version](https://img.shields.io/npm/v/auterix.svg?color=cb3837)](https://www.npmjs.com/package/auterix)
+[![Open VSX](https://img.shields.io/open-vsx/v/auterix/auterix-workflow.svg?color=purple)](https://open-vsx.org/extension/auterix/auterix-workflow)
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/auterix.auterix-workflow.svg?color=blue)](https://marketplace.visualstudio.com/items?itemName=auterix.auterix-workflow)
 [![Studio: Vercel](https://img.shields.io/badge/Web%20Studio-auterix.vercel.app-sky)](https://auterix.vercel.app)
 [![Get Auterix Pro](https://img.shields.io/badge/Pro%20Suite-%2414%20Instant%20Access-orange)](https://tenantdefense.gumroad.com/l/auterix)
 
