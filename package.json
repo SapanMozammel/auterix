@@ -5,7 +5,7 @@
   "description": "One workflow across 21 native AI tools. Universal agent standard.",
   "type": "module",
   "bin": {
-    "auterix": "./bin/workflow.mjs"
+    "auterix": "bin/workflow.mjs"
   },
   "files": [
     "bin",
