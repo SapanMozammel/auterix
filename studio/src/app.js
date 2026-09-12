@@ -904,6 +904,28 @@ function renderAdapters() {
     counter.textContent = `${state.activeAdapters.size}/${ADAPTERS.length}`;
   }
 
+  // Sync Top Popular Quick Tool Pills
+  const quickPills = document.querySelectorAll(".tool-quick-pill");
+  quickPills.forEach(pill => {
+    const toolId = pill.dataset.tool;
+    const isActive = state.activeAdapters.has(toolId);
+    pill.classList.toggle("active", isActive);
+    const checkSpan = pill.querySelector(".tool-quick-check");
+    if (checkSpan) {
+      checkSpan.textContent = isActive ? "✓" : "";
+    }
+  });
+
+  // Sync Adapters Drawer Label
+  const drawerLabel = document.getElementById("adapters-drawer-label");
+  const adaptersDrawer = document.getElementById("adapters-drawer");
+  if (drawerLabel && adaptersDrawer) {
+    const isCollapsed = adaptersDrawer.classList.contains("collapsed");
+    if (isCollapsed) {
+      drawerLabel.textContent = `+17 More AI Tools (${state.activeAdapters.size} Active)`;
+    }
+  }
+
   const query = (state.adapterSearchQuery || "").toLowerCase().trim();
   const filtered = query
     ? ADAPTERS.filter(a => a.name.toLowerCase().includes(query) || a.file.toLowerCase().includes(query) || a.id.toLowerCase().includes(query))
@@ -1119,18 +1141,52 @@ function initViewModeSwitch() {
 }
 
 function initGuardrails() {
-  document.getElementById("guard-strict-types").addEventListener("change", (e) => {
-    state.guardrails.strictTypes = e.target.checked;
-    compileAll();
-  });
-  document.getElementById("guard-security-rls").addEventListener("change", (e) => {
-    state.guardrails.securityRls = e.target.checked;
-    compileAll();
-  });
-  document.getElementById("guard-token-saver").addEventListener("change", (e) => {
-    state.guardrails.tokenSaver = e.target.checked;
-    compileAll();
-  });
+  const strictTypes = document.getElementById("guard-strict-types");
+  const securityRls = document.getElementById("guard-security-rls");
+  const tokenSaver = document.getElementById("guard-token-saver");
+  const counterPill = document.getElementById("guard-counter-pill");
+  const btnToggle = document.getElementById("btn-toggle-guardrails");
+  const guardBox = document.getElementById("guardrails-box");
+
+  function updateGuardCount() {
+    let count = 0;
+    if (state.guardrails.strictTypes) count++;
+    if (state.guardrails.securityRls) count++;
+    if (state.guardrails.tokenSaver) count++;
+    if (counterPill) counterPill.textContent = `${count} Active`;
+  }
+
+  if (btnToggle && guardBox) {
+    btnToggle.addEventListener("click", () => {
+      const isCollapsed = guardBox.classList.contains("collapsed");
+      guardBox.classList.toggle("collapsed", !isCollapsed);
+      btnToggle.classList.toggle("is-open", isCollapsed);
+      btnToggle.setAttribute("aria-expanded", isCollapsed ? "true" : "false");
+    });
+  }
+
+  if (strictTypes) {
+    strictTypes.addEventListener("change", (e) => {
+      state.guardrails.strictTypes = e.target.checked;
+      updateGuardCount();
+      compileAll();
+    });
+  }
+  if (securityRls) {
+    securityRls.addEventListener("change", (e) => {
+      state.guardrails.securityRls = e.target.checked;
+      updateGuardCount();
+      compileAll();
+    });
+  }
+  if (tokenSaver) {
+    tokenSaver.addEventListener("change", (e) => {
+      state.guardrails.tokenSaver = e.target.checked;
+      updateGuardCount();
+      compileAll();
+    });
+  }
+  updateGuardCount();
 }
 
 // 9. Enhanced Auto-Detector (Drop & Paste Parser)
@@ -1143,8 +1199,35 @@ function initAutoDetector() {
   const tabBtnDrop = document.getElementById("tab-btn-drop");
   const tabBtnPaste = document.getElementById("tab-btn-paste");
   const badge = document.getElementById("detect-badge");
+  const btnToggleManifest = document.getElementById("btn-toggle-manifest-drawer");
+  const manifestDrawer = document.getElementById("manifest-drawer");
 
   if (!dropZone) return;
+
+  // Progressive Disclosure: Toggle Manifest Drawer
+  if (btnToggleManifest && manifestDrawer) {
+    btnToggleManifest.addEventListener("click", () => {
+      const isCollapsed = manifestDrawer.classList.contains("collapsed");
+      manifestDrawer.classList.toggle("collapsed", !isCollapsed);
+      btnToggleManifest.classList.toggle("is-open", isCollapsed);
+      btnToggleManifest.setAttribute("aria-expanded", isCollapsed ? "true" : "false");
+    });
+  }
+
+  // Auto-expand drawer if user drags a file anywhere over Step 1 block
+  const frameworkBlock = document.getElementById("step-framework-block");
+  if (frameworkBlock && manifestDrawer) {
+    frameworkBlock.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      if (manifestDrawer.classList.contains("collapsed")) {
+        manifestDrawer.classList.remove("collapsed");
+        if (btnToggleManifest) {
+          btnToggleManifest.classList.add("is-open");
+          btnToggleManifest.setAttribute("aria-expanded", "true");
+        }
+      }
+    });
+  }
 
   // Toggle between Drop and Paste modes
   if (tabBtnDrop && tabBtnPaste && pasteZone) {
@@ -1463,7 +1546,8 @@ function initActions() {
   // Copy NPX Command
   const copyCmdBtns = document.querySelectorAll("#btn-copy-cli, #btn-copy-hero-cmd");
   copyCmdBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
       const heroCmdText = document.getElementById("hero-cmd-text");
       const cmd = heroCmdText
         ? heroCmdText.textContent.trim()
@@ -1472,9 +1556,37 @@ function initActions() {
         const orig = btn.innerHTML;
         btn.innerHTML = "<span>Copied!</span>";
         setTimeout(() => btn.innerHTML = orig, 1800);
+        const badge = document.getElementById("cli-copied-badge");
+        if (badge) {
+          badge.classList.remove("hidden");
+          setTimeout(() => badge.classList.add("hidden"), 2000);
+        }
       });
     });
   });
+
+  // CLI Quick Copy Card Click
+  const cliQuickCopy = document.getElementById("cli-quick-copy");
+  if (cliQuickCopy) {
+    cliQuickCopy.addEventListener("click", () => {
+      const heroCmdText = document.getElementById("hero-cmd-text");
+      const cmd = heroCmdText
+        ? heroCmdText.textContent.trim()
+        : `npx auterix@latest init --adapters ${Array.from(state.activeAdapters).join(",")} --profile ${state.selectedStack}`;
+      const showBadge = () => {
+        const badge = document.getElementById("cli-copied-badge");
+        if (badge) {
+          badge.classList.remove("hidden");
+          setTimeout(() => badge.classList.add("hidden"), 2000);
+        }
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(cmd).then(showBadge).catch(showBadge);
+      } else {
+        showBadge();
+      }
+    });
+  }
 
   // Download Comprehensive Multi-Tool Bundle (.zip)
   document.getElementById("btn-download-zip").addEventListener("click", async () => {
@@ -2011,6 +2123,33 @@ function initAdapterControls() {
   const btnNone = document.getElementById("btn-select-none");
   const searchInput = document.getElementById("adapter-search-input");
   const btnClearSearch = document.getElementById("btn-clear-search");
+  const btnToggleAdapters = document.getElementById("btn-toggle-adapters-drawer");
+  const adaptersDrawer = document.getElementById("adapters-drawer");
+
+  // Progressive Disclosure: Quick Popular Tool Pills
+  const quickPills = document.querySelectorAll(".tool-quick-pill");
+  quickPills.forEach((pill) => {
+    pill.addEventListener("click", () => {
+      const toolId = pill.dataset.tool;
+      if (toolId) toggleAdapter(toolId);
+    });
+  });
+
+  // Progressive Disclosure: Toggle Adapters Drawer
+  if (btnToggleAdapters && adaptersDrawer) {
+    btnToggleAdapters.addEventListener("click", () => {
+      const isCollapsed = adaptersDrawer.classList.contains("collapsed");
+      adaptersDrawer.classList.toggle("collapsed", !isCollapsed);
+      btnToggleAdapters.classList.toggle("is-open", isCollapsed);
+      btnToggleAdapters.setAttribute("aria-expanded", isCollapsed ? "true" : "false");
+      const label = document.getElementById("adapters-drawer-label");
+      if (label) {
+        label.textContent = isCollapsed
+          ? "Hide 21 Tools Matrix"
+          : `+17 More AI Tools (${state.activeAdapters.size} Active)`;
+      }
+    });
+  }
 
   if (btnAll) {
     btnAll.addEventListener("click", () => {

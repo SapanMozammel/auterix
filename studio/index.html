@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="src/styles.css?v=1.2.3">
+  <link rel="stylesheet" href="src/styles.css?v=1.3.0">
   
   <!-- JSZip for 100% Client-Side In-Memory ZIP Bundling & Unlock Verification -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -502,15 +502,34 @@
           <!-- LEFT COLUMN: Mission Control Steps -->
           <div class="studio-controls-pane">
             
-            <!-- Step 1: Intelligent Stack Scanner -->
-            <div class="pane-step-block">
+            <!-- Step 1: Framework Choice & Auto-Detect -->
+            <div class="pane-step-block" id="step-framework-block">
               <div class="step-header">
                 <span class="step-badge">STEP 1</span>
-                <h3>AI Stack Scanner &amp; Ingest</h3>
+                <h3>Framework Architecture</h3>
               </div>
-              <p class="step-desc">Drop your project manifest, paste dependencies, or pick a production stack:</p>
+              <p class="step-desc">Pick your stack, or drop your project manifest to auto-detect:</p>
 
-              <div class="auto-detector-wrapper">
+              <!-- Sleek Preset Framework Chips (Prominent First Choice) -->
+              <div class="preset-chips-wrap">
+                <div class="preset-chips-list">
+                  <button type="button" class="stack-chip active" data-stack="nextjs">⚡ Next.js 15</button>
+                  <button type="button" class="stack-chip" data-stack="fastapi">🐍 FastAPI</button>
+                  <button type="button" class="stack-chip" data-stack="node-clean">🟢 Node Fastify</button>
+                  <button type="button" class="stack-chip" data-stack="react-native">📱 Expo Mobile</button>
+                  <button type="button" class="stack-chip" data-stack="ai-pipeline">🤖 AI Pipeline</button>
+                </div>
+              </div>
+
+              <!-- Collapsible Auto-Detector Drawer Toggle -->
+              <button type="button" id="btn-toggle-manifest-drawer" class="drawer-toggle-btn" aria-expanded="false">
+                <span class="drawer-icon">📂</span>
+                <span class="drawer-text" id="manifest-drawer-label">Or drop package.json / requirements.txt to auto-detect</span>
+                <span class="drawer-arrow">▾</span>
+              </button>
+
+              <!-- Auto-Detector Scanner Drawer (Collapsed by default) -->
+              <div class="auto-detector-wrapper manifest-drawer collapsed" id="manifest-drawer">
                 <div class="scanner-scanline"></div>
                 
                 <!-- Modern Segmented Control Switch for Step 1 -->
@@ -528,7 +547,7 @@
                 <!-- Dropzone Box -->
                 <div class="drop-zone" id="drop-zone">
                   <div class="drop-icon-pulse">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="1.8">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="1.8">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                       <polyline points="17 8 12 3 7 8"/>
                       <line x1="12" y1="3" x2="12" y2="15"/>
@@ -546,34 +565,22 @@
                     <span>⚡ Analyze &amp; Detect Stack</span>
                   </button>
                 </div>
-
-                <!-- Live Detection Badge Tag -->
-                <div class="detection-status-row" id="detect-badge">
-                  <span class="detect-pulse-indicator"></span>
-                  <span class="detect-text" id="stack-badge-tag">Ready: Drop manifest or pick a blueprint below</span>
-                </div>
-
-                <!-- Sleek Preset Blueprints Row -->
-                <div class="preset-chips-wrap">
-                  <span class="preset-label">Quick Blueprint:</span>
-                  <div class="preset-chips-list">
-                    <button type="button" class="stack-chip active" data-stack="nextjs">Next.js 15</button>
-                    <button type="button" class="stack-chip" data-stack="fastapi">FastAPI</button>
-                    <button type="button" class="stack-chip" data-stack="node-clean">Node Fastify</button>
-                    <button type="button" class="stack-chip" data-stack="react-native">Expo Mobile</button>
-                    <button type="button" class="stack-chip" data-stack="ai-pipeline">AI Pipeline</button>
-                  </div>
-                </div>
-
-                <!-- Hidden select element for programmatic updates -->
-                <select id="stack-select" class="hidden-select" aria-label="Architecture Stack">
-                  <option value="nextjs-supabase" selected>Next.js 15 App Router + Supabase RLS</option>
-                  <option value="fastapi-sqlalchemy">FastAPI + Async SQLAlchemy + Pydantic v2</option>
-                  <option value="enterprise-node">Enterprise Node.js + Clean Architecture</option>
-                  <option value="react-native-expo">React Native + Expo + Zustand</option>
-                  <option value="ai-pipeline">AI Agent Engineering + Eval Pipeline</option>
-                </select>
               </div>
+
+              <!-- Live Detection Badge Tag -->
+              <div class="detection-status-row" id="detect-badge">
+                <span class="detect-pulse-indicator"></span>
+                <span class="detect-text" id="stack-badge-tag">Ready: Next.js 15 App Router + Supabase RLS</span>
+              </div>
+
+              <!-- Hidden select element for programmatic updates -->
+              <select id="stack-select" class="hidden-select" aria-label="Architecture Stack">
+                <option value="nextjs-supabase" selected>Next.js 15 App Router + Supabase RLS</option>
+                <option value="fastapi-sqlalchemy">FastAPI + Async SQLAlchemy + Pydantic v2</option>
+                <option value="enterprise-node">Enterprise Node.js + Clean Architecture</option>
+                <option value="react-native-expo">React Native + Expo + Zustand</option>
+                <option value="ai-pipeline">AI Agent Engineering + Eval Pipeline</option>
+              </select>
             </div>
 
             <!-- Step 2: Multi-Agent Neural Matrix -->
@@ -584,37 +591,79 @@
                   <h3>Target AI Tools</h3>
                   <span id="adapter-counter" class="adapter-counter-pill">21/21</span>
                 </div>
-                <div class="adapter-quick-actions">
-                  <button type="button" id="btn-select-all" class="btn-quick-filter" title="Select all 21 tools">All</button>
-                  <button type="button" id="btn-select-core" class="btn-quick-filter" title="Select core 6 tools">Core (6)</button>
-                  <button type="button" id="btn-select-none" class="btn-quick-filter" title="Clear selection">Clear</button>
-                </div>
+              </div>
+              <p class="step-desc">Select your tools (configs are synchronized automatically):</p>
+
+              <!-- Top Popular Tools Quick-Toggle Pills -->
+              <div class="popular-tools-row" id="popular-tools-row">
+                <button type="button" class="tool-quick-pill active" data-tool="cursor">
+                  <span class="tool-quick-check">✓</span>
+                  <span class="tool-quick-name">Cursor</span>
+                </button>
+                <button type="button" class="tool-quick-pill active" data-tool="claude">
+                  <span class="tool-quick-check">✓</span>
+                  <span class="tool-quick-name">Claude Code</span>
+                </button>
+                <button type="button" class="tool-quick-pill active" data-tool="copilot">
+                  <span class="tool-quick-check">✓</span>
+                  <span class="tool-quick-name">GitHub Copilot</span>
+                </button>
+                <button type="button" class="tool-quick-pill active" data-tool="windsurf">
+                  <span class="tool-quick-check">✓</span>
+                  <span class="tool-quick-name">Windsurf</span>
+                </button>
               </div>
 
-              <!-- Quick Search / Filter Bar -->
-              <div class="adapters-filter-bar">
-                <div class="filter-search-box">
-                  <span class="search-icon">🔍</span>
-                  <input type="text" id="adapter-search-input" placeholder="Filter 21 tools (Cursor, Claude, Copilot, Devin...)" class="adapter-search-field" autocomplete="off" spellcheck="false">
-                  <button type="button" id="btn-clear-search" class="btn-clear-search hidden" aria-label="Clear search">&times;</button>
-                </div>
-              </div>
+              <!-- Expander Button for remaining 17 tools -->
+              <button type="button" id="btn-toggle-adapters-drawer" class="drawer-toggle-btn" aria-expanded="false">
+                <span class="drawer-icon">⚡</span>
+                <span class="drawer-text" id="adapters-drawer-label">+17 More AI Tools (Antigravity, Devin, Aider...)</span>
+                <span class="drawer-arrow">▾</span>
+              </button>
 
-              <!-- Bounded High-Density Adapter Matrix (Scrollable max-height: 220px) -->
-              <div class="adapters-grid-container" id="adapters-container">
-                <!-- Dynamically populated by app.js with 21 tool adapter items -->
+              <!-- Collapsible 21-Tool Drawer (Collapsed by default) -->
+              <div class="adapters-drawer collapsed" id="adapters-drawer">
+                <div class="adapters-drawer-header">
+                  <!-- Quick Search / Filter Bar -->
+                  <div class="filter-search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="adapter-search-input" placeholder="Filter 21 tools (Cursor, Claude, Copilot, Devin...)" class="adapter-search-field" autocomplete="off" spellcheck="false">
+                    <button type="button" id="btn-clear-search" class="btn-clear-search hidden" aria-label="Clear search">&times;</button>
+                  </div>
+                  <div class="adapter-quick-actions">
+                    <button type="button" id="btn-select-all" class="btn-quick-filter" title="Select all 21 tools">All</button>
+                    <button type="button" id="btn-select-core" class="btn-quick-filter" title="Select core 6 tools">Core (6)</button>
+                    <button type="button" id="btn-select-none" class="btn-quick-filter" title="Clear selection">Clear</button>
+                  </div>
+                </div>
+
+                <!-- Bounded High-Density Adapter Matrix -->
+                <div class="adapters-grid-container" id="adapters-container">
+                  <!-- Dynamically populated by app.js with 21 tool adapter items -->
+                </div>
               </div>
             </div>
 
             <!-- Step 3: Cryptographic Guardrails & Invariants -->
-            <div class="pane-step-block">
-              <div class="step-header">
-                <span class="step-badge">STEP 3</span>
-                <h3>Cryptographic Guardrails &amp; Invariants</h3>
+            <div class="pane-step-block" id="step-guardrails-block">
+              <div class="step-header-row">
+                <div class="step-header">
+                  <span class="step-badge">STEP 3</span>
+                  <h3>Cryptographic Guardrails</h3>
+                </div>
+                <span class="guard-active-pill" id="guard-counter-pill">3 Active</span>
               </div>
-              <p class="step-desc">Check-gated security policies compiled into all generated rule files:</p>
 
-              <div class="guardrails-box">
+              <!-- Accordion Toggle Header -->
+              <button type="button" id="btn-toggle-guardrails" class="guardrails-accordion-toggle" aria-expanded="false">
+                <div class="guard-toggle-left">
+                  <span class="guard-summary-icons">🛡️ ⚡ 🔒</span>
+                  <span class="guard-summary-text">Strict Types • Supabase RLS • Token Optimization</span>
+                </div>
+                <span class="drawer-arrow">▾</span>
+              </button>
+
+              <div class="guardrails-box collapsed" id="guardrails-box">
                 <label class="guard-toggle-label">
                   <input type="checkbox" id="guard-strict-types" checked>
                   <span class="guard-custom-check"></span>
@@ -722,6 +771,21 @@
                   <span>Download Complete Context Bundle (.ZIP)</span>
                   <span class="btn-sub">100% Free Forever</span>
                 </button>
+                <div class="cli-quick-copy" id="cli-quick-copy" title="Click to copy CLI init command">
+                  <div class="cli-header-row">
+                    <span class="cli-label">OR RUN IN TERMINAL</span>
+                    <span class="cli-copied-badge hidden" id="cli-copied-badge">✓ Copied!</span>
+                  </div>
+                  <div class="cli-code-row">
+                    <code class="cli-code-text">npx auterix init</code>
+                    <button type="button" class="btn-copy-cli-icon" id="btn-copy-cli" aria-label="Copy CLI command">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               </div>
 
               <!-- Quick Next Steps Guide -->
@@ -1867,6 +1931,6 @@ export async function updateUserAction(rawData: unknown) {
     </div>
   </div>
 
-  <script src="src/app.js?v=1.2.3"></script>
+  <script src="src/app.js?v=1.3.0"></script>
 </body>
 </html>
