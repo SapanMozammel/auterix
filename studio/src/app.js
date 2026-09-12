@@ -1025,7 +1025,9 @@ function renderProAlert() {
   const badgeTag = document.getElementById("stack-badge-tag");
 
   if (profile.isPro) {
-    badgeTag.textContent = state.isProUnlocked ? "PRO BLUEPRINT (ACTIVE)" : "PRO BLUEPRINT";
+    badgeTag.textContent = state.isProUnlocked 
+      ? `Active: ${profile.name} (Pro Unlocked)` 
+      : `Active: ${profile.name} (Pro Blueprint)`;
     badgeTag.className = "stack-badge-tag pro";
     alertContainer.style.display = "flex";
     document.getElementById("pro-alert-title").textContent = state.isProUnlocked 
@@ -1051,7 +1053,7 @@ function renderProAlert() {
       }
     }
   } else {
-    badgeTag.textContent = "FREE / COMMUNITY";
+    badgeTag.textContent = `Active: ${profile.name} (Community Free)`;
     badgeTag.className = "stack-badge-tag free";
     alertContainer.style.display = "none";
   }
