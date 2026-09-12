@@ -516,6 +516,7 @@
                   <button type="button" class="stack-chip active" data-stack="nextjs">⚡ Next.js 15</button>
                   <button type="button" class="stack-chip" data-stack="fastapi">🐍 FastAPI</button>
                   <button type="button" class="stack-chip" data-stack="node-clean">🟢 Node Fastify</button>
+                  <button type="button" class="stack-chip" data-stack="cloudflare">☁️ Cloudflare</button>
                   <button type="button" class="stack-chip" data-stack="react-native">📱 Expo Mobile</button>
                   <button type="button" class="stack-chip" data-stack="ai-pipeline">🤖 AI Pipeline</button>
                 </div>
@@ -558,9 +559,9 @@
                   <input type="file" id="file-input" accept=".json,.txt,.lock,.toml,.yaml,.yml" class="hidden-input">
                 </div>
 
-                <!-- Paste Zone Box (Hidden by default) -->
+                <!-- Paste Textarea Area -->
                 <div class="paste-zone hidden" id="paste-zone">
-                  <textarea id="paste-input" placeholder="Paste package.json dependencies, requirements.txt, or list your libraries (e.g. next, supabase, tailwind, fastapi, sqlalchemy)..." rows="3"></textarea>
+                  <textarea id="paste-input" class="manifest-paste-textarea" placeholder="Paste package.json dependencies, requirements.txt, or list your libraries (e.g. next, supabase, tailwind, fastapi, sqlalchemy)..." rows="3"></textarea>
                   <button type="button" id="btn-detect-paste" class="btn-detect-now">
                     <span>⚡ Analyze &amp; Detect Stack</span>
                   </button>
@@ -578,6 +579,7 @@
                 <option value="nextjs-supabase" selected>Next.js 15 App Router + Supabase RLS</option>
                 <option value="fastapi-sqlalchemy">FastAPI + Async SQLAlchemy + Pydantic v2</option>
                 <option value="enterprise-node">Enterprise Node.js + Clean Architecture</option>
+                <option value="cloudflare-workers">Cloudflare Workers + Hono &amp; D1 Edge</option>
                 <option value="react-native-expo">React Native + Expo + Zustand</option>
                 <option value="ai-pipeline">AI Agent Engineering + Eval Pipeline</option>
               </select>
@@ -1865,58 +1867,116 @@ export async function updateUserAction(rawData: unknown) {
       </div>
 
       <div class="modal-body">
-        <p class="modal-instruction">
-          Purchased Auterix Pro on Gumroad? Drop your downloaded <code>Auterix-Pro-Production-Suite.zip</code> below.
-        </p>
+        <!-- Locked View (Shown when Pro is not yet loaded) -->
+        <div id="modal-locked-view">
+          <p class="modal-instruction">
+            Purchased Auterix Pro on Gumroad? Drop your downloaded <code>Auterix-Pro-Production-Suite.zip</code> below.
+          </p>
 
-        <!-- Dropzone for Pro ZIP -->
-        <div class="pro-zip-dropzone" id="pro-zip-dropzone">
-          <div class="drop-zip-icon">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="1.8">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="17 8 12 3 7 8"/>
-              <line x1="12" y1="3" x2="12" y2="15"/>
-            </svg>
-          </div>
-          <div class="drop-zip-text">Drop Auterix-Pro-Production-Suite.zip here</div>
-          <div class="drop-zip-sub">or click to browse your local downloads</div>
-          <input type="file" id="pro-zip-input" accept=".zip" class="hidden-input">
-        </div>
-
-        <!-- Unlock Status Message -->
-        <div class="pro-unlock-status hidden" id="pro-unlock-status">
-          <span class="status-msg"></span>
-        </div>
-
-        <!-- Agency Member Repository Hint -->
-        <div class="modal-agency-hint">
-          <span>Invited Agency member?</span>
-          <a href="https://github.com/SapanMozammel/auterix-pro" target="_blank" rel="noopener">📦 Access your GitHub repo &rarr;</a>
-        </div>
-
-        <!-- Direct Purchase Section for Users Without Pro Access -->
-        <div class="modal-purchase-cta">
-          <div class="modal-purchase-divider">
-            <span>Don't have Auterix Pro yet?</span>
-          </div>
-          <div class="modal-purchase-box">
-            <div class="modal-purchase-header">
-              <div class="modal-purchase-title-row">
-                <span class="modal-purchase-badge">COMMERCIAL ACCESS</span>
-                <span class="modal-purchase-name">Auterix Pro Production Suite</span>
-              </div>
-              <div class="modal-purchase-price">$14 <small>one-time</small></div>
+          <!-- Dropzone for Pro ZIP -->
+          <div class="pro-zip-dropzone" id="pro-zip-dropzone">
+            <div class="drop-zip-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="1.8">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
             </div>
-            <p class="modal-purchase-desc">
-              Get instant access to 5 complete production stacks, PostgreSQL RLS migrations, pre-commit AI hooks, and automated PR compliance bots.
-            </p>
-            <div class="modal-purchase-actions">
-              <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="btn-modal-purchase glow-button">
-                <span>⚡ Purchase Auterix Pro on Gumroad ($14) &rarr;</span>
-              </a>
-              <a href="#pricing" class="modal-view-tiers-link" onclick="document.getElementById('btn-close-modal').click()">
-                Compare tiers &amp; team packages &darr;
-              </a>
+            <div class="drop-zip-text">Drop Auterix-Pro-Production-Suite.zip here</div>
+            <div class="drop-zip-sub">or click to browse your local downloads</div>
+            <input type="file" id="pro-zip-input" accept=".zip" class="hidden-input">
+          </div>
+
+          <!-- Unlock Status Message -->
+          <div class="pro-unlock-status hidden" id="pro-unlock-status">
+            <span class="status-msg"></span>
+          </div>
+
+          <!-- Agency Member Repository Hint -->
+          <div class="modal-agency-hint">
+            <span>Invited Agency member?</span>
+            <a href="https://github.com/SapanMozammel/auterix-pro" target="_blank" rel="noopener">📦 Access your GitHub repo &rarr;</a>
+          </div>
+
+          <!-- Direct Purchase Section for Users Without Pro Access -->
+          <div class="modal-purchase-cta">
+            <div class="modal-purchase-divider">
+              <span>Don't have Auterix Pro yet?</span>
+            </div>
+            <div class="modal-purchase-box">
+              <div class="modal-purchase-header">
+                <div class="modal-purchase-title-row">
+                  <span class="modal-purchase-badge">COMMERCIAL ACCESS</span>
+                  <span class="modal-purchase-name">Auterix Pro Production Suite</span>
+                </div>
+                <div class="modal-purchase-price">$14 <small>one-time</small></div>
+              </div>
+              <p class="modal-purchase-desc">
+                Get instant access to 5 complete production stacks, PostgreSQL RLS migrations, pre-commit AI hooks, and automated PR compliance bots.
+              </p>
+              <div class="modal-purchase-actions">
+                <a href="https://tenantdefense.gumroad.com/l/auterix" target="_blank" rel="noopener" class="btn-modal-purchase glow-button">
+                  <span>⚡ Purchase Auterix Pro on Gumroad ($14) &rarr;</span>
+                </a>
+                <a href="#pricing" class="modal-view-tiers-link" onclick="document.getElementById('btn-close-modal').click()">
+                  Compare tiers &amp; team packages &darr;
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unlocked View (Shown when Pro is unlocked) -->
+        <div id="modal-unlocked-view" class="hidden">
+          <div class="modal-unlocked-card">
+            <div class="unlocked-header">
+              <span class="unlocked-badge">🌟 PRO ACTIVE &amp; VERIFIED</span>
+              <h4 class="unlocked-title">Auterix Pro Production Suite Unlocked</h4>
+              <p class="unlocked-desc">
+                Your archive is verified in-memory. Full commercial stacks, database migrations, and CI guardrails are active across the Studio.
+              </p>
+            </div>
+            
+            <div class="unlocked-features-list">
+              <div class="unlocked-feature-item">
+                <span class="feat-check">✔</span>
+                <div class="feat-info">
+                  <strong>Production Starters Unlocked</strong>
+                  <small>Next.js 15, FastAPI, Node Fastify, Expo Mobile, Cloudflare, AI Pipeline</small>
+                </div>
+              </div>
+              <div class="unlocked-feature-item">
+                <span class="feat-check">✔</span>
+                <div class="feat-info">
+                  <strong>11 Enterprise Blueprints Active</strong>
+                  <small>PostgreSQL RLS, JWT Auth, Stripe Webhooks, RAG, Monitoring</small>
+                </div>
+              </div>
+              <div class="unlocked-feature-item">
+                <span class="feat-check">✔</span>
+                <div class="feat-info">
+                  <strong>CI Bots &amp; Guardrails Included</strong>
+                  <small>Pre-commit AI guardrail hook &amp; GitHub Actions PR review bot</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="unlocked-actions-row">
+              <button type="button" id="btn-reupload-pro-zip" class="btn-secondary-modal">
+                <span>🔄 Re-upload / Switch Archive</span>
+              </button>
+              <button type="button" class="btn-primary-modal" onclick="document.getElementById('btn-close-modal').click()">
+                <span>Continue in Studio &rarr;</span>
+              </button>
+            </div>
+
+            <!-- Re-upload Dropzone (Hidden until clicked) -->
+            <div class="reupload-dropzone-wrap hidden" id="reupload-dropzone-wrap" style="margin-top: 14px;">
+              <div class="pro-zip-dropzone" id="pro-zip-dropzone-reupload" style="padding: 16px;">
+                <div class="drop-zip-text" style="font-size: 12px;">Drop new Auterix-Pro-Production-Suite.zip here</div>
+                <div class="drop-zip-sub">or click to choose file</div>
+                <input type="file" id="pro-zip-input-reupload" accept=".zip" class="hidden-input">
+              </div>
             </div>
           </div>
         </div>
@@ -1931,6 +1991,6 @@ export async function updateUserAction(rawData: unknown) {
     </div>
   </div>
 
-  <script src="src/app.js?v=1.3.0"></script>
+  <script src="src/app.js?v=1.4.0"></script>
 </body>
 </html>

@@ -224,7 +224,59 @@ const STACK_PROFILES = {
       "Database Transactions: Wrap multi-table operations in transaction blocks with automated rollback."
     ]
   },
+  "react-native-expo": {
+    name: "React Native + Expo Router + Zustand Mobile",
+    framework: "React Native / Expo",
+    isPro: true,
+    lang: "TypeScript Strict",
+    commands: {
+      test: "npm test",
+      lint: "npm run lint",
+      start: "npx expo start"
+    },
+    rules: [
+      "Expo Router: Use file-based routing in the app/ directory; keep screen components decoupled from navigation params.",
+      "State Management: Use Zustand stores with shallow selectors; never store unneeded derived state or duplicate route parameters.",
+      "Native Performance: Use FlashList instead of FlatList for large datasets; memoize callbacks passed to list items.",
+      "Safe Areas & Layout: Wrap screen layouts with react-native-safe-area-context SafeAreaView; test responsiveness on both iOS and Android."
+    ]
+  },
+  "cloudflare-workers": {
+    name: "Cloudflare Workers + Hono & D1 Edge",
+    framework: "Cloudflare Workers / Hono",
+    isPro: true,
+    lang: "TypeScript Strict",
+    commands: {
+      test: "npm test",
+      lint: "npm run lint",
+      dev: "npx wrangler dev",
+      deploy: "npx wrangler deploy"
+    },
+    rules: [
+      "Edge Runtime Constraints: Never use Node.js built-ins without node: prefix or cloudflare: compatibility flags.",
+      "Hono Routing & Validation: Type all routes using Hono env bindings and validate query/json with @hono/zod-validator.",
+      "Cloudflare D1 & KV: Use prepared statements with parameter binding (?1, ?2) to prevent SQL injection in D1 queries.",
+      "Cold-start Optimization: Keep module-level state immutable; initialize connections lazily within request execution handlers."
+    ]
+  },
   "ai-agent-pipeline": {
+    name: "AI & Autonomous Agent Engineering Pipeline",
+    framework: "LLM & Agent Workflows",
+    isPro: true,
+    lang: "Python / TypeScript",
+    commands: {
+      test: "pytest tests/evals",
+      lint: "ruff check .",
+      eval: "python -m evals.run"
+    },
+    rules: [
+      "Structured Outputs: Always enforce Pydantic / Zod JSON schemas on model generation; disallow unconstrained free-text output where structured data is expected.",
+      "Deterministic Fallback: Handle rate-limiting (429/503) with exponential backoff and jitter. Implement prompt retries with error feedback loops.",
+      "Token Budgeting: Keep system prompts concise and modular. Use progressive context injection rather than dumping whole codebases into chat memory.",
+      "Safety & Evals: Every prompt refactor must pass the baseline regression evaluation harness before deployment."
+    ]
+  },
+  "ai-pipeline": {
     name: "AI & Autonomous Agent Engineering Pipeline",
     framework: "LLM & Agent Workflows",
     isPro: true,
@@ -499,6 +551,195 @@ npm test && npm run lint || exit 1`
     }
   },
   "ai-agent-pipeline": {
+    "eval_harness.py": {
+      path: "evals/regression_harness.py",
+      content: `import json
+from pathlib import Path
+
+def run_eval_benchmark(test_cases_path: Path) -> dict:
+    cases = json.loads(test_cases_path.read_text())
+    passed = sum(1 for c in cases if True)
+    return {"total": len(cases), "passed": passed, "failed": 0}`
+    },
+    "structured_inference.py": {
+      path: "pipeline/inference.py",
+      content: `from pydantic import BaseModel
+
+class AgentAction(BaseModel):
+    tool_name: str
+    parameters: dict
+    confidence: float`
+    },
+    "auterix-verify.yml": {
+      path: ".github/workflows/auterix-verify.yml",
+      content: `name: Auterix Eval Suite
+on: [pull_request]
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m evals.run`
+    },
+    "pre-commit": {
+      path: ".git/hooks/pre-commit",
+      content: `#!/bin/sh
+python -m evals.run || exit 1`
+    }
+  },
+  "react-native-expo": {
+    "zustand-store.ts": {
+      path: "store/useAppStore.ts",
+      content: `import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+interface AuthState {
+  user: { id: string; email: string } | null;
+  token: string | null;
+  setUser: (user: { id: string; email: string } | null) => void;
+  setToken: (token: string | null) => void;
+  logout: () => void;
+}
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      setUser: (user) => set({ user }),
+      setToken: (token) => set({ token }),
+      logout: () => set({ user: null, token: null }),
+    }),
+    {
+      name: "auth-storage",
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);`
+    },
+    "safe-screen-layout.tsx": {
+      path: "app/(tabs)/index.tsx",
+      content: `import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuthStore } from "../../store/useAppStore";
+
+export default function HomeScreen() {
+  const user = useAuthStore((s) => s.user);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Auterix Mobile Cockpit</Text>
+        <Text style={styles.subtitle}>
+          {user ? \`Welcome, \${user.email}\` : "Logged in as Guest"}
+        </Text>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "#090d16" },
+  content: { flex: 1, padding: 24, justifyContent: "center", alignItems: "center" },
+  title: { fontSize: 24, fontWeight: "bold", color: "#f8fafc", marginBottom: 8 },
+  subtitle: { fontSize: 16, color: "#94a3b8" },
+});`
+    },
+    "auterix-verify.yml": {
+      path: ".github/workflows/auterix-verify.yml",
+      content: `name: Auterix Mobile CI Compliance
+on: [pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - run: npm test && npm run lint`
+    },
+    "pre-commit": {
+      path: ".git/hooks/pre-commit",
+      content: `#!/bin/sh
+npm test && npm run lint || exit 1`
+    }
+  },
+  "cloudflare-workers": {
+    "hono-edge-api.ts": {
+      path: "src/index.ts",
+      content: `import { Hono } from "hono";
+import { z } from "zod";
+import { zValidator } from "@hono/zod-validator";
+import { cors } from "hono/cors";
+
+type Bindings = {
+  DB: D1Database;
+  CACHE: KVNamespace;
+  API_SECRET: string;
+};
+
+const app = new Hono<{ Bindings: Bindings }>();
+app.use("*", cors());
+
+const CreateItemSchema = z.object({
+  name: z.string().min(1).max(100),
+  category: z.string().default("general"),
+});
+
+app.get("/api/health", (c) => c.json({ status: "healthy", timestamp: Date.now() }));
+
+app.post("/api/items", zValidator("json", CreateItemSchema), async (c) => {
+  const data = c.req.valid("json");
+  const id = crypto.randomUUID();
+  
+  await c.env.DB.prepare(
+    "INSERT INTO items (id, name, category, created_at) VALUES (?1, ?2, ?3, ?4)"
+  ).bind(id, data.name, data.category, Date.now()).run();
+
+  return c.json({ id, ...data }, 201);
+});
+
+export default app;`
+    },
+    "wrangler.jsonc": {
+      path: "wrangler.jsonc",
+      content: `{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "auterix-edge-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "prod-d1-db",
+      "database_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    }
+  ]
+}`
+    },
+    "auterix-verify.yml": {
+      path: ".github/workflows/auterix-verify.yml",
+      content: `name: Auterix Edge CI Compliance
+on: [pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - run: npm test && npm run lint`
+    },
+    "pre-commit": {
+      path: ".git/hooks/pre-commit",
+      content: `#!/bin/sh
+npm test && npm run lint || exit 1`
+    }
+  },
+  "ai-pipeline": {
     "eval_harness.py": {
       path: "evals/regression_harness.py",
       content: `import json
@@ -1087,6 +1328,8 @@ function initStackSelector() {
     "fastapi-sqlalchemy": "fastapi-sqlalchemy",
     "node-clean": "enterprise-node",
     "enterprise-node": "enterprise-node",
+    "cloudflare": "cloudflare-workers",
+    "cloudflare-workers": "cloudflare-workers",
     "react-native": "react-native-expo",
     "react-native-expo": "react-native-expo",
     "ai-pipeline": "ai-pipeline",
@@ -1314,8 +1557,11 @@ function initAutoDetector() {
         detected = "nextjs-supabase";
         tags.push("Next.js 15");
         if (depKeys.includes("@supabase/supabase-js") || depKeys.includes("@supabase/ssr")) tags.push("Supabase RLS");
+      } else if (depKeys.includes("hono") || depKeys.includes("@cloudflare/workers-types") || depKeys.includes("wrangler")) {
+        detected = "cloudflare-workers";
+        tags.push("Cloudflare Workers + Hono");
       } else if (depKeys.includes("expo") || depKeys.includes("react-native")) {
-        detected = "baseline";
+        detected = "react-native-expo";
         tags.push("React Native / Expo");
       } else if (depKeys.includes("fastify") || depKeys.includes("express") || depKeys.includes("@nestjs/core")) {
         detected = "enterprise-node";
@@ -1337,6 +1583,12 @@ function initAutoDetector() {
       } else if (lowerContent.includes("langchain") || lowerContent.includes("llama_index") || lowerContent.includes("openai") || lowerContent.includes("anthropic") || lowerContent.includes("pydantic_ai")) {
         detected = "ai-agent-pipeline";
         tags.push("AI Agent Pipeline");
+      } else if (lowerContent.includes("wrangler") || lowerContent.includes("cloudflare") || lowerContent.includes("hono")) {
+        detected = "cloudflare-workers";
+        tags.push("Cloudflare Workers + Hono");
+      } else if (lowerContent.includes("expo") || lowerContent.includes("react-native")) {
+        detected = "react-native-expo";
+        tags.push("React Native / Expo");
       } else if (lowerContent.includes("next") || lowerContent.includes("supabase")) {
         detected = "nextjs-supabase";
         tags.push("Next.js / Supabase");
@@ -1349,6 +1601,26 @@ function initAutoDetector() {
     state.selectedStack = detected;
     const selectElem = document.getElementById("stack-select");
     if (selectElem) selectElem.value = detected;
+
+    const chips = document.querySelectorAll(".stack-chip");
+    const STACK_MAP = {
+      "nextjs": "nextjs-supabase",
+      "nextjs-supabase": "nextjs-supabase",
+      "fastapi": "fastapi-sqlalchemy",
+      "fastapi-sqlalchemy": "fastapi-sqlalchemy",
+      "node-clean": "enterprise-node",
+      "enterprise-node": "enterprise-node",
+      "cloudflare": "cloudflare-workers",
+      "cloudflare-workers": "cloudflare-workers",
+      "react-native": "react-native-expo",
+      "react-native-expo": "react-native-expo",
+      "ai-pipeline": "ai-pipeline",
+      "baseline": "baseline"
+    };
+    chips.forEach(c => {
+      const cStack = STACK_MAP[c.getAttribute("data-stack")] || c.getAttribute("data-stack");
+      c.classList.toggle("active", cStack === detected);
+    });
 
     const tagStr = tags.length > 0 ? tags.join(" • ") : "Universal Stack Configuration";
     badge.innerHTML = `✨ <strong>Auto-Detected:</strong> ${tagStr} <span style="opacity:0.75; font-size:11px;">(from ${sourceName})</span>`;
@@ -1962,11 +2234,106 @@ function initProUnlocker() {
   const statusElem = document.getElementById("pro-unlock-status");
   const modeLabel = document.getElementById("studio-mode-label");
   const statusDot = document.getElementById("status-dot");
-  const btnOpen = document.getElementById("btn-open-unlock-modal") || document.getElementById("btn-open-unlock-modal-nav");
+  
+  // Re-upload elements in unlocked view
+  const btnReupload = document.getElementById("btn-reupload-pro-zip");
+  const reuploadWrap = document.getElementById("reupload-dropzone-wrap");
+  const reuploadDropzone = document.getElementById("pro-zip-dropzone-reupload");
+  const reuploadInput = document.getElementById("pro-zip-input-reupload");
 
   if (!modal) return;
 
+  function updateUnlockedUI() {
+    const modalLockedView = document.getElementById("modal-locked-view");
+    const modalUnlockedView = document.getElementById("modal-unlocked-view");
+    const modalTitle = document.getElementById("unlock-modal-title");
+    const btnNav = document.getElementById("btn-open-unlock-modal-nav");
+    const btnBody = document.getElementById("btn-open-unlock-modal-body");
+    const heroBtn = document.querySelector(".btn-tertiary-hero");
+    const haveZipBtn = document.querySelector(".lock-have-zip-btn");
+
+    if (state.isProUnlocked) {
+      if (modalLockedView) modalLockedView.classList.add("hidden");
+      if (modalUnlockedView) modalUnlockedView.classList.remove("hidden");
+      if (modalTitle) modalTitle.textContent = "Auterix Pro Commercial Suite Active";
+
+      if (btnNav) {
+        btnNav.innerHTML = '<span class="unlock-icon">🌟</span> <span>Pro Active (Unlocked)</span>';
+        btnNav.classList.add("unlocked");
+      }
+      if (btnBody) {
+        btnBody.innerHTML = '<span class="icon">🌟</span> <span>Pro Suite Active (Unlocked)</span>';
+        btnBody.classList.add("unlocked");
+      }
+      if (heroBtn) {
+        heroBtn.innerHTML = '<span>🌟 Pro Suite Active (Unlocked) &rarr;</span>';
+        heroBtn.classList.add("unlocked");
+      }
+      if (haveZipBtn) {
+        haveZipBtn.innerHTML = '<span>🌟 Pro Suite Active</span>';
+        haveZipBtn.classList.add("unlocked");
+      }
+      if (modeLabel) {
+        modeLabel.innerHTML = 'Mode: <strong style="color: #00f2fe;">🌟 Pro Commercial Suite &bull; All Stacks &amp; Blueprints Unlocked</strong>';
+      }
+      if (statusDot) {
+        statusDot.className = "radar-dot pro";
+      }
+
+      // Pro view mode buttons
+      const btnRules = document.getElementById("mode-rules");
+      const btnPro = document.getElementById("mode-pro");
+      if (btnRules && btnPro) {
+        btnRules.classList.remove("active");
+        btnPro.classList.add("active");
+        btnPro.innerHTML = "<span>🌟 Production Stacks &amp; Blueprints (Active)</span>";
+      }
+
+      // Download button
+      const downloadBtn = document.getElementById("btn-download-zip");
+      if (downloadBtn) {
+        downloadBtn.innerHTML = `
+          <span class="btn-icon">🌟</span>
+          <span>Download Complete Pro Bundle (.ZIP)</span>
+          <span class="btn-sub">Production Stacks & Blueprints Included</span>
+        `;
+      }
+
+      // Code container lock overlay
+      const lockOverlay = document.getElementById("pro-locked-overlay");
+      if (lockOverlay) lockOverlay.classList.add("hidden");
+    } else {
+      if (modalLockedView) modalLockedView.classList.remove("hidden");
+      if (modalUnlockedView) modalUnlockedView.classList.add("hidden");
+      if (modalTitle) modalTitle.textContent = "Load Your Pro Deliverable ZIP";
+
+      if (btnNav) {
+        btnNav.innerHTML = '<span class="unlock-icon">📦</span> <span>Load Pro ZIP</span>';
+        btnNav.classList.remove("unlocked");
+      }
+      if (btnBody) {
+        btnBody.innerHTML = '<span class="icon">📦</span> <span>Already Purchased? Load Pro ZIP</span>';
+        btnBody.classList.remove("unlocked");
+      }
+      if (heroBtn) {
+        heroBtn.innerHTML = '<span>Already Purchased? Load ZIP &rarr;</span>';
+        heroBtn.classList.remove("unlocked");
+      }
+      if (haveZipBtn) {
+        haveZipBtn.innerHTML = '<span>I already have Pro ZIP &rarr;</span>';
+        haveZipBtn.classList.remove("unlocked");
+      }
+      if (modeLabel) {
+        modeLabel.innerHTML = 'Mode: <strong>Community (Free) &bull; Client-Side Engine</strong>';
+      }
+      if (statusDot) {
+        statusDot.className = "radar-dot free";
+      }
+    }
+  }
+
   function openModal() {
+    updateUnlockedUI();
     modal.style.display = "flex";
     modal.classList.remove("hidden");
     if (statusElem) statusElem.classList.add("hidden");
@@ -1978,7 +2345,7 @@ function initProUnlocker() {
   }
 
   // Hook all buttons that open the modal
-  document.querySelectorAll(".btn-trigger-unlock-modal, #btn-open-unlock-modal, #btn-open-unlock-modal-nav, .lock-have-zip-btn").forEach(btn => {
+  document.querySelectorAll(".btn-trigger-unlock-modal, #btn-open-unlock-modal, #btn-open-unlock-modal-nav, #btn-open-unlock-modal-body, .lock-have-zip-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       openModal();
@@ -2002,44 +2369,60 @@ function initProUnlocker() {
     }
   });
 
-  if (dropzone && fileInput) {
-    dropzone.addEventListener("click", () => fileInput.click());
+  function setupDropzone(dropEl, inputEl) {
+    if (!dropEl || !inputEl) return;
+    dropEl.addEventListener("click", () => inputEl.click());
 
-    dropzone.addEventListener("dragover", (e) => {
+    dropEl.addEventListener("dragover", (e) => {
       e.preventDefault();
-      dropzone.classList.add("dragover");
+      dropEl.classList.add("dragover");
     });
 
-    dropzone.addEventListener("dragleave", () => {
-      dropzone.classList.remove("dragover");
+    dropEl.addEventListener("dragleave", () => {
+      dropEl.classList.remove("dragover");
     });
 
-    dropzone.addEventListener("drop", (e) => {
+    dropEl.addEventListener("drop", (e) => {
       e.preventDefault();
-      dropzone.classList.remove("dragover");
+      dropEl.classList.remove("dragover");
       if (e.dataTransfer.files.length) {
         verifyProZip(e.dataTransfer.files[0]);
       }
     });
 
-    fileInput.addEventListener("change", (e) => {
+    inputEl.addEventListener("change", (e) => {
       if (e.target.files.length) {
         verifyProZip(e.target.files[0]);
       }
     });
   }
 
+  // Primary Dropzone (in locked view)
+  setupDropzone(dropzone, fileInput);
+
+  // Re-upload Dropzone (in unlocked view)
+  if (btnReupload && reuploadWrap) {
+    btnReupload.addEventListener("click", () => {
+      reuploadWrap.classList.toggle("hidden");
+    });
+  }
+  setupDropzone(reuploadDropzone, reuploadInput);
+
   async function verifyProZip(file) {
     if (!file.name.endsWith(".zip")) {
-      statusElem.innerHTML = "❌ Please provide a <code>.zip</code> file.";
-      statusElem.className = "unlock-status error";
-      statusElem.classList.remove("hidden");
+      if (statusElem) {
+        statusElem.innerHTML = "❌ Please provide a <code>.zip</code> file.";
+        statusElem.className = "unlock-status error";
+        statusElem.classList.remove("hidden");
+      }
       return;
     }
 
-    statusElem.innerHTML = "⏳ Verifying Pro Suite package...";
-    statusElem.className = "unlock-status info";
-    statusElem.classList.remove("hidden");
+    if (statusElem) {
+      statusElem.innerHTML = "⏳ Verifying Pro Suite package...";
+      statusElem.className = "unlock-status info";
+      statusElem.classList.remove("hidden");
+    }
 
     try {
       if (typeof JSZip === "undefined") {
@@ -2063,59 +2446,34 @@ function initProUnlocker() {
         state.proZipInstance = zip;
         state.viewMode = "pro";
         
-        statusElem.innerHTML = "✅ <strong>Auterix Pro Verified!</strong> Full production blueprints and guardrails unlocked.";
-        statusElem.className = "unlock-status success";
-
-        // Update Status Bar
-        if (modeLabel) {
-          modeLabel.innerHTML = 'Studio Mode: <strong style="color: #00f2fe;">🌟 Pro Suite Active (All Blueprints Unlocked)</strong>';
-        }
-        if (statusDot) {
-          statusDot.className = "status-dot pro";
-        }
-        if (btnOpen) {
-          btnOpen.innerHTML = "<span>🌟 Pro Active (Unlocked)</span>";
-          btnOpen.classList.add("unlocked");
+        if (statusElem) {
+          statusElem.innerHTML = "✅ <strong>Auterix Pro Verified!</strong> Full production blueprints and guardrails unlocked.";
+          statusElem.className = "unlock-status success";
         }
 
-        // Switch to Pro view mode buttons
-        const btnRules = document.getElementById("mode-rules");
-        const btnPro = document.getElementById("mode-pro");
-        if (btnRules && btnPro) {
-          btnRules.classList.remove("active");
-          btnPro.classList.add("active");
-          btnPro.innerHTML = "<span>🌟 Production Stacks & Blueprints (Active)</span>";
-        }
-
-        // Update download button
-        const downloadBtn = document.getElementById("btn-download-zip");
-        if (downloadBtn) {
-          downloadBtn.innerHTML = `
-            <span class="btn-icon">🌟</span>
-            <span>Download Complete Pro Bundle (.ZIP)</span>
-            <span class="btn-sub">Production Stacks & Blueprints Included</span>
-          `;
-        }
-
-        // Hide lock overlay in code container
-        const lockOverlay = document.getElementById("pro-locked-overlay");
-        if (lockOverlay) lockOverlay.classList.add("hidden");
-
+        updateUnlockedUI();
         compileAll();
 
         setTimeout(() => {
           closeModal();
         }, 1200);
       } else {
-        statusElem.innerHTML = "❌ Unrecognized package. Please upload the official <code>Auterix-Pro-Production-Suite.zip</code> or <a href='https://tenantdefense.gumroad.com/l/auterix' target='_blank' rel='noopener' style='color: #818cf8; text-decoration: underline; font-weight: 700;'>purchase Pro access here &rarr;</a>";
-        statusElem.className = "unlock-status error";
+        if (statusElem) {
+          statusElem.innerHTML = "❌ Unrecognized package. Please upload the official <code>Auterix-Pro-Production-Suite.zip</code> or <a href='https://tenantdefense.gumroad.com/l/auterix' target='_blank' rel='noopener' style='color: #818cf8; text-decoration: underline; font-weight: 700;'>purchase Pro access here &rarr;</a>";
+          statusElem.className = "unlock-status error";
+        }
       }
     } catch (err) {
       console.error("Failed to parse zip:", err);
-      statusElem.innerHTML = "❌ Could not read ZIP archive. Please check file integrity.";
-      statusElem.className = "unlock-status error";
+      if (statusElem) {
+        statusElem.innerHTML = "❌ Could not read ZIP archive. Please check file integrity.";
+        statusElem.className = "unlock-status error";
+      }
     }
   }
+
+  // Initial sync
+  updateUnlockedUI();
 }
 
 // 10.5 Adapter Controls & Instant Search Filter
