@@ -15,7 +15,7 @@ import {
 } from '../lib/workflow.mjs';
 import { runInteractiveWizard } from '../lib/tui.mjs';
 import { extractSchemaContextFromFile } from '../lib/schema-extractor.mjs';
-import { getOrCreateMemoryFile, recordMemory, readMemoryContext } from '../lib/memory.mjs';
+import { getOrCreateMemoryFile, recordMemory, readMemoryContext, parseCommitMessage } from '../lib/memory.mjs';
 
 function performInit(root, rawAdapters, profileName, bundleFn, installPreCommit = false) {
   const coreKnown = new Set(['cursor', 'claude', 'antigravity', 'copilot', 'codex', 'augment']);
@@ -212,6 +212,32 @@ function performInit(root, rawAdapters, profileName, bundleFn, installPreCommit 
         '#!/bin/sh\n# Auterix Pre-Commit Guardrail\nif git diff --cached --name-only | grep -qE "^(\\.env|\\.env\\.local)$"; then\n  echo "❌ [BLOCKED] .env files staged for commit!" && exit 1\nfi\nnode .ai/tools/check.mjs --root . || exit 1\n',
         { mode: 0o755 }
       );
+      // Post-Commit Memory Ingestion Hook
+      const postCommitPath = path.join(hooksDir, 'post-commit');
+      fs.writeFileSync(
+        postCommitPath,
+        `#!/bin/sh
+# Auterix Post-Commit Memory Ingestion
+# Automatically records architectural decisions flagged with --ai-note
+# Usage: git commit -m "Switch to tRPC --ai-note architecture"
+MSG=$(git log -1 --format='%s')
+case "$MSG" in
+  *--ai-note*)
+    NOTE=$(echo "$MSG" | sed 's/ *--ai-note.*//')
+    CATEGORY=$(echo "$MSG" | sed -n 's/.*--ai-note *\\([a-z-]*\\).*/\\1/p')
+    AUTHOR=$(git log -1 --format='%an')
+    if [ -n "$NOTE" ]; then
+      CATEGORY=\${CATEGORY:-conventions}
+      node --input-type=module -e "
+        const {recordMemory} = await import('./lib/memory.mjs');
+        recordMemory('.', '\${CATEGORY}', \\\`\${NOTE}\\\`, '\${AUTHOR}');
+      " 2>/dev/null || true
+    fi
+    ;;
+esac
+`,
+        { mode: 0o755 }
+      );
     }
   }
 
@@ -253,6 +279,7 @@ Commands:
   apply           Apply a reviewed plan
   extract-schema  Extract Drizzle/Prisma/SQL schema to token-optimized Markdown
   memory          Read or record to institutional cross-agent memory (.ai/memory.md)
+  doctor          Run AI Safety & Readiness Scorecard (0-100% diagnostic)
   bundle          Compile canonical context bundle
 
 Options:
@@ -383,6 +410,18 @@ Options:
         } else {
           result = { memory: readMemoryContext(root) };
         }
+        break;
+      }
+      case 'doctor': {
+        const root = path.resolve(options['--root'] || process.cwd());
+        const { runDiagnostics, formatScorecard } = await import('../lib/doctor.mjs');
+        const report = runDiagnostics(root);
+        if (options['--out']) {
+          result = report;
+        } else {
+          process.stdout.write(formatScorecard(report));
+        }
+        if (report.percentage < 100) process.exitCode = 1;
         break;
       }
       default:

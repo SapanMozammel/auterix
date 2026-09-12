@@ -34,23 +34,41 @@ runs:
 
         echo "check_status=$CHECK_STATUS" >> $GITHUB_OUTPUT
 
-        # Format Step Summary
-        echo "## 🛡️ Auterix Architectural Compliance Audit" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
+        # Generate Rich Compliance Report via Auterix Report Formatter
+        export CHECK_STATUS CHECK_OUTPUT
+        node --input-type=module -e "
+          const { formatComplianceReport } = await import('${{ github.action_path }}/lib/report.mjs');
+          const { appendFileSync } = await import('node:fs');
 
-        if [ "$CHECK_STATUS" -eq 0 ]; then
-          echo "### ✅ Status: VERIFIED & INTACT" >> $GITHUB_STEP_SUMMARY
-          echo "All 21 AI coding agent adapters match cryptographic SHA-256 content hashes. Zero architectural drift detected." >> $GITHUB_STEP_SUMMARY
-        else
-          echo "### ❌ Status: ARCHITECTURAL DRIFT DETECTED" >> $GITHUB_STEP_SUMMARY
-          echo "One or more managed AI rules or context manifests have been modified without updating the lockfile." >> $GITHUB_STEP_SUMMARY
-          echo "Run \`npx auterix apply\` locally to re-synchronize adapter rules." >> $GITHUB_STEP_SUMMARY
-        fi
+          const ok = process.env.CHECK_STATUS === '0';
+          let checkResult = { ok, managedFiles: 21 };
+          try {
+            const parsed = JSON.parse(process.env.CHECK_OUTPUT || '{}');
+            if (parsed && typeof parsed === 'object') {
+              checkResult = { ...parsed, ok };
+            }
+          } catch {}
 
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
-        echo "$CHECK_OUTPUT" >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          const report = formatComplianceReport(checkResult);
+          if (process.env.GITHUB_STEP_SUMMARY) {
+            appendFileSync(process.env.GITHUB_STEP_SUMMARY, report + '\n\n');
+          }
+        " 2>/dev/null || {
+          echo "## 🛡️ Auterix Architectural Compliance Audit" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "$CHECK_STATUS" -eq 0 ]; then
+            echo "### ✅ Status: VERIFIED & INTACT" >> $GITHUB_STEP_SUMMARY
+            echo "| Check | Status | Details |" >> $GITHUB_STEP_SUMMARY
+            echo "|-------|--------|---------|" >> $GITHUB_STEP_SUMMARY
+            echo "| SHA-256 Integrity | ✅ Pass | All managed adapter files verified |" >> $GITHUB_STEP_SUMMARY
+            echo "| Context Manifest | ✅ Pass | Schema v1 compliant |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ❌ Status: ARCHITECTURAL DRIFT DETECTED" >> $GITHUB_STEP_SUMMARY
+            echo "One or more managed AI rules or context manifests have been modified without updating the lockfile." >> $GITHUB_STEP_SUMMARY
+            echo "Run \`npx auterix apply\` locally to re-synchronize adapter rules." >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+        }
 
         if [ "${{ inputs.fail-on-drift }}" = "true" ] && [ "$CHECK_STATUS" -ne 0 ]; then
           exit "$CHECK_STATUS"

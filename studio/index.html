@@ -265,7 +265,7 @@
             </svg>
           </div>
           <h4 class="node-title">Cross-Agent Shared Memory</h4>
-          <p class="node-desc">Maintains institutional memory in <code>.ai/memory.md</code>: decisions, architecture invariants, and anti-patterns persist across all tools.</p>
+          <p class="node-desc">Maintains institutional memory in <code>.ai/memory.md</code>: decisions, architecture invariants, and anti-patterns persist across all tools via automated <code>--ai-note</code> git commit hooks.</p>
           <div class="node-status"><span class="mini-pulse violet"></span> Shared Memory Active</div>
         </div>
 
@@ -284,9 +284,9 @@
               <polyline points="2 12 12 17 22 12"></polyline>
             </svg>
           </div>
-          <h4 class="node-title">Multi-Agent Synthesis</h4>
-          <p class="node-desc">Compiles unified native rulebooks for Cursor, Claude, Copilot, Windsurf, Devin &amp; all 21 AI assistants simultaneously.</p>
-          <div class="node-status"><span class="mini-pulse emerald"></span> 21 Adapters Ready</div>
+          <h4 class="node-title">Multi-Agent &amp; Role Synthesis</h4>
+          <p class="node-desc">Compiles unified native rulebooks for Cursor, Claude, Copilot, Windsurf, Devin &amp; all 21 AI assistants alongside modular role personas in <code>.ai/roles/</code>.</p>
+          <div class="node-status"><span class="mini-pulse emerald"></span> 21 Adapters &bull; Modular Roles</div>
         </div>
 
         <!-- Flow Connector 3 -->
@@ -322,9 +322,9 @@
               <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
             </svg>
           </div>
-          <h4 class="node-title">Continuous CI &amp; IDE Telemetry</h4>
-          <p class="node-desc">Official VS Code extension status bar telemetry &amp; headless GitHub Action audit PRs in &lt;1.5s at $0.00 compute cost.</p>
-          <div class="node-status"><span class="mini-pulse rose"></span> Real-Time Guard</div>
+          <h4 class="node-title">Continuous CI &amp; Readiness Telemetry</h4>
+          <p class="node-desc">Headless GitHub Action audits PRs with rich Markdown compliance tables, while <code>npx auterix doctor</code> scores project AI readiness from 0&ndash;100%.</p>
+          <div class="node-status"><span class="mini-pulse rose"></span> Real-Time Guard &bull; Doctor Scorecard</div>
         </div>
       </div>
     </section>
@@ -776,11 +776,13 @@
             The open-source context protocol, zero-dependency CLI engine, universal 21-tool adapters, and in-browser Web Studio.
           </p>
           <ul class="repo-features">
-            <li><span>✔</span> Complete Node.js CLI (<code>init</code>, <code>check</code>, <code>inspect</code>, <code>plan</code>, <code>apply</code>)</li>
+            <li><span>✔</span> Complete Node.js CLI (<code>init</code>, <code>check</code>, <code>inspect</code>, <code>plan</code>, <code>apply</code>, <code>doctor</code>)</li>
             <li><span>✔</span> Native adapters for all 21 AI tools (Cursor, Claude, Copilot, Windsurf, Devin, Lovable, etc.)</li>
-            <li><span>✔</span> Cross-Agent Shared Memory (<code>.ai/memory.md</code>) &amp; Schema Extractor (<code>extract-schema</code>)</li>
-            <li><span>✔</span> Headless GitHub Action (<code>action.yml</code>) &amp; official VS Code Extension</li>
-            <li><span>✔</span> 65 automated unit tests with rollback guards &amp; SHA-256 validation (zero dependencies)</li>
+            <li><span>✔</span> Cross-Agent Shared Memory (<code>.ai/memory.md</code>), <code>--ai-note</code> hooks &amp; Schema Extractor</li>
+            <li><span>✔</span> AI Readiness Scorecard (<code>npx auterix doctor</code>) &mdash; 8-check 0&ndash;100% diagnostic</li>
+            <li><span>✔</span> 4 Modular Role Personas (<code>.ai/roles/</code>) &mdash; Architect, Engineer, Reviewer, Verifier</li>
+            <li><span>✔</span> Headless GitHub Action (<code>action.yml</code>) with rich Markdown compliance reports</li>
+            <li><span>✔</span> 90 automated unit tests with rollback guards &amp; SHA-256 validation (zero dependencies)</li>
           </ul>
           <div class="repo-action-wrap">
             <a href="https://github.com/SapanMozammel/auterix" target="_blank" rel="noopener" class="btn-repo public">
@@ -805,9 +807,10 @@
           <ul class="repo-features">
             <li><span>✔</span> 5 Complete runnable starters (Next.js 15, FastAPI, Clean Node Fastify, Expo Mobile, Cloudflare Hono)</li>
             <li><span>✔</span> 11 Hardened blueprints (RAG search, session guards, Stripe webhooks, Drizzle+pgvector, Docker)</li>
+            <li><span>✔</span> 6 Specialized role personas (Security Auditor, DB Architect, QA, API Designer, Performance, DevOps)</li>
             <li><span>✔</span> Bank-grade multi-tenant PostgreSQL Row Level Security (RLS) policies</li>
             <li><span>✔</span> Pre-commit AI guardrail hook (<code>pre-commit-guard.sh</code>) to prevent secret leaks &amp; errors</li>
-            <li><span>✔</span> Automated GitHub Action PR audit bot for CI pipeline compliance</li>
+            <li><span>✔</span> Turnkey PR Compliance Bot with rich Markdown tables &amp; secret scan</li>
             <li><span>✔</span> Standalone offline desktop studio &bull; continuous <code>git pull</code> updates</li>
           </ul>
           <div class="repo-action-wrap">
@@ -826,6 +829,25 @@
           <p class="showcase-subtitle">Compare how an unconstrained AI writes code versus an AI constrained by Auterix rules.</p>
         </div>
 
+        <!-- Scenario Selector Tabs -->
+        <div class="diff-scenario-nav" role="tablist" aria-label="Hallucination comparison scenarios">
+          <button type="button" class="diff-scenario-tab active" data-scenario="supabase" role="tab" aria-selected="true">
+            <span class="tab-indicator">&#9679;</span> Supabase Auth &amp; RLS
+          </button>
+          <button type="button" class="diff-scenario-tab" data-scenario="stripe" role="tab" aria-selected="false">
+            <span class="tab-indicator">&#9679;</span> Stripe Webhook
+          </button>
+          <button type="button" class="diff-scenario-tab" data-scenario="migration" role="tab" aria-selected="false">
+            <span class="tab-indicator">&#9679;</span> Schema Migration
+          </button>
+          <button type="button" class="diff-scenario-tab" data-scenario="api-route" role="tab" aria-selected="false">
+            <span class="tab-indicator">&#9679;</span> API &amp; Rate Limit
+          </button>
+          <button type="button" class="diff-scenario-tab" data-scenario="memory" role="tab" aria-selected="false">
+            <span class="tab-indicator">&#9679;</span> Cross-Agent Memory
+          </button>
+        </div>
+
         <div class="diff-grid">
           <!-- Left: Without Auterix (Red) -->
           <div class="diff-box bad">
@@ -836,9 +858,9 @@
                 <span class="mini-dot green"></span>
               </div>
               <span class="diff-badge bad">❌ Raw AI (Without Auterix)</span>
-              <span class="diff-sub">Vulnerable &bull; Client Leaks &bull; No Invariants</span>
+              <span class="diff-sub" id="diff-bad-sub">Vulnerable &bull; Client Leaks &bull; No Invariants</span>
             </div>
-            <pre class="diff-code"><code>// Client Component ('use client')
+            <pre class="diff-code"><code id="diff-bad-code">// Client Component ('use client')
 import { createClient } from '@supabase/supabase-js';
 
 // ❌ VULNERABILITY 1: Secret service role key leaked on browser bundle!
@@ -866,9 +888,9 @@ export default function UpdateUser() {
                 <span class="mini-dot green"></span>
               </div>
               <span class="diff-badge good">✅ With Auterix Protocol</span>
-              <span class="diff-sub">Strict RSC &bull; Zod Validated &bull; Bank-Grade RLS</span>
+              <span class="diff-sub" id="diff-good-sub">Strict RSC &bull; Zod Validated &bull; Bank-Grade RLS</span>
             </div>
-            <pre class="diff-code"><code>// Server Action ('use server')
+            <pre class="diff-code"><code id="diff-good-code">// Server Action ('use server')
 import { createServerClient } from '@/lib/supabase/server';
 import { UpdateUserSchema } from '@/lib/schemas/user';
 import { requireSession } from '@/lib/auth/guards';
@@ -1092,8 +1114,10 @@ export async function updateUserAction(rawData: unknown) {
           <p class="plan-desc">Multi-agent context compiler &amp; shared memory protocol for any codebase.</p>
           <ul class="plan-features">
             <li><span>✔</span> <strong>All 21 AI tool adapters</strong> (Cursor, Claude, Devin...)</li>
-            <li><span>✔</span> <strong>Cross-Agent Shared Memory</strong> (<code>.ai/memory.md</code>)</li>
+            <li><span>✔</span> <strong>Cross-Agent Shared Memory</strong> (<code>.ai/memory.md</code>) &amp; <code>--ai-note</code> hooks</li>
             <li><span>✔</span> <strong>Token-Optimized Schema Extractor</strong> (SQL, ORMs)</li>
+            <li><span>✔</span> <strong>AI Readiness Scorecard</strong> (<code>npx auterix doctor</code>)</li>
+            <li><span>✔</span> <strong>4 Modular Role Personas</strong> (<code>.ai/roles/</code>)</li>
             <li><span>✔</span> <strong>Automated GitHub Action PR Check</strong> ($0 compute)</li>
             <li><span>✔</span> <strong>Official VS Code Extension</strong> with live telemetry</li>
             <li><span>✔</span> <strong>Deterministic SHA-256 Hash Lock</strong> &amp; CLI</li>
@@ -1119,6 +1143,7 @@ export async function updateUserAction(rawData: unknown) {
             <li><span>✔</span> <strong>Everything in Community</strong>, plus:</li>
             <li><span>✔</span> <strong>5 Runnable Production Starters</strong> (Next.js, FastAPI, Node...)</li>
             <li><span>✔</span> <strong>11 Hardened Component Blueprints</strong> (RAG, Stripe, Auth...)</li>
+            <li><span>✔</span> <strong>6 Specialized Role Personas</strong> (Security Auditor, DB Architect, QA...)</li>
             <li><span>✔</span> <strong>Bank-Grade PostgreSQL RLS</strong> migrations &amp; schemas</li>
             <li><span>✔</span> <strong>Pre-Commit AI Guardrail Hook</strong> (<code>pre-commit-guard.sh</code>)</li>
             <li><span>✔</span> <strong>Standalone Offline Desktop Studio</strong> bundle</li>
@@ -1293,6 +1318,42 @@ export async function updateUserAction(rawData: unknown) {
               </tr>
               <tr class="detailed-row">
                 <td>
+                  <span class="feature-title">AI Readiness Scorecard</span>
+                  <span class="feature-sub"><code>npx auterix doctor</code> &mdash; 8-check diagnostic producing a 0&ndash;100% safety score</span>
+                </td>
+                <td class="col-free"><span class="cell-check">✔ Included</span></td>
+                <td class="col-pro"><span class="cell-check">✔ Included</span></td>
+                <td class="col-agency"><span class="cell-check">✔ Included</span></td>
+              </tr>
+              <tr class="detailed-row">
+                <td>
+                  <span class="feature-title">Modular Role Personas</span>
+                  <span class="feature-sub"><code>.ai/roles/</code> &mdash; Architect, Engineer, Reviewer &amp; Verifier persona files</span>
+                </td>
+                <td class="col-free"><span class="cell-check">✔ 4 Base Roles</span></td>
+                <td class="col-pro"><span class="cell-pro-badge">4 + 6 Specialized</span></td>
+                <td class="col-agency"><span class="cell-agency-badge">4 + 6 Specialized</span></td>
+              </tr>
+              <tr class="detailed-row">
+                <td>
+                  <span class="feature-title">Automated Git-Hook Memory Ingestion</span>
+                  <span class="feature-sub">Post-commit hook captures <code>--ai-note</code> decisions into <code>.ai/memory.md</code> automatically</span>
+                </td>
+                <td class="col-free"><span class="cell-check">✔ Included</span></td>
+                <td class="col-pro"><span class="cell-check">✔ Included</span></td>
+                <td class="col-agency"><span class="cell-check">✔ Included</span></td>
+              </tr>
+              <tr class="detailed-row">
+                <td>
+                  <span class="feature-title">Rich CI Compliance Reports</span>
+                  <span class="feature-sub">Markdown tables with SHA-256 parity matrix &amp; secret scan in GitHub Step Summary</span>
+                </td>
+                <td class="col-free"><span class="cell-check">✔ Basic Report</span></td>
+                <td class="col-pro"><span class="cell-check">✔ Basic Report</span></td>
+                <td class="col-agency"><span class="cell-agency-badge">Full PR Bot + Report</span></td>
+              </tr>
+              <tr class="detailed-row">
+                <td>
                   <span class="feature-title">Web Studio Cockpit</span>
                   <span class="feature-sub">Accessible in-browser rule compiler (0ms WASM, zero server transmission)</span>
                 </td>
@@ -1422,7 +1483,7 @@ export async function updateUserAction(rawData: unknown) {
         <div class="access-chart-toggle-bar">
           <button type="button" id="btn-toggle-access-chart" class="btn-toggle-matrix" aria-expanded="false">
             <span class="matrix-toggle-icon">⚡</span>
-            <span class="matrix-toggle-text">Show Full 22-Feature Comparison Table &darr;</span>
+            <span class="matrix-toggle-text">Show Full 26-Feature Comparison Table &darr;</span>
           </button>
         </div>
       </div>
@@ -1542,6 +1603,7 @@ export async function updateUserAction(rawData: unknown) {
           </summary>
           <div class="faq-answer">
             <p>When switching between Claude Code, Cursor, Windsurf, or Copilot, each AI tool previously started from scratch without knowing previous decisions or bugs. <strong>Cross-Agent Shared Memory</strong> (<code>.ai/memory.md</code>) provides a unified institutional knowledge base where all models record architectural invariants, conventions, and anti-patterns with <code>npx auterix memory</code>.</p>
+            <p>With <strong>automated post-commit ingestion</strong>, simply add <code>--ai-note architecture</code> to any git commit message, and the decision is automatically captured into <code>.ai/memory.md</code> &mdash; no manual steps required.</p>
           </div>
         </details>
 
