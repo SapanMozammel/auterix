@@ -207,6 +207,21 @@ function activate(context) {
     })
   );
 
+  // Command: auterix.doctor
+  context.subscriptions.push(
+    vscode.commands.registerCommand('auterix.doctor', () => {
+      const root = getWorkspaceRoot();
+      const terminal = vscode.window.createTerminal('Auterix Doctor');
+      terminal.show();
+      const localCli = root ? path.join(root, 'bin', 'workflow.mjs') : null;
+      if (localCli && fs.existsSync(localCli)) {
+        terminal.sendText(`node "${localCli}" doctor`);
+      } else {
+        terminal.sendText('npx auterix doctor');
+      }
+    })
+  );
+
   // Command: auterix.openStudio
   context.subscriptions.push(
     vscode.commands.registerCommand('auterix.openStudio', () => {

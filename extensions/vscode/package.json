@@ -4,6 +4,16 @@
   "description": "Zero-drift multi-agent context standard, SHA-256 integrity locks, and cross-agent memory for Cursor, Claude Code, Copilot, Antigravity, and 21 tools.",
   "version": "1.2.0",
   "publisher": "auterix",
+  "license": "MIT",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SapanMozammel/auterix.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SapanMozammel/auterix/issues"
+  },
+  "homepage": "https://auterix.vercel.app",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -33,6 +43,11 @@
   "contributes": {
     "commands": [
       {
+        "command": "auterix.doctor",
+        "title": "Auterix: Run AI Readiness Scorecard (Doctor)",
+        "category": "Auterix"
+      },
+      {
         "command": "auterix.check",
         "title": "Auterix: Verify AI Rules & Compliance",
         "category": "Auterix"
@@ -60,6 +75,7 @@
     ],
     "menus": {
       "commandPalette": [
+        { "command": "auterix.doctor" },
         { "command": "auterix.check" },
         { "command": "auterix.sync" },
         { "command": "auterix.recordMemory" },
