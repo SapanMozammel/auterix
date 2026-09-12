@@ -1653,14 +1653,22 @@ export async function updateUserAction(rawData: unknown) {
         <!-- Item 03 -->
         <div class="faq-item">
           <button type="button" class="faq-question" aria-expanded="false" id="faq-btn-3" aria-controls="faq-ans-3">
-            <span class="faq-question-text">How does the Pro Mode Unlock work in the Web Studio?</span>
+            <span class="faq-question-text">How does the Pro Mode Unlock work in the Web Studio and Terminal CLI?</span>
             <span class="faq-chevron">&plus;</span>
           </button>
           <div class="faq-collapse" id="faq-ans-3" role="region" aria-labelledby="faq-btn-3">
             <div class="faq-collapse-inner">
               <div class="faq-answer">
-                <p>When you purchase Auterix Pro on Gumroad, you download <code>Auterix-Pro-Production-Suite.zip</code>. Click <strong>"Load Pro ZIP"</strong> in the top navigation or Studio header, and drop your ZIP file into the browser modal.</p>
-                <p>Auterix inspects the ZIP signatures 100% locally in your browser using JSZip. Your files are <strong>never uploaded to any server</strong>. Once verified, the Studio unlocks live previews and 1-click custom bundle downloads with production codebases included.</p>
+                <p>When you purchase Auterix Pro on Gumroad, you download <code>Auterix-Pro-Production-Suite.zip</code>. You can use it in two frictionless ways:</p>
+                <p><strong>1. Web Studio Drag &amp; Drop:</strong> Click <strong>"Load Pro ZIP"</strong> in the top navigation or Studio header and drop your ZIP file. Auterix verifies the archive 100% locally in your browser using JSZip &mdash; your files are never uploaded to any server. Once loaded, live previews and 1-click custom bundle downloads unlock immediately.</p>
+                <p><strong>2. Terminal CLI (One-Liner):</strong> You can unpack production starters directly into a new application from your terminal:</p>
+                <div class="code-snippet-box">
+                  <code>npx auterix unpack ./Auterix-Pro-Production-Suite.zip --starter nextjs-supabase --out ./my-new-app</code>
+                </div>
+                <p>Or unpack enterprise blueprints and guardrails directly into your existing project:</p>
+                <div class="code-snippet-box">
+                  <code>npx auterix unpack ./Auterix-Pro-Production-Suite.zip --blueprints --out ./my-existing-app</code>
+                </div>
               </div>
             </div>
           </div>
@@ -1723,6 +1731,30 @@ export async function updateUserAction(rawData: unknown) {
             <div class="faq-collapse-inner">
               <div class="faq-answer">
                 <p><strong>Zero code transmission. Zero telemetry.</strong> Auterix is designed for bank-grade privacy. When you drop a <code>package.json</code> or ZIP into the Web Studio, all parsing, stack detection, and compilation occurs strictly in your browser's local memory via Web APIs and JSZip.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 08 -->
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" id="faq-btn-8" aria-controls="faq-ans-8">
+            <span class="faq-question-text">What CLI commands are available with Auterix?</span>
+            <span class="faq-chevron">&plus;</span>
+          </button>
+          <div class="faq-collapse" id="faq-ans-8" role="region" aria-labelledby="faq-btn-8">
+            <div class="faq-collapse-inner">
+              <div class="faq-answer">
+                <p>Auterix includes a high-performance, zero-dependency CLI executable via <code>npx auterix</code>:</p>
+                <ul style="margin: 8px 0 12px 18px; line-height: 1.8;">
+                  <li><code>npx auterix init</code> &mdash; Interactive ANSI wizard or headless setup with 21 synchronized AI adapters and pre-commit guardrails.</li>
+                  <li><code>npx auterix doctor</code> &mdash; 8-check diagnostic producing a 0&ndash;100% AI Safety &amp; Readiness Scorecard.</li>
+                  <li><code>npx auterix unpack &lt;zip&gt;</code> &mdash; Extracts full production starters (Next.js 15, FastAPI, Node Fastify, Expo Mobile, Cloudflare Hono, AI Pipeline) or enterprise blueprints from Pro ZIP.</li>
+                  <li><code>npx auterix extract-schema --file &lt;path&gt;</code> &mdash; Distills Prisma, Drizzle, or SQL schema into ultra-dense Markdown (&gt;70% LLM token savings).</li>
+                  <li><code>npx auterix memory</code> &mdash; Reads or records institutional decisions into <code>.ai/memory.md</code> for cross-agent memory.</li>
+                  <li><code>npx auterix check</code> &mdash; Cryptographic SHA-256 lockfile integrity verification with zero drift.</li>
+                  <li><code>npx auterix inspect</code> &mdash; Static non-executing inventory of active stack, adapters, and task state.</li>
+                </ul>
               </div>
             </div>
           </div>

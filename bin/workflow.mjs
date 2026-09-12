@@ -18,6 +18,7 @@ import { extractSchemaContextFromFile } from '../lib/schema-extractor.mjs';
 import { getOrCreateMemoryFile, recordMemory, readMemoryContext, parseCommitMessage } from '../lib/memory.mjs';
 
 function performInit(root, rawAdapters, profileName, bundleFn, installPreCommit = false) {
+  if (!fs.existsSync(root)) fs.mkdirSync(root, { recursive: true });
   const coreKnown = new Set(['cursor', 'claude', 'antigravity', 'copilot', 'codex', 'augment']);
   let coreAdapters = undefined;
   if (rawAdapters) {
@@ -371,26 +372,26 @@ Options:
         result = bundle();
         break;
       case 'inspect':
-        result = inspect(options['--root']);
+        result = inspect(options['--root'] ? path.resolve(options['--root']) : process.cwd());
         break;
       case 'plan':
-        result = makePlan(options['--root'], bundle(), 'install', {
+        result = makePlan(options['--root'] ? path.resolve(options['--root']) : process.cwd(), bundle(), 'install', {
           adapters: options['--adapters'] === 'none' ? [] : options['--adapters']?.split(','),
         });
         break;
       case 'update-plan':
-        result = makePlan(options['--root'], bundle(), 'update', {
+        result = makePlan(options['--root'] ? path.resolve(options['--root']) : process.cwd(), bundle(), 'update', {
           adapters: options['--adapters'] === 'none' ? [] : options['--adapters']?.split(','),
         });
         break;
       case 'apply':
-        result = applyPlan(options['--root'], bundle(), readJsonFile(options['--plan']));
+        result = applyPlan(options['--root'] ? path.resolve(options['--root']) : process.cwd(), bundle(), readJsonFile(options['--plan']));
         break;
       case 'check':
-        result = check(options['--root']);
+        result = check(options['--root'] ? path.resolve(options['--root']) : process.cwd());
         break;
       case 'eject-plan':
-        result = ejectPlan(options['--root']);
+        result = ejectPlan(options['--root'] ? path.resolve(options['--root']) : process.cwd());
         break;
       case 'init': {
         const root = path.resolve(options['--root'] || process.cwd());
@@ -400,10 +401,14 @@ Options:
       }
       case 'extract-schema': {
         if (!options['--file']) throw new Error('--file is required for extract-schema');
-        const md = extractSchemaContextFromFile(options['--file']);
+        const schemaPath = path.resolve(options['--file']);
+        const md = extractSchemaContextFromFile(schemaPath);
         if (options['--out']) {
-          fs.writeFileSync(options['--out'], md, 'utf-8');
-          result = { status: 'extracted', file: options['--file'], out: options['--out'] };
+          const outPath = path.resolve(options['--out']);
+          fs.mkdirSync(path.dirname(outPath), { recursive: true });
+          fs.writeFileSync(outPath, md, 'utf-8');
+          process.stdout.write(`\n\x1b[32m✔ Schema extracted to ${outPath}\x1b[0m\n\n`);
+          process.exit(0);
         } else {
           process.stdout.write(md);
           process.exit(0);
@@ -424,7 +429,12 @@ Options:
         const { runDiagnostics, formatScorecard } = await import('../lib/doctor.mjs');
         const report = runDiagnostics(root);
         if (options['--out']) {
-          result = report;
+          const outPath = path.resolve(options['--out']);
+          fs.mkdirSync(path.dirname(outPath), { recursive: true });
+          fs.writeFileSync(outPath, JSON.stringify(report, null, 2) + '\n', 'utf-8');
+          process.stdout.write(`\n\x1b[32m✔ Doctor report saved to ${outPath}\x1b[0m\n\n`);
+          if (report.percentage < 100) process.exitCode = 1;
+          process.exit(process.exitCode || 0);
         } else {
           process.stdout.write(formatScorecard(report));
         }
@@ -447,6 +457,9 @@ Options:
           'enterprise-node': '03-Enterprise-NodeJS-Clean-Architecture',
           'react-native-expo': '04-ReactNative-Expo-Mobile',
           'ai-agent-pipeline': '05-AI-Agent-Engineering-Pipeline',
+          'ai-pipeline': '05-AI-Agent-Engineering-Pipeline',
+          'cloudflare-workers': '09-Cloudflare-Workers-Hono-D1',
+          'cloudflare': '09-Cloudflare-Workers-Hono-D1',
         };
 
         const { execSync } = await import('node:child_process');
@@ -467,7 +480,7 @@ Options:
         }
 
         if (!options['--starter']) {
-          process.stdout.write(`\n\x1b[36mAuterix Pro Production Suite Archive Verified:\x1b[0m ${path.basename(resolvedZip)}\n\nAvailable Starters:\n  1. nextjs-supabase      (Next.js 15 App Router + Supabase PostgreSQL RLS)\n  2. fastapi-sqlalchemy   (Python FastAPI + Async SQLAlchemy 2.0 + JWT)\n  3. enterprise-node      (Node.js 22 + Fastify/Prisma Clean Architecture)\n  4. react-native-expo    (Expo 51+ React Native + SecureStore)\n  5. ai-agent-pipeline    (Agent Evaluation Harness + Structured Inference)\n\n\x1b[1mTo unpack a starter into a new project:\x1b[0m\n  npx auterix unpack "${zipFile}" --starter nextjs-supabase --out ./my-new-app\n\n\x1b[1mTo unpack enterprise blueprints into an existing project:\x1b[0m\n  npx auterix unpack "${zipFile}" --blueprints --out ./my-existing-app\n\n`);
+          process.stdout.write(`\n\x1b[36mAuterix Pro Production Suite Archive Verified:\x1b[0m ${path.basename(resolvedZip)}\n\nAvailable Starters:\n  1. nextjs-supabase      (Next.js 15 App Router + Supabase PostgreSQL RLS)\n  2. fastapi-sqlalchemy   (Python FastAPI + Async SQLAlchemy 2.0 + JWT)\n  3. enterprise-node      (Node.js 22 + Fastify/Prisma Clean Architecture)\n  4. react-native-expo    (Expo 51+ React Native + SecureStore)\n  5. ai-agent-pipeline    (Agent Evaluation Harness + Structured Inference)\n  6. cloudflare-workers   (Cloudflare Workers + Hono Edge API + D1)\n\n\x1b[1mTo unpack a starter into a new project:\x1b[0m\n  npx auterix unpack "${zipFile}" --starter nextjs-supabase --out ./my-new-app\n\n\x1b[1mTo unpack enterprise blueprints into an existing project:\x1b[0m\n  npx auterix unpack "${zipFile}" --blueprints --out ./my-existing-app\n\n`);
           result = { status: 'verified', availableStarters: Object.keys(STARTER_MAP) };
           break;
         }
