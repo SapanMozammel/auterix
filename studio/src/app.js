@@ -2244,6 +2244,40 @@ function initDiffSimulator() {
   });
 }
 
+// 10.8 Interactive Animated FAQ Accordion (CSS Grid Approach - sapan.dev pattern)
+function initFaqAccordion() {
+  const faqWrap = document.querySelector(".faq-accordion-wrap");
+  if (!faqWrap) return;
+
+  const items = faqWrap.querySelectorAll(".faq-item");
+  items.forEach((item) => {
+    const btn = item.querySelector(".faq-question");
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+      const isOpen = item.classList.contains("is-open");
+
+      // Close other accordion items for clean accordion UX (matching sapan.dev)
+      items.forEach((other) => {
+        if (other !== item && other.classList.contains("is-open")) {
+          other.classList.remove("is-open");
+          const otherBtn = other.querySelector(".faq-question");
+          if (otherBtn) otherBtn.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      // Toggle current item
+      if (isOpen) {
+        item.classList.remove("is-open");
+        btn.setAttribute("aria-expanded", "false");
+      } else {
+        item.classList.add("is-open");
+        btn.setAttribute("aria-expanded", "true");
+      }
+    });
+  });
+}
+
 // 11. Bootstrap Studio
 function bootstrapStudio() {
   renderAdapters();
@@ -2259,6 +2293,7 @@ function bootstrapStudio() {
   initActions();
   initMatrixToggle();
   initDiffSimulator();
+  initFaqAccordion();
   compileAll();
 }
 

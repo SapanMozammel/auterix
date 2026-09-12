@@ -1553,79 +1553,149 @@ export async function updateUserAction(rawData: unknown) {
       </p>
 
       <div class="faq-accordion-wrap">
-        <details class="faq-item" open>
-          <summary class="faq-question">
-            <span>What exactly is Auterix, and why do I need it if I already pay for Cursor or Claude?</span>
-            <span class="faq-chevron">&plus;</span>
-          </summary>
-          <div class="faq-answer">
-            <p>Cursor, Claude, and Copilot are brilliant generative engines, but they lack persistent architectural context about your specific codebase. Without Auterix, they frequently hallucinate wrong package versions, leak API keys into client components, and write junior-level spaghetti code.</p>
-            <p>Auterix acts as an <strong>autonomous context orchestrator</strong>. It compiles deterministic rules, type boundaries, and security invariants into native rule files (<code>.cursorrules</code>, <code>CLAUDE.md</code>, <code>.agents/</code>) so your AI assistant behaves like a senior staff engineer on every single turn.</p>
+        <!-- Item 01 -->
+        <div class="faq-item is-open">
+          <button type="button" class="faq-question" aria-expanded="true" id="faq-btn-1" aria-controls="faq-ans-1">
+            <span class="faq-q-content">
+              <span class="faq-number">01</span>
+              <span class="faq-title">What exactly is Auterix, and why do I need it if I already pay for Cursor or Claude?</span>
+            </span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-collapse" id="faq-ans-1" role="region" aria-labelledby="faq-btn-1">
+            <div class="faq-collapse-inner">
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <p>Cursor, Claude, and Copilot are brilliant generative engines, but they lack persistent architectural context about your specific codebase. Without Auterix, they frequently hallucinate wrong package versions, leak API keys into client components, and write junior-level spaghetti code.</p>
+                  <p>Auterix acts as an <strong>autonomous context orchestrator</strong>. It compiles deterministic rules, type boundaries, and security invariants into native rule files (<code>.cursorrules</code>, <code>CLAUDE.md</code>, <code>.agents/</code>) so your AI assistant behaves like a senior staff engineer on every single turn.</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </details>
+        </div>
 
-        <details class="faq-item">
-          <summary class="faq-question">
-            <span>Is the Free Core truly free, or is it a trial?</span>
-            <span class="faq-chevron">&plus;</span>
-          </summary>
-          <div class="faq-answer">
-            <p><strong>The Free Core is 100% free forever under the MIT License.</strong> There are no trials, no credit card requirements, and no feature gates on context generation. You can drop any project into the Web Studio or use the open-source CLI to compile rule files across all 21 supported AI tools indefinitely.</p>
+        <!-- Item 02 -->
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" id="faq-btn-2" aria-controls="faq-ans-2">
+            <span class="faq-q-content">
+              <span class="faq-number">02</span>
+              <span class="faq-title">Is the Free Core truly free, or is it a trial?</span>
+            </span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-collapse" id="faq-ans-2" role="region" aria-labelledby="faq-btn-2">
+            <div class="faq-collapse-inner">
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <p><strong>The Free Core is 100% free forever under the MIT License.</strong> There are no trials, no credit card requirements, and no feature gates on context generation. You can drop any project into the Web Studio or use the open-source CLI to compile rule files across all 21 supported AI tools indefinitely.</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </details>
+        </div>
 
-        <details class="faq-item">
-          <summary class="faq-question">
-            <span>How does the Pro Mode Unlock work in the Web Studio?</span>
-            <span class="faq-chevron">&plus;</span>
-          </summary>
-          <div class="faq-answer">
-            <p>When you purchase Auterix Pro on Gumroad, you download <code>Auterix-Pro-Production-Suite.zip</code>. Click <strong>"Load Pro ZIP"</strong> in the top navigation or Studio header, and drop your ZIP file into the browser modal.</p>
-            <p>Auterix inspects the ZIP signatures 100% locally in your browser using JSZip. Your files are <strong>never uploaded to any server</strong>. Once verified, the Studio unlocks live previews and 1-click custom bundle downloads with production codebases included.</p>
+        <!-- Item 03 -->
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" id="faq-btn-3" aria-controls="faq-ans-3">
+            <span class="faq-q-content">
+              <span class="faq-number">03</span>
+              <span class="faq-title">How does the Pro Mode Unlock work in the Web Studio?</span>
+            </span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-collapse" id="faq-ans-3" role="region" aria-labelledby="faq-btn-3">
+            <div class="faq-collapse-inner">
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <p>When you purchase Auterix Pro on Gumroad, you download <code>Auterix-Pro-Production-Suite.zip</code>. Click <strong>"Load Pro ZIP"</strong> in the top navigation or Studio header, and drop your ZIP file into the browser modal.</p>
+                  <p>Auterix inspects the ZIP signatures 100% locally in your browser using JSZip. Your files are <strong>never uploaded to any server</strong>. Once verified, the Studio unlocks live previews and 1-click custom bundle downloads with production codebases included.</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </details>
+        </div>
 
-        <details class="faq-item">
-          <summary class="faq-question">
-            <span>How do Agency &amp; Team collaborators receive updates from the private repository?</span>
-            <span class="faq-chevron">&plus;</span>
-          </summary>
-          <div class="faq-answer">
-            <p>When you purchase the $39 Agency tier, provide your GitHub username at checkout. Our automated webhook immediately sends a collaborator invitation to <code>SapanMozammel/auterix-pro</code>.</p>
-            <p>You can clone the repository directly (<code>git clone git@github.com:SapanMozammel/auterix-pro.git</code>) and pull fresh updates whenever new AI tools or stack blueprints are released.</p>
+        <!-- Item 04 -->
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" id="faq-btn-4" aria-controls="faq-ans-4">
+            <span class="faq-q-content">
+              <span class="faq-number">04</span>
+              <span class="faq-title">How do Agency &amp; Team collaborators receive updates from the private repository?</span>
+            </span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-collapse" id="faq-ans-4" role="region" aria-labelledby="faq-btn-4">
+            <div class="faq-collapse-inner">
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <p>When you purchase the $39 Agency tier, provide your GitHub username at checkout. Our automated webhook immediately sends a collaborator invitation to <code>SapanMozammel/auterix-pro</code>.</p>
+                  <p>You can clone the repository directly (<code>git clone git@github.com:SapanMozammel/auterix-pro.git</code>) and pull fresh updates whenever new AI tools or stack blueprints are released.</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </details>
+        </div>
 
-        <details class="faq-item">
-          <summary class="faq-question">
-            <span>What is Cross-Agent Shared Memory, and how does it prevent context loss?</span>
-            <span class="faq-chevron">&plus;</span>
-          </summary>
-          <div class="faq-answer">
-            <p>When switching between Claude Code, Cursor, Windsurf, or Copilot, each AI tool previously started from scratch without knowing previous decisions or bugs. <strong>Cross-Agent Shared Memory</strong> (<code>.ai/memory.md</code>) provides a unified institutional knowledge base where all models record architectural invariants, conventions, and anti-patterns with <code>npx auterix memory</code>.</p>
-            <p>With <strong>automated post-commit ingestion</strong>, simply add <code>--ai-note architecture</code> to any git commit message, and the decision is automatically captured into <code>.ai/memory.md</code> &mdash; no manual steps required.</p>
+        <!-- Item 05 -->
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" id="faq-btn-5" aria-controls="faq-ans-5">
+            <span class="faq-q-content">
+              <span class="faq-number">05</span>
+              <span class="faq-title">What is Cross-Agent Shared Memory, and how does it prevent context loss?</span>
+            </span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-collapse" id="faq-ans-5" role="region" aria-labelledby="faq-btn-5">
+            <div class="faq-collapse-inner">
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <p>When switching between Claude Code, Cursor, Windsurf, or Copilot, each AI tool previously started from scratch without knowing previous decisions or bugs. <strong>Cross-Agent Shared Memory</strong> (<code>.ai/memory.md</code>) provides a unified institutional knowledge base where all models record architectural invariants, conventions, and anti-patterns with <code>npx auterix memory</code>.</p>
+                  <p>With <strong>automated post-commit ingestion</strong>, simply add <code>--ai-note architecture</code> to any git commit message, and the decision is automatically captured into <code>.ai/memory.md</code> &mdash; no manual steps required.</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </details>
+        </div>
 
-        <details class="faq-item">
-          <summary class="faq-question">
-            <span>How does the Token-Optimized Schema Extractor save LLM prompt budget?</span>
-            <span class="faq-chevron">&plus;</span>
-          </summary>
-          <div class="faq-answer">
-            <p>Raw database schemas and ORM client files (like massive Prisma or Drizzle definitions) consume thousands of tokens when dumped into AI context. The <code>extract-schema</code> command distills table definitions, foreign keys, and indexes into ultra-compact, high-density Markdown that uses <strong>&gt;70% fewer tokens</strong> while providing complete schema clarity.</p>
+        <!-- Item 06 -->
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" id="faq-btn-6" aria-controls="faq-ans-6">
+            <span class="faq-q-content">
+              <span class="faq-number">06</span>
+              <span class="faq-title">How does the Token-Optimized Schema Extractor save LLM prompt budget?</span>
+            </span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-collapse" id="faq-ans-6" role="region" aria-labelledby="faq-btn-6">
+            <div class="faq-collapse-inner">
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <p>Raw database schemas and ORM client files (like massive Prisma or Drizzle definitions) consume thousands of tokens when dumped into AI context. The <code>extract-schema</code> command distills table definitions, foreign keys, and indexes into ultra-compact, high-density Markdown that uses <strong>&gt;70% fewer tokens</strong> while providing complete schema clarity.</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </details>
+        </div>
 
-        <details class="faq-item">
-          <summary class="faq-question">
-            <span>Does Auterix send my code or architecture to any third-party server?</span>
-            <span class="faq-chevron">&plus;</span>
-          </summary>
-          <div class="faq-answer">
-            <p><strong>Zero code transmission. Zero telemetry.</strong> Auterix is designed for bank-grade privacy. When you drop a <code>package.json</code> or ZIP into the Web Studio, all parsing, stack detection, and compilation occurs strictly in your browser's local memory via Web APIs and JSZip.</p>
+        <!-- Item 07 -->
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" id="faq-btn-7" aria-controls="faq-ans-7">
+            <span class="faq-q-content">
+              <span class="faq-number">07</span>
+              <span class="faq-title">Does Auterix send my code or architecture to any third-party server?</span>
+            </span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="faq-collapse" id="faq-ans-7" role="region" aria-labelledby="faq-btn-7">
+            <div class="faq-collapse-inner">
+              <div class="faq-answer">
+                <div class="faq-answer-inner">
+                  <p><strong>Zero code transmission. Zero telemetry.</strong> Auterix is designed for bank-grade privacy. When you drop a <code>package.json</code> or ZIP into the Web Studio, all parsing, stack detection, and compilation occurs strictly in your browser's local memory via Web APIs and JSZip.</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </details>
+        </div>
       </div>
     </section>
 
