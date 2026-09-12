@@ -261,12 +261,12 @@ try {
   const rawArgs = process.argv.slice(2);
 
   if (rawArgs.includes('--version') || rawArgs.includes('-v')) {
-    process.stdout.write('1.2.0\n');
+    process.stdout.write('1.2.1\n');
     process.exit(0);
   }
 
   if (rawArgs.includes('--help') || rawArgs.includes('-h') || rawArgs[0] === 'help') {
-    process.stdout.write(`Auterix v1.2.0 - Universal Multi-Agent Workflow Standard
+    process.stdout.write(`Auterix v1.2.1 - Universal Multi-Agent Workflow Standard
 
 Usage:
   npx auterix [command] [options]

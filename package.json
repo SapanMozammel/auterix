@@ -1,6 +1,6 @@
 {
   "name": "auterix",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "license": "MIT",
   "description": "One workflow across 21 native AI tools. Universal agent standard.",
   "type": "module",
