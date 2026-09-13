@@ -2,6 +2,7 @@
 
 **One workflow across 21 native AI tools. Universal agent standard.**
 
+[![GitHub Stars](https://img.shields.io/github/stars/SapanMozammel/auterix?style=social)](https://github.com/SapanMozammel/auterix/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen)](package.json)
 [![Tests: 90 Passing](https://img.shields.io/badge/Tests-90%20Passing-emerald)](test/)
@@ -13,6 +14,7 @@
 
 Auterix is a deterministic, tool-neutral autonomous context protocol and multi-agent engineering workflow. Projects define shared architectural invariants, task lifecycles, and verification gates once, while Auterix compiles, verifies, and locks them natively across **21 modern AI coding assistants and platforms** — including Cursor, Claude Code, Google Antigravity, Windsurf, GitHub Copilot, Devin, Aider, OpenHands, Cline, Roo Code, CodeRabbit, Zed, Trae, and more.
 
+> ⭐ **If Auterix saves you engineering hours or prevents AI regressions, please star the repository — it helps more engineers discover the project!**  
 > 📖 **[Explore the Documentation Hub (docs/)](docs/README.md)** | **[60-Second Quickstart](docs/quickstart.md)** | **[Free vs. Pro vs. Agency Guide](docs/free-vs-pro.md)**  
 > ⚡ **Live Web Studio:** Configure, auto-detect your stack, test hallucination diffs, and export unified AI configs visually at **[auterix.vercel.app](https://auterix.vercel.app)**.  
 > 📦 **Commercial Pro Suite:** Production stacks, runnable templates, pre-commit AI guardrails, turnkey PR review bots, and 6 specialized role personas available at **[Gumroad (`$14`)](https://tenantdefense.gumroad.com/l/auterix)**.

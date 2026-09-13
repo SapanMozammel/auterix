@@ -2221,7 +2221,33 @@ Production blueprints, database migrations, and security guardrails are included
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+
+    // Show gentle star toast
+    setTimeout(() => {
+      showStarToast();
+    }, 400);
   });
+}
+
+function showStarToast() {
+  if (document.getElementById("auterix-star-toast")) return;
+  const toast = document.createElement("div");
+  toast.id = "auterix-star-toast";
+  toast.className = "auterix-star-toast";
+  toast.innerHTML = `
+    <div class="toast-content">
+      <span class="toast-star">⭐</span>
+      <div class="toast-text">
+        <strong>Bundle Downloaded!</strong>
+        <span>If Auterix saves you time, star us on GitHub — it keeps the core free!</span>
+      </div>
+      <a href="https://github.com/SapanMozammel/auterix" target="_blank" rel="noopener" class="toast-btn-star">Star ↗</a>
+      <button type="button" class="toast-btn-close" aria-label="Close">&times;</button>
+    </div>
+  `;
+  document.body.appendChild(toast);
+  toast.querySelector(".toast-btn-close").addEventListener("click", () => toast.remove());
+  setTimeout(() => { if (toast.parentNode) toast.remove(); }, 10000);
 }
 
 

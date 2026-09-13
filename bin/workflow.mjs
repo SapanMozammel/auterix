@@ -360,7 +360,7 @@ Options:
       const wizard = await runInteractiveWizard();
       const root = path.resolve(options['--root'] || process.cwd());
       result = performInit(root, wizard.adapters, wizard.profile, bundle, wizard.installPreCommit);
-      process.stdout.write(`\n\x1b[32m✔ Auterix synchronized ${wizard.adapters.length} AI tools with ${wizard.profile} stack!\x1b[0m\n\n`);
+      process.stdout.write(`\n\x1b[32m✔ Auterix synchronized ${wizard.adapters.length} AI tools with ${wizard.profile} stack!\x1b[0m\n\x1b[90m⭐ Star on GitHub: https://github.com/SapanMozammel/auterix\x1b[0m\n\n`);
     } else {
       throw new Error(
         'Usage: node bin/workflow.mjs init|inspect|plan|update-plan|apply|check|eject-plan|extract-schema|memory --root /absolute/project [--adapters cursor,claude,...|none] [--profile nextjs-supabase] [--bundle /absolute/bundle.json] [--plan /absolute/plan.json] [--out /absolute/new.json]; or bundle --out /absolute/new.json',
@@ -437,6 +437,7 @@ Options:
           process.exit(process.exitCode || 0);
         } else {
           process.stdout.write(formatScorecard(report));
+          process.stdout.write('\x1b[90m⭐ Star on GitHub: https://github.com/SapanMozammel/auterix\x1b[0m\n\n');
         }
         if (report.percentage < 100) process.exitCode = 1;
         break;
