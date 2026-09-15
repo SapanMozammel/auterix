@@ -1050,7 +1050,9 @@ ${context}
 function generateProjectManifest(stackKey) {
   const profile = STACK_PROFILES[stackKey] || STACK_PROFILES["baseline"];
   return JSON.stringify({
-    auterixVersion: "1.2.0",
+    // Static string: this file ships as a plain browser bundle with no build-time
+    // access to package.json. Keep in sync with package.json's version by hand.
+    auterixVersion: "1.3.0",
     schema: 1,
     project: {
       name: "auterix-managed-project",

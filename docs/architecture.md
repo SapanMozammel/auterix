@@ -1,7 +1,9 @@
 # Distribution architecture
 
 `baseline/managed/` owns portable instructions, templates and discovery bridges.
-`baseline/project/` provides editable starter context. `lib/workflow.mjs` implements
+`baseline/project/` provides editable starter context, including an opt-in
+`.formatter/` config generator: present from install, never overwritten by later
+syncs, and touched only if the project runs it. `lib/workflow.mjs` implements
 filesystem guards, content-addressed bundles, preview plans, adoption and checking.
 `lib/context.mjs` validates project-owned data through a guarded reader, without
 filesystem or process access. `bin/workflow.mjs` is the source CLI; these libraries and a small checker are

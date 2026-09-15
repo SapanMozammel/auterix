@@ -5,7 +5,7 @@
 [![GitHub Stars](https://img.shields.io/github/stars/SapanMozammel/auterix?style=social)](https://github.com/SapanMozammel/auterix/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D22-brightgreen)](package.json)
-[![Tests: 90 Passing](https://img.shields.io/badge/Tests-90%20Passing-emerald)](test/)
+[![Tests: 91 Passing](https://img.shields.io/badge/Tests-91%20Passing-emerald)](test/)
 [![npm version](https://img.shields.io/npm/v/auterix.svg?color=cb3837)](https://www.npmjs.com/package/auterix)
 [![Open VSX](https://img.shields.io/open-vsx/v/auterix/auterix-workflow.svg?color=purple)](https://open-vsx.org/extension/auterix/auterix-workflow)
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/auterix.auterix-workflow.svg?color=blue)](https://marketplace.visualstudio.com/items?itemName=auterix.auterix-workflow)
@@ -98,6 +98,26 @@ npx auterix memory --category anti-patterns --note "Do not use client-side Supab
 
 ---
 
+## 🎨 Single-Source Formatter Config (`.formatter/`)
+
+AI assistants drift on formatting as much as on architecture — one commit in tabs,
+the next in spaces. `npx auterix init` scaffolds `.formatter/FORMATTER_CONFIG.md`
+alongside your project (edit once, in plain `KEY=VALUE` form) plus a generator
+that keeps `.prettierrc.cjs` and `.prettierignore` in sync with it:
+
+```sh
+node .formatter/sync.cjs   # regenerates .prettierrc.cjs + .prettierignore
+```
+
+The generated `.prettierignore` is a blacklist, not a whitelist — it stays correct
+in monorepos with multiple source roots (`apps/*/src`, `packages/*/src`), where a
+whitelist-style ignore file (`/*` + `!/src/`) silently stops formatting everything
+outside a single root-level `src/`. Consistent with Auterix's portable core
+selecting nothing on your behalf: this file is yours from the first `init`, never
+overwritten by later syncs, and installing it doesn't touch your `package.json`.
+
+---
+
 ## 🛡️ Rich CI Compliance Reports (`action.yml`)
 
 Add turnkey AI rule compliance audits to your GitHub PRs at **`$0.00` compute cost**. Auterix formats rich Markdown tables directly into `$GITHUB_STEP_SUMMARY`:
@@ -187,7 +207,7 @@ Auterix includes battle-tested production profiles available interactively in th
 node --test
 ```
 
-Auterix includes **90 automated unit tests** (0 external npm dependencies, running on Node.js >=22 native test runner):
+Auterix includes **91 automated unit tests** (0 external npm dependencies, running on Node.js >=22 native test runner):
 * Deterministic, content-addressed SHA-256 bundle digests.
 * Diagnostic 8-check health scoring (`lib/doctor.mjs`).
 * Automated commit message memory parsing (`lib/memory.mjs`).

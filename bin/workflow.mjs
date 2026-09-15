@@ -11,6 +11,7 @@ import {
   makePlan,
   readJsonFile,
   validateBundle,
+  VERSION,
   writeNewJson,
 } from '../lib/workflow.mjs';
 import { runInteractiveWizard } from '../lib/tui.mjs';
@@ -261,12 +262,12 @@ try {
   const rawArgs = process.argv.slice(2);
 
   if (rawArgs.includes('--version') || rawArgs.includes('-v')) {
-    process.stdout.write('1.2.1\n');
+    process.stdout.write(`${VERSION}\n`);
     process.exit(0);
   }
 
   if (rawArgs.includes('--help') || rawArgs.includes('-h') || rawArgs[0] === 'help') {
-    process.stdout.write(`Auterix v1.2.1 - Universal Multi-Agent Workflow Standard
+    process.stdout.write(`Auterix v${VERSION} - Universal Multi-Agent Workflow Standard
 
 Usage:
   npx auterix [command] [options]
@@ -437,7 +438,8 @@ Options:
           process.exit(process.exitCode || 0);
         } else {
           process.stdout.write(formatScorecard(report));
-          process.stdout.write('\x1b[90m⭐ Star on GitHub: https://github.com/SapanMozammel/auterix\x1b[0m\n\n');
+          process.stdout.write('\x1b[90m⭐ Star on GitHub: https://github.com/SapanMozammel/auterix\x1b[0m\n');
+          process.stdout.write('\x1b[90m📦 Want runnable production stacks, RLS migrations & a pre-commit AI guardrail? Auterix Pro: https://tenantdefense.gumroad.com/l/auterix\x1b[0m\n\n');
         }
         if (report.percentage < 100) process.exitCode = 1;
         break;
@@ -506,7 +508,20 @@ Options:
           performInit(dest, options['--adapters'] || 'cursor,claude,copilot', starterKey, bundle, true);
         }
 
-        process.stdout.write(`\n\x1b[32m✔ Successfully unpacked ${folderName} to ${dest}!\x1b[0m\n\x1b[32m✔ Pre-configured with 21 synchronized AI adapters, guardrails, and templates!\x1b[0m\n\nNext steps:\n  cd ${path.relative(process.cwd(), dest) || '.'}\n  npm install (or pip install)\n\n`);
+        // Each starter ships AI context + curated reference implementations
+        // (boilerplate-templates/), not a scaffolded app — point to the real
+        // official scaffolder for that stack so `cd` isn't followed by a
+        // failing `npm install` against a directory with no package.json.
+        const BOOTSTRAP_HINT = {
+          'nextjs-supabase': 'npx create-next-app@latest . --typescript --app',
+          'fastapi-sqlalchemy': 'python -m venv .venv && pip install fastapi "uvicorn[standard]" sqlalchemy asyncpg',
+          'enterprise-node': 'npm init -y && npm install fastify @fastify/autoload',
+          'react-native-expo': 'npx create-expo-app@latest .',
+          'ai-agent-pipeline': 'npm init -y',
+          'cloudflare-workers': 'npm create cloudflare@latest .',
+        }[starterKey] || 'npm init -y';
+
+        process.stdout.write(`\n\x1b[32m✔ Successfully unpacked ${folderName} to ${dest}!\x1b[0m\n\x1b[32m✔ Pre-configured with 21 synchronized AI adapters, guardrails, and templates!\x1b[0m\n\nThis unpacks AI context + a curated reference implementation (see boilerplate-templates/) —\nnot a runnable app. You have two ways to get one:\n\nNext steps:\n  cd ${path.relative(process.cwd(), dest) || '.'}\n  ${BOOTSTRAP_HINT}\n  (then review boilerplate-templates/ and apply the reference code to your new app)\n\n\x1b[1mOr, for a ready-to-run starter kernel with package.json and dependencies pre-declared:\x1b[0m\n  npx auterix unpack "${zipFile}" --blueprints --out .\n\n`);
         result = { status: 'unpacked', starter: starterKey, destination: dest };
         break;
       }

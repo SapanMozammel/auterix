@@ -15,6 +15,7 @@ import {
   makePlan,
   rootPath,
   validateBundle,
+  VERSION,
   writeNewJson,
 } from '../lib/workflow.mjs';
 
@@ -41,10 +42,17 @@ function install(root, release = bundle) {
 function changedRelease(mutator) {
   const copy = structuredClone(bundle);
   delete copy.sourceDigest;
-  copy.version = '1.2.1';
+  // Distinct from the real VERSION on purpose (simulates "a newer release"); never hardcode
+  // this to a literal that could collide with package.json's version again.
+  copy.version = `${VERSION}-next`;
   mutator(copy);
   return { ...copy, sourceDigest: digest(copy) };
 }
+
+test('VERSION literal matches package.json (must stay a literal, not a filesystem lookup, since lib/workflow.mjs is copied verbatim into consumer projects)', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(source, 'package.json'), 'utf8'));
+  assert.equal(VERSION, pkg.version);
+});
 
 test('bundle is deterministic, bounded and excludes historical policies', () => {
   assert.deepEqual(bundle, buildBundle(source));
@@ -59,7 +67,7 @@ test('bundle is deterministic, bounded and excludes historical policies', () => 
 
 test('new bundles use the Auterix identity and a distinct compatible release version', () => {
   assert.equal(bundle.source, 'SapanMozammel/auterix');
-  assert.equal(bundle.version, '1.2.0');
+  assert.equal(bundle.version, VERSION);
   assert.notEqual(bundle.sourceDigest, legacyBundle.sourceDigest);
 });
 
@@ -126,7 +134,8 @@ test('legacy consumers migrate through a reviewed update and retain their projec
   assert(
     plan.actions
       .filter((action) => action.ownership === 'project')
-      .every((action) => action.action === 'preserve'),
+      .every((action) => action.action === 'preserve' || action.action === 'create'),
+    'project files must only ever be preserved (already present) or created (new in this release), never overwritten',
   );
   assert.equal(
     plan.actions.find((action) => action.path === '.ai/tools/workflow.mjs').action,
@@ -137,11 +146,11 @@ test('legacy consumers migrate through a reviewed update and retain their projec
     'create',
   );
   const applied = applyPlan(root, bundle, plan);
-  assert.equal(applied.version, '1.2.0');
+  assert.equal(applied.version, VERSION);
   assert.equal(applied.sourceDigest, bundle.sourceDigest);
   const lock = JSON.parse(read(root, '.ai/workflow.lock.json'));
   assert.equal(lock.source, 'SapanMozammel/auterix');
-  assert.equal(lock.version, '1.2.0');
+  assert.equal(lock.version, VERSION);
   assert.equal(lock.sourceDigest, bundle.sourceDigest);
   assert.equal(read(root, '.ai/core/LICENSE.md'), read(source, 'LICENSE'));
   assert.equal(lock.files['.ai/core/LICENSE.md'], digest(read(source, 'LICENSE')));
@@ -149,7 +158,7 @@ test('legacy consumers migrate through a reviewed update and retain their projec
   assert(check(root).ok);
   const upgradedCheck = runChecker();
   assert.equal(upgradedCheck.status, 0, upgradedCheck.stderr);
-  assert.equal(JSON.parse(upgradedCheck.stdout).version, '1.2.0');
+  assert.equal(JSON.parse(upgradedCheck.stdout).version, VERSION);
   assert.equal(JSON.parse(upgradedCheck.stdout).commandsExecuted, 0);
   assert.equal(applyPlan(root, bundle, makePlan(root, bundle, 'update')).applied, 0);
 });
